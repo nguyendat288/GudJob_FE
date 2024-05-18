@@ -5,11 +5,15 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { LoadingButton } from '@mui/lab'
 import { useDispatch, useSelector } from 'react-redux';
+import authApi from '../service/authApi';
 
 
 const Register = () => {
-  const [userName, setUserName] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
   const [showPassword, setShowPassword] = useState(false)
   const isLoading = useSelector((state) => state.auth.login?.isFetching)
   const dispatch = useDispatch()
@@ -22,10 +26,13 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     let data = {
-      username: userName,
-      password: password
+      email: email,
+      password: password,
+      lastName :lastName ,
+      firstName : firstName,
+      roles : ["User"]
     }
-    //  await authApi.loginUser(data, dispatch, navigate);
+    await authApi.register(data, navigate);
   }
 
 
@@ -50,7 +57,7 @@ const Register = () => {
               name="firstName"
               type="firstName"
               size="small"
-              onChange={(e) => setUserName(e.target.value)}
+              onChange={(e) => setFirstName(e.target.value)}
             />
             <TextField
 
@@ -58,7 +65,7 @@ const Register = () => {
               name="lastName"
               type="lastName"
               size="small"
-              onChange={(e) => setUserName(e.target.value)}
+              onChange={(e) => setLastName(e.target.value)}
             />
           </Box>
           <Box mt={3}>
@@ -68,7 +75,7 @@ const Register = () => {
               name="email"
               type="email"
               size="small"
-              onChange={(e) => setUserName(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
 
             <TextField
@@ -94,13 +101,13 @@ const Register = () => {
               }}
             />
           </Box>
-          <Box mt={3} display='flex'>
+          {/* <Box mt={3} display='flex'>
             <Checkbox {...label} />
 
             <Typography variant='h8'>
               I agree to the Freelancer User Agreement and Privacy Policy.
             </Typography>
-          </Box>
+          </Box> */}
           <Box>
             <LoadingButton
               fullWidth
@@ -112,6 +119,7 @@ const Register = () => {
                 p: '11px 24px',
                 borderRadius: '12px'
               }}
+              onClick={(e) => handleSubmit(e)}
               type="submit"
               variant="contained">
               Register
@@ -120,7 +128,7 @@ const Register = () => {
           </Box>
           <Box mt={3} display='flex' justifyContent='center' alignItems='center'>
             <Typography>
-              Already have an account ? 
+              Already have an account ?
             </Typography>
             <Typography
               variant="body1"
@@ -131,8 +139,8 @@ const Register = () => {
               style={{
                 cursor: 'pointer',
                 color: 'rgb(99, 102, 241)',
-                marginLeft:'10px',
-                textDecoration :'underline'
+                marginLeft: '10px',
+                textDecoration: 'underline'
               }}>
               Log in
             </Typography>

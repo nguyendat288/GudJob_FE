@@ -6,17 +6,29 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { logOutSuccess } from '../redux/authSlice';
 
 const Navbar = () => {
+  const currentUser = useSelector((state) => state.auth.login?.currentUser)
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch()
+  console.log(currentUser);
+  const handleLogin = () => {
+    navigate("/login");
+  }
 
-    const handleLogin = () => {
-        navigate("/login");
-    }
-    const handleRegister = () => {
-        navigate("/register");
-    }
+  const handleRegister = () => {
+    navigate("/register");
+  }
+  const handleLogOut = () => {
+    dispatch(logOutSuccess())
+    localStorage.clear();
+    navigate('/login');
+    toast.success('Logout successfully!');
+  }
   return (
     <AppBar position="static">
       <Toolbar>
@@ -26,8 +38,17 @@ const Navbar = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           GudJob
         </Typography>
-        <Button color="inherit" onClick={(e)=>handleLogin() }>Login</Button>
-        <Button color="inherit" onClick={(e)=>handleRegister() }>Sign Up</Button>
+        {
+          currentUser && (<>
+            <Button color="inherit" onClick={(e) => handleLogOut(e)}>Logout</Button>
+          </>)
+        }
+        {
+          currentUser == null && (<>
+            <Button color="inherit" onClick={(e) => handleLogin()}>Login</Button>
+            <Button color="inherit" onClick={(e) => handleRegister()}>Sign Up</Button>
+          </>)
+        }
       </Toolbar>
     </AppBar>
   );

@@ -11,6 +11,7 @@ const categories = [
 ];
 
 const Home = () => {
+
   return (
     <>
       <Navbar />
