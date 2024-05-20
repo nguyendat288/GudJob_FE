@@ -23,6 +23,12 @@ const Navbar = () => {
   const handleRegister = () => {
     navigate("/register");
   }
+  const handlePost = () => {
+    navigate("/post");
+  }
+  const handleHome = () => {
+    navigate("/home");
+  }
   const handleLogOut = () => {
     dispatch(logOutSuccess())
     localStorage.clear();
@@ -35,11 +41,12 @@ const Navbar = () => {
         <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
           <MenuIcon />
         </IconButton>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} onClick={()=>handleHome()}>
           GudJob
         </Typography>
         {
           currentUser && (<>
+            <Button color="inherit" onClick={() => handlePost()}>Create Post</Button>
             <Button color="inherit" onClick={(e) => handleLogOut(e)}>Logout</Button>
           </>)
         }

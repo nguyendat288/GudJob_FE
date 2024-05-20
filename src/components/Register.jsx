@@ -6,6 +6,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { LoadingButton } from '@mui/lab'
 import { useDispatch, useSelector } from 'react-redux';
 import authApi from '../service/authApi';
+import { toast } from 'react-toastify';
 
 
 const Register = () => {
@@ -24,21 +25,19 @@ const Register = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    let data = {
-      email: email,
-      password: password,
-      lastName :lastName ,
-      firstName : firstName,
-      roles : ["User"]
+    if (email == "" || password == '' || lastName == '' || firstName == '') {
+      toast.error("Not null");
+    } else {
+      e.preventDefault()
+      let data = {
+        email: email,
+        password: password,
+        lastName: lastName,
+        firstName: firstName,
+        roles: ["User"]
+      }
+      await authApi.register(data, navigate);
     }
-    await authApi.register(data, navigate);
-  }
-
-
-
-  const handleRegister = (e) => {
-    navigate("/register")
   }
 
   return (
