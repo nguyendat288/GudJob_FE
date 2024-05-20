@@ -10,7 +10,7 @@ const authApi = {
             const response = await axios.post(`${BASE_URL}/api/Identity/Login`, data)
             // toast.success("Login success");
             // dispatch(loginSuccess(response.data))
-            if (response.data.success == false) {
+            if (response.data.success === false) {
                 toast.error("Login fail");
                 dispatch(loginFailed())
             } else {

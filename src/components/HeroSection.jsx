@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Button } from '@mui/material';
 import heroImage from '../assets/hero-image.png'
 
-const HeroSection = () => {
+function HeroSection() {
   return (
     <Box
       sx={{
