@@ -52,6 +52,11 @@ const Detail = () => {
     }, [])       
     
 
+    useEffect(() => {
+      
+     
+    }, [])   
+
     console.log(item);
 
     const handleSubmit = async (e) => {
@@ -75,12 +80,12 @@ const Detail = () => {
             <Box m={4}>
                 <Box display='flex'>
                     <Typography variant='h4'>{detail?.title} </Typography>
-                    {detail?.statusId == 0 && (<>
+                    {detail?.statusId == 1 && (<>
                         <StyledTypography>
                             Pending
                         </StyledTypography>
                     </>)}
-                    {detail?.statusId == 1 && (<>
+                    {detail?.statusId == 2 && (<>
                         <StyledTypography>
                             Done
                         </StyledTypography>

@@ -5,6 +5,7 @@ import Register from "../components/Register";
 import { PUBLIC_PATH } from "../path";
 import CreatePost from "../components/CreatePost";
 import Detail from "../components/Detail";
+import Post from "../components/Post";
 
 export default function Router() {
     let router = useRoutes([
@@ -23,6 +24,10 @@ export default function Router() {
         {
             path: PUBLIC_PATH.CREATE_POST,
             element: <CreatePost />
+        },
+        {
+            path: PUBLIC_PATH.VIEW_POST,
+            element: <Post />
         },
         {
             path: PUBLIC_PATH.DETAIL,

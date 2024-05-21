@@ -1,16 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Grid } from '@mui/material';
 import Navbar from './Navbar';
 import HeroSection from './HeroSection';
 import CategoryCard from './CategoryCard';
+import { useSelector } from 'react-redux';
+import authApi from '../service/authApi';
+import { BASE_URL } from '../service/index.js'
+import axios from 'axios';
 
 const categories = [
-  { title: 'Graphics & Design', imageUrl: 'https://via.placeholder.com/300' },
-  { title: 'Digital Marketing', imageUrl: 'https://via.placeholder.com/300' },
-  { title: 'Writing & Translation', imageUrl: 'https://via.placeholder.com/300' },
+  { title: 'Graphics & Design' },
+  { title: 'Digital Marketing' },
+  { title: 'Writing' },
+  { title: 'Translation' },
+  { title: 'Content Creator' }
 ];
 
 const Home = () => {
+  const currentUser = useSelector((state) => state.auth.login?.currentUser)
+  
+
+  const [project, setProject] = useState();
+    useEffect(() => {
+      const getData = async () => {
+          let res = await authApi.GetAllProject(1, 5);
+          setProject(res)
+      }
+      getData()
+  }, [])
 
   return (
     <>
@@ -18,11 +35,11 @@ const Home = () => {
       <HeroSection />
       <Container sx={{ mt: 5 }}>
         <Grid container spacing={4}>
-          {categories.map((category, index) => (
+          {currentUser ? project?.items.map((job, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
-              <CategoryCard title={category.title} imageUrl={category.imageUrl} />
+              <CategoryCard id= {job.id} title={job.title} min={job.minBudget} max={job.maxBudget} duration={job.duration} />
             </Grid>
-          ))}
+          )) : <p>chua dang nhap</p>}
         </Grid>
       </Container>
     </>
