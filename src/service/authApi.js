@@ -127,7 +127,26 @@ const authApi = {
             }
         }
     },
-
+    GetAllProject: async (index,size) => {
+        try {
+            const response = await axios.get(`${BASE_URL}/api/Projects/GetAll?pageIndex=${index}&pageSize=${size}`)
+            return response.data;
+        } catch (error) {
+            if (error.response.data.status === 500) {
+                toast.error("Something wrong ")
+            }
+        }
+    },
+    GetAllProjectByUserId: async (id, index,size) => {
+        try {
+            const response = await axios.get(`${BASE_URL}/api/Projects/GetProjectsByUserId?UserId=${id}&PageIndex=${index}&PageSize=${size}`)
+            return response.data;
+        } catch (error) {
+            if (error.response.data.status === 500) {
+                toast.error("Something wrong ")
+            }
+        }
+    },
 }
 
 export default authApi

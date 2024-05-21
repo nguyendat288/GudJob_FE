@@ -4,5 +4,6 @@ export const PUBLIC_PATH = {
     HOME: "/home",
     REGISTER: "/register",
     CREATE_POST: "/post",
+    VIEW_POST: "/view/post",
     DETAIL: "/detail/:projectId",
 }
