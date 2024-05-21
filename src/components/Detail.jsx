@@ -52,11 +52,6 @@ const Detail = () => {
     }, [])       
     
 
-    useEffect(() => {
-      
-     
-    }, [])   
-
     console.log(item);
 
     const handleSubmit = async (e) => {
