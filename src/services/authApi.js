@@ -8,30 +8,11 @@ const authApi = {
         dispatch(loginStart())
         try {
             const response = await axios.post(`${BASE_URL}/api/Identity/Login`, data)
-            // toast.success("Login success");
-            // dispatch(loginSuccess(response.data))
-            if (response.data.success === false) {
-                toast.error("Login fail");
-                dispatch(loginFailed())
-            } else {
                 dispatch(loginSuccess(response.data))
                 localStorage.setItem('token', response.data.accessToken)
                 toast.success("Login success");
                 navigate('/home')
-            }
-            // let url = localStorage.getItem('href');
-            // if (response.data.role === 'ADMIN') {
-            //     navigate('/admin')
-            // } else if (response.data.role === 'USER') {
-            //     // console.log(url);
-            //     // if (url == null) {
-            //     //     navigate('/user')
-            //     // } else {
-            //     //     navigate(url)
-            //     // }
-            // }
             return response?.data?.id;
-
         } catch (error) {
             if (error.response.status === 400) {
                 toast.error('Password wrong, please try again!')

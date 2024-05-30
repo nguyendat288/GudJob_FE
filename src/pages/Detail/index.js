@@ -50,7 +50,14 @@ const Detail = () => {
         }
         getProjectDetail()
     }, [])       
-   
+    
+
+    useEffect(() => {
+      
+     
+    }, [])   
+
+    console.log(item);
 
     const handleSubmit = async (e) => {
         if (proposal === '' || duration ==='' || budget === 0) {

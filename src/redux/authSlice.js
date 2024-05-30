@@ -11,7 +11,7 @@ const authSlice = createSlice({
   },
   reducers: {
     loginStart: (state) => {
-      state.login.isFetching = false
+      state.login.isFetching = true
     },
     loginSuccess: (state, action) => {
       state.login.isFetching = false

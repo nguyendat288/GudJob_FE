@@ -33,11 +33,14 @@ const ProjectList = () => {
                 <Paper>
                     <Divider />
                     {currentUser ? projectList?.items.map((post, index) => (
+                        <>
                         <Box p={4} key={index} onClick={(e) => handleViewDetail(post.id)}>
                             <Typography variant='h6'>Title: {post?.title}</Typography>
                             <Typography>Category: {post?.category?.categoryName} </Typography>
                             <Typography>Estimate deadline: {post?.duration} </Typography>
                         </Box>
+                        <Divider />
+                        </>
                     )) : <p>Chua dang nhap</p>}
                 </Paper>
             </Box>
