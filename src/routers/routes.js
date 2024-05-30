@@ -1,11 +1,11 @@
 import { useRoutes } from "react-router-dom";
-import Home from "../components/Home";
-import Login from "../components/Login";
-import Register from "../components/Register";
+import Home from "../pages/Home";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
 import { PUBLIC_PATH } from "../path";
-import CreatePost from "../components/CreatePost";
-import Detail from "../components/Detail";
-import Post from "../components/Post";
+import CreatePost from "../pages/CreatePost";
+import Detail from "../pages/Detail";
+import Post from "../pages/Post";
 
 export default function Router() {
     let router = useRoutes([

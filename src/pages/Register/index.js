@@ -1,11 +1,11 @@
-import { Box, Button, Checkbox, Divider, Grid, IconButton, Stack, TextField, Typography } from '@mui/material'
+import { Box, Divider, IconButton, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { LoadingButton } from '@mui/lab'
-import { useDispatch, useSelector } from 'react-redux';
-import authApi from '../service/authApi';
+import { useSelector } from 'react-redux';
+import authApi from '../../services/authApi';
 import { toast } from 'react-toastify';
 
 
@@ -17,7 +17,6 @@ const Register = () => {
 
   const [showPassword, setShowPassword] = useState(false)
   const isLoading = useSelector((state) => state.auth.login?.isFetching)
-  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const handleClickShowPassword = () => {
@@ -25,7 +24,7 @@ const Register = () => {
   }
 
   const handleSubmit = async (e) => {
-    if (email == "" || password == '' || lastName == '' || firstName == '') {
+    if (email === "" || password === '' || lastName === '' || firstName === '') {
       toast.error("Not null");
     } else {
       e.preventDefault()
@@ -295,6 +294,5 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 export default Register;

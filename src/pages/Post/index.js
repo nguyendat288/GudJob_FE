@@ -1,23 +1,9 @@
-import { Box, Button, Divider, FormControl, FormHelperText, InputAdornment, Modal, OutlinedInput, Paper, TextField, Typography } from '@mui/material'
+import { Box, Divider, Paper, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import Navbar from './Navbar'
-import { styled } from '@mui/system';
-import { useNavigate, useParams } from 'react-router-dom';
+import Navbar from '../../components/Navbar'
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import authApi from '../service/authApi';
-import { toast } from 'react-toastify';
-
-const StyledTypography = styled(Typography)(({ theme }) => ({
-    borderRadius: '10px',
-    marginLeft: theme.spacing(3),
-    backgroundColor: 'green',
-    color: 'white',
-    padding: '8px 16px',
-    fontSize: '16px',
-    fontWeight: 'bold',
-    display: 'inline-block',
-    textAlign: 'center',
-}));
+import authApi from '../../services/authApi';
 
 const ProjectList = () => {    
     const currentUser = useSelector((state) => state.auth.login?.currentUser)
@@ -58,15 +44,5 @@ const ProjectList = () => {
         </>
     )
 }
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 800,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 3,
-};
+
 export default ProjectList

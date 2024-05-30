@@ -1,11 +1,11 @@
 import { Box, Button, Divider, FormControl, FormHelperText, InputAdornment, Modal, OutlinedInput, Paper, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import Navbar from './Navbar'
+import Navbar from '../../components/Navbar'
 import { styled } from '@mui/system';
-import ListComment from './ListComment';
+import ListComment from '../../components/ListComment';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import authApi from '../service/authApi';
+import authApi from '../../services/authApi';
 import { toast } from 'react-toastify';
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
@@ -53,7 +53,7 @@ const Detail = () => {
    
 
     const handleSubmit = async (e) => {
-        if (proposal === '' || duration =='' || budget == 0) {
+        if (proposal === '' || duration ==='' || budget === 0) {
             toast.error("Something was error");
         }else{
             let data = {
@@ -73,12 +73,12 @@ const Detail = () => {
             <Box m={4}>
                 <Box display='flex'>
                     <Typography variant='h4'>{detail?.title} </Typography>
-                    {detail?.statusId == 1 && (<>
+                    {detail?.statusId === 1 && (<>
                         <StyledTypography>
                             Pending
                         </StyledTypography>
                     </>)}
-                    {detail?.statusId == 2 && (<>
+                    {detail?.statusId === 2 && (<>
                         <StyledTypography>
                             Done
                         </StyledTypography>
@@ -112,7 +112,7 @@ const Detail = () => {
                         <Typography variant='h6'>Project Description</Typography>
                         <Typography> {detail?.description} </Typography>
                     </Box>
-                    {detail?.createdBy != currentUser?.userId && (<>
+                    {detail?.createdBy !== currentUser?.userId && (<>
                         <Box p={4}>
                             <Button variant='contained' onClick={handleOpen}>Bidding</Button>
                         </Box>
@@ -122,7 +122,7 @@ const Detail = () => {
 
                 </Paper>
                 {
-                    detail?.createdBy == currentUser?.userId && (<>
+                    detail?.createdBy === currentUser?.userId && (<>
                         <ListComment list={item}/>
 
                     </>)

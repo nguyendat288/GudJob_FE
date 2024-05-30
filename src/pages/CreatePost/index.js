@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from './Navbar'
-import { Box, Button, FormControl, InputLabel, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
-import authApi from '../service/authApi';
+import Navbar from '../../components/Navbar'
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
+import authApi from '../../services/authApi';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -26,9 +26,6 @@ const CreatePost = () => {
         getData()
     }, [])
     console.log(listCategory);
-    const handleChange = (event) => {
-        setCategory(event.target.value);
-    };
 
     const handleSubmit = async (e) => {
         if (category === '' || name === '' || minBudget === 0 || maxBudget <= minBudget || duration === ''|| description ==='') {
@@ -73,7 +70,7 @@ const CreatePost = () => {
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
                             >
-                                {listCategory.length != 0 && listCategory.map((item, index) => (
+                                {listCategory.length !== 0 && listCategory.map((item, index) => (
                                     <MenuItem value={item?.id}>{item?.categoryName}</MenuItem>
                                 ))}
                             </Select>
