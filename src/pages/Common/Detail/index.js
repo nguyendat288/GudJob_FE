@@ -1,12 +1,14 @@
 import { Box, Button, Divider, FormControl, FormHelperText, InputAdornment, Modal, OutlinedInput, Paper, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import Navbar from '../../components/Navbar'
+import Navbar from '../../../components/Navbar'
 import { styled } from '@mui/system';
-import ListComment from '../../components/ListComment';
+import ListComment from '../../../components/ListComment';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import authApi from '../../services/authApi';
+import authApi from '../../../services/authApi';
 import { toast } from 'react-toastify';
+import projectApi from '../../../services/projectApi';
+import biddingApi from '../../../services/biddingApi';
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
     borderRadius: '10px',
@@ -38,11 +40,11 @@ const Detail = () => {
 
     useEffect(() => {
         const getProjectDetail = async () => {
-            let res = await authApi.GetProjectDetailsById(projectId);
+            let res = await projectApi.GetProjectDetailsById(projectId);
             setDetail(res);
             if(res?.createdBy === currentUser?.userId){
                 const getBidding = async () => {
-                    let res1 = await authApi.GetBiddingListByProjectId(projectId,1,10);
+                    let res1 = await biddingApi.GetBiddingListByProjectId(projectId,1,10);
                     setItem(res1?.items);
                 }
                 getBidding()
@@ -57,8 +59,6 @@ const Detail = () => {
      
     }, [])   
 
-    console.log(item);
-
     const handleSubmit = async (e) => {
         if (proposal === '' || duration ==='' || budget === 0) {
             toast.error("Something was error");
@@ -70,7 +70,7 @@ const Detail = () => {
                 duration: duration,
                 budget: budget
             }
-            await authApi.AddBidding(data, navigate);
+            await biddingApi.AddBidding(data, navigate);
         }
     }
 
@@ -123,9 +123,7 @@ const Detail = () => {
                         <Box p={4}>
                             <Button variant='contained' onClick={handleOpen}>Bidding</Button>
                         </Box>
-                    </>)
-
-                    }
+                    </>)}
 
                 </Paper>
                 {

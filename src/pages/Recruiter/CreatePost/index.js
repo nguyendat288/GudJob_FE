@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../../components/Navbar'
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
-import authApi from '../../services/authApi';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import categoryApi from '../../../services/categoryApi';
+import projectApi from '../../../services/projectApi';
+import Navbar from '../../../components/Navbar';
 
 const CreatePost = () => {
     const currentUser = useSelector((state) => state.auth.login?.currentUser)
@@ -20,12 +21,11 @@ const CreatePost = () => {
 
     useEffect(() => {
         const getData = async () => {
-            let res = await authApi.GetAllCategory();
+            let res = await categoryApi.GetAllCategory();
             setListCategory(res)
         }
         getData()
     }, [])
-    console.log(listCategory);
 
     const handleSubmit = async (e) => {
         if (category === '' || name === '' || minBudget === 0 || maxBudget <= minBudget || duration === ''|| description ==='') {
@@ -41,8 +41,7 @@ const CreatePost = () => {
                 createdBy: currentUser?.userId,
                 description: description
             }
-            console.log(data);
-            await authApi.AddProject(data, navigate);
+            await projectApi.AddProject(data, navigate);
         }
     }
 

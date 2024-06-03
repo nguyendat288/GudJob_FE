@@ -1,1 +1,1 @@
-export const BASE_URL = 'https://localhost:7089'
+export const BASE_URL = 'https://app-doan.azurewebsites.net'

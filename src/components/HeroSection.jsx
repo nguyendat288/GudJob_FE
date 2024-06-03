@@ -3,6 +3,7 @@ import { Box, Button } from '@mui/material';
 import heroImage from '../assets/hero-image.png'
 
 function HeroSection() {
+  
   return (
     <Box
       sx={{

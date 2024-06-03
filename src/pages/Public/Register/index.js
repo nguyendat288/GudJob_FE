@@ -5,8 +5,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { LoadingButton } from '@mui/lab'
 import { useSelector } from 'react-redux';
-import authApi from '../../services/authApi';
 import { toast } from 'react-toastify';
+import authApi from '../../../services/authApi';
 
 
 const Register = () => {

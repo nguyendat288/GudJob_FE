@@ -5,7 +5,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { LoadingButton } from '@mui/lab'
 import { useDispatch, useSelector } from 'react-redux';
-import authApi from '../../services/authApi';
+import authApi from '../../../services/authApi';
 
 
 const Login = () => {
@@ -28,8 +28,6 @@ const Login = () => {
     }
       await authApi.loginUser(data, dispatch, navigate);
   }
-
-
 
   const handleRegister = (e) => {
     navigate("/register")

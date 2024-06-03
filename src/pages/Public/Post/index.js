@@ -1,11 +1,11 @@
 import { Box, Divider, Paper, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import Navbar from '../../components/Navbar'
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import authApi from '../../services/authApi';
+import projectApi from '../../../services/projectApi';
+import Navbar from '../../../components/Navbar';
 
-const ProjectList = () => {    
+const Post = () => {    
     const currentUser = useSelector((state) => state.auth.login?.currentUser)
     const navigate = useNavigate();
     const [projectList, setProjectList] = useState();
@@ -16,7 +16,7 @@ const ProjectList = () => {
 
     useEffect(() => {
         const getProjectList = async () => {
-            let res = await authApi.GetAllProjectByUserId(currentUser.userId, 1, 5);
+            let res = await projectApi.GetAllProjectByUserId(currentUser.userId, 1, 5);
             setProjectList(res);
         }
         getProjectList()
@@ -48,4 +48,4 @@ const ProjectList = () => {
     )
 }
 
-export default ProjectList
+export default Post

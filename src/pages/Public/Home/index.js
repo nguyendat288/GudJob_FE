@@ -1,20 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Grid } from '@mui/material';
-import Navbar from './Navbar';
-import HeroSection from './HeroSection';
-import CategoryCard from './CategoryCard';
+import Navbar from '../../../components/Navbar.jsx'
+import HeroSection from '../../../components/HeroSection.jsx';
+import CategoryCard from '../../../components/CategoryCard.jsx';
 import { useSelector } from 'react-redux';
-import authApi from '../service/authApi';
-import { BASE_URL } from '../service/index.js'
-import axios from 'axios';
-
-const categories = [
-  { title: 'Graphics & Design' },
-  { title: 'Digital Marketing' },
-  { title: 'Writing' },
-  { title: 'Translation' },
-  { title: 'Content Creator' }
-];
+import authApi from '../../../services/authApi.js';
+import projectApi from '../../../services/projectApi.js';
 
 const Home = () => {
   const currentUser = useSelector((state) => state.auth.login?.currentUser)
@@ -23,7 +14,7 @@ const Home = () => {
   const [project, setProject] = useState();
     useEffect(() => {
       const getData = async () => {
-          let res = await authApi.GetAllProject(1, 5);
+          let res = await projectApi.GetAllProject(1, 5);
           setProject(res)
       }
       getData()
