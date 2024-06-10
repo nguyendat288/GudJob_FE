@@ -1,6 +1,6 @@
 // api/axiosClient.js
 import axios from 'axios'
-import { BASE_URL } from '../service'
+import { BASE_URL } from '../services'
 
 // Set up default config for http requests here
 

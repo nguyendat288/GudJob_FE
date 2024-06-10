@@ -1,21 +1,51 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { loginFailed, loginStart, loginSuccess } from '../redux/authSlice'
 import { BASE_URL } from '.'
+import axiosClient from '../utils/axiosClient'
 
 const projectApi = {
     AddProject: async (data, navigate) => {
         try {
             const response = await axios.post(`${BASE_URL}/api/Projects/AddProject`, data)
             toast.success('create success')
-            navigate("/home")
+            navigate("/recruiter")
             return response
         } catch (error) {
             if (error.response.data.status === 500) {
-                toast.error("Phone or Email not match format ")
+                toast.error("Some thing was wrong")
             }
             if (error.response.data.status === 501) {
                 toast.error("Username or Phone or Email exist")
+            }
+        }
+    },
+    UpdateProject: async (data, navigate) => {
+        try {
+            const response = await axiosClient.put(`${BASE_URL}/api/Projects/UpdateProject`, data)
+            toast.success('update success')
+            navigate("/recruiter")
+            return response
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                toast.error("Not null")
+            }
+            if (error.response.data.status === 404) {
+                toast.error("Not found")
+            }
+        }
+    },
+    DeleteProject: async (projectId, navigate) => {
+        try {
+            const response = await axiosClient.delete(`${BASE_URL}/api/Projects/DeleteProject?projectId=${projectId}`)
+            toast.success('delete success')
+            navigate("/recruiter")
+            return response
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                toast.error("Not null")
+            }
+            if (error.response.data.status === 404) {
+                toast.error("Not found")
             }
         }
     },
@@ -23,13 +53,12 @@ const projectApi = {
         try {
             const response = await axios.get(`${BASE_URL}/api/Projects/GetProjectDetailsById?id=${id}`)
             return response.data;
-            
         } catch (error) {
             if (error.response.data.status === 500) {
-                toast.error("Phone or Email not match format ")
+                toast.error("Some thing was wrong ")
             }
             if (error.response.data.status === 501) {
-                toast.error("Username or Phone or Email exist")
+                toast.error("Some thing was wrong")
             }
         }
     },
@@ -45,8 +74,8 @@ const projectApi = {
     },
     GetAllProjectByUserId: async (id, index,size) => {
         try {
-            const response = await axios.get(`${BASE_URL}/api/Projects/GetProjectsByUserId?UserId=${id}&PageIndex=${index}&PageSize=${size}`)
-            return response.data;
+            const response = await axiosClient.get(`${BASE_URL}/api/Projects/GetProjectsByUserId?UserId=${id}&PageIndex=${index}&PageSize=${size}`)
+            return response;
         } catch (error) {
             if (error.response.data.status === 500) {
                 toast.error("Something wrong ")
