@@ -1,10 +1,8 @@
 import { Box, Button, Divider, FilledInput, FormControl, FormHelperText, InputAdornment, Modal, OutlinedInput, Paper, Tab, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import Navbar from '../../../components/Navbar'
 import { styled } from '@mui/system';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import authApi from '../../../services/authApi';
 import { toast } from 'react-toastify';
 import projectApi from '../../../services/projectApi';
 import biddingApi from '../../../services/biddingApi';
@@ -131,7 +129,7 @@ const Detail = () => {
                             </TabList>
                         </Box>
                         <TabPanel value="1">
-                            <ProjectDetail detail={detail} navigate={navigate} handleDelete={handleDelete} />
+                            <ProjectDetail detail={detail} navigate={navigate} handleDelete={handleDelete} currentUser={currentUser} />
                             {currentUser != null && currentUser?.role == ROLES.FREELANCER && (
                                 <>
                                     <Button onClick={handleOpen}>Bidding</Button>

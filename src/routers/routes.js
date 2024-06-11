@@ -2,7 +2,6 @@ import { useRoutes } from "react-router-dom";
 
 import {FREELANCER_PATH, PUBLIC_PATH, RECRUITER_PATH } from "../constaints/path";
 import Register from "../pages/Public/Register";
-
 import Login from "../pages/Public/Login";
 import NotFoundPage from "../components/NotFoundPage";
 import UnAuthorized from "../components/UnAuthorized";
@@ -18,9 +17,8 @@ import CreateProject from "../pages/Recruiter/CreateProject/CreateProject";
 import Detail from "../pages/Common/Detail/Detail";
 import TopBarRecruiter from "../pages/Recruiter/LayOutRecruiter/TopBarRecruiter";
 import UpdateProject from "../pages/Recruiter/UpdateProject/UpdateProject";
-import ListProject from "../pages/Common/ListProject/ListProject";
-
-
+import Search from "../pages/Common/ListProject/Search";
+import Filter from "../pages/Common/ListProject/Filter";
 
 export default function Router() {
     let router = useRoutes([
@@ -47,10 +45,18 @@ export default function Router() {
                     )
                   },
                   {
-                    path: PUBLIC_PATH.LIST_PROJECT,
+                    path: PUBLIC_PATH.SEARCH_PROJECT,
                     element: (
                       <Suspense fallback={<>Loading...</>}>
-                        <ListProject />
+                        <Search />
+                      </Suspense>
+                    )
+                  },
+                  {
+                    path: PUBLIC_PATH.SEARCH_CATEGORY_PROJECT,
+                    element: (
+                      <Suspense fallback={<>Loading...</>}>
+                        <Filter />
                       </Suspense>
                     )
                   },

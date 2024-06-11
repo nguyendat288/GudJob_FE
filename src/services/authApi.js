@@ -38,10 +38,10 @@ const authApi = {
             // if (error.response.status === 400) {
             //   toast.error('Something wrong')
             // }
-            if (error.response.data.status === 500) {
+            if (error.response.status === 500) {
                 toast.error("Phone or Email not match format ")
             }
-            if (error.response.data.status === 501) {
+            if (error.response.status === 501) {
                 toast.error("Username or Phone or Email exist")
             }
         }

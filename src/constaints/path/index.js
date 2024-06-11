@@ -3,7 +3,8 @@ export const PUBLIC_PATH = {
     LOGIN: "/login",
     HOME:'/home',
     REGISTER: "/register",
-    LIST_PROJECT: "/list-project/:search",
+    SEARCH_PROJECT: "/search/:searchKey",
+    SEARCH_CATEGORY_PROJECT: "/category/:idCate",
     DETAIL: "/detail/:projectId",
     NOT_FOUND: '*',
 }

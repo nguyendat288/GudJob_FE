@@ -9,12 +9,11 @@ const projectApi = {
             const response = await axios.post(`${BASE_URL}/api/Projects/AddProject`, data)
             toast.success('create success')
             navigate("/recruiter")
-            return response
         } catch (error) {
-            if (error.response.data.status === 500) {
+            if (error.response.status === 500) {
                 toast.error("Some thing was wrong")
             }
-            if (error.response.data.status === 501) {
+            if (error.response.status === 501) {
                 toast.error("Username or Phone or Email exist")
             }
         }
@@ -24,12 +23,11 @@ const projectApi = {
             const response = await axiosClient.put(`${BASE_URL}/api/Projects/UpdateProject`, data)
             toast.success('update success')
             navigate("/recruiter")
-            return response
         } catch (error) {
-            if (error.response.data.status === 400) {
+            if (error.response.status === 400) {
                 toast.error("Not null")
             }
-            if (error.response.data.status === 404) {
+            if (error.response.status === 404) {
                 toast.error("Not found")
             }
         }
@@ -39,12 +37,11 @@ const projectApi = {
             const response = await axiosClient.delete(`${BASE_URL}/api/Projects/DeleteProject?projectId=${projectId}`)
             toast.success('delete success')
             navigate("/recruiter")
-            return response
         } catch (error) {
-            if (error.response.data.status === 400) {
+            if (error.response.status === 400) {
                 toast.error("Not null")
             }
-            if (error.response.data.status === 404) {
+            if (error.response.status === 404) {
                 toast.error("Not found")
             }
         }
@@ -52,12 +49,12 @@ const projectApi = {
     GetProjectDetailsById: async (id) => {
         try {
             const response = await axios.get(`${BASE_URL}/api/Projects/GetProjectDetailsById?id=${id}`)
-            return response.data;
+            return response?.data;
         } catch (error) {
-            if (error.response.data.status === 500) {
+            if (error.response.status === 500) {
                 toast.error("Some thing was wrong ")
             }
-            if (error.response.data.status === 501) {
+            if (error.response.status === 501) {
                 toast.error("Some thing was wrong")
             }
         }
@@ -65,19 +62,39 @@ const projectApi = {
     GetAllProject: async (index,size) => {
         try {
             const response = await axios.get(`${BASE_URL}/api/Projects/GetAll?pageIndex=${index}&pageSize=${size}`)
-            return response.data;
+            return response?.data;
         } catch (error) {
-            if (error.response.data.status === 500) {
+            if (error.response.status === 500) {
                 toast.error("Something wrong ")
             }
         }
     },
     GetAllProjectByUserId: async (id, index,size) => {
         try {
-            const response = await axiosClient.get(`${BASE_URL}/api/Projects/GetProjectsByUserId?UserId=${id}&PageIndex=${index}&PageSize=${size}`)
-            return response;
+            const response = await axios.get(`${BASE_URL}/api/Projects/GetProjectsByUserId?UserId=${id}&PageIndex=${index}&PageSize=${size}`)
+            return response?.data;
         } catch (error) {
-            if (error.response.data.status === 500) {
+            if (error.response.status === 500) {
+                toast.error("Something wrong ")
+            }
+        }
+    },
+    SearchProjectByName: async (Keyword, index,size) => {
+        try {
+            const response = await axios.get(`${BASE_URL}/api/Projects/Search?Keyword=${Keyword}&PageIndex=${index}&PageSize=${size}`)
+            return response?.data;
+        } catch (error) {
+            if (error.response.status === 500) {
+                toast.error("Something wrong ")
+            }
+        }
+    },
+    filterProject: async (data) => {
+        try {
+            const response = await axios.post(`${BASE_URL}/api/Projects/Filter`,data)
+            return response?.data;
+        } catch (error) {
+            if (error.response.status === 500) {
                 toast.error("Something wrong ")
             }
         }

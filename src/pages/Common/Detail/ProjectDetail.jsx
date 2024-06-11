@@ -2,9 +2,10 @@ import { Box, Button, Divider, Paper, Typography, styled } from '@mui/material'
 import React from 'react'
 import ProjectDescription from '../../../components/ProjectDescription'
 import StarIcon from '@mui/icons-material/Star';
+import { ROLES } from '../../../constaints/role';
 
 
-const ProjectDetail = ({ detail, navigate,handleDelete }) => {
+const ProjectDetail = ({ detail, navigate, handleDelete, currentUser }) => {
     return (
         <Box display='flex' >
             <Box flex='4'>
@@ -58,10 +59,13 @@ const ProjectDetail = ({ detail, navigate,handleDelete }) => {
                             <Typography fontSize='8px'> ProjectId : {detail?.id} </Typography>
                         </Box>
                         <Box ml='auto' mr={3}>
-                            <Button variant='contained' onClick={() => navigate(`/update-project/${detail?.id}`)}>Update Project</Button>
-                            {detail?.statusId != 2 && (<>
-                            <Button variant='contained' onClick={(e) => handleDelete(detail?.id)}>Delete Project</Button>
+                            {currentUser?.role === ROLES.RECRUITER && currentUser?.userId === detail?.createdBy && (<>
+                                <Button variant='contained' onClick={() => navigate(`/update-project/${detail?.id}`)}>Update Project</Button>
+                                {detail?.statusId != 2 && (<>
+                                    <Button variant='contained' onClick={(e) => handleDelete(detail?.id)}>Delete Project</Button>
+                                </>)}
                             </>)}
+
                         </Box>
                     </Box>
 

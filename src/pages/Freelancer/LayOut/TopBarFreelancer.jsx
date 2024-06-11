@@ -17,7 +17,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 const TopBarFreelancer = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
-
+  const [search, setSearch] = useState('')
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -36,6 +36,10 @@ const TopBarFreelancer = () => {
     toast.success('Logout successfully!');
   }
 
+  const handleSearch =()=>{
+    navigate(`/search/${search}`)
+  }
+  
   return (
     <AppBar position="static" sx={{ bgcolor: 'white' }}>
       <Container maxWidth="xl">
@@ -63,8 +67,13 @@ const TopBarFreelancer = () => {
               bgcolor='#EEEEEE'
               sx={{ width: '50%' }}
             >
-              <InputBase placeholder='Seach name project' sx={{ ml: 2, flex: 1 }} />
-              <IconButton type='button' p={1}>
+              <InputBase
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder='Seach name project' sx={{ ml: 2, flex: 1 }} />
+              <IconButton type='button'
+              onClick={(e)=>handleSearch(e)}
+              p={1}>
                 <SearchOutlinedIcon />
               </IconButton>
             </Box>
@@ -126,8 +135,8 @@ const TopBarFreelancer = () => {
             currentUser == null && (
               <>
                 <Box display='flex' gap={2}>
-                  <Button onClick={(e)=> navigate('/login')}>Sign in</Button>
-                  <Button onClick={(e)=> navigate('/register')}>Sign up</Button>
+                  <Button onClick={(e) => navigate('/login')}>Sign in</Button>
+                  <Button onClick={(e) => navigate('/register')}>Sign up</Button>
                 </Box>
               </>
             )

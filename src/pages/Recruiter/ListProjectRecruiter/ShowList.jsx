@@ -3,14 +3,19 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import ProjectDescription from '../../../components/ProjectDescription'
 import StarIcon from '@mui/icons-material/Star';
+import { useSelector } from 'react-redux';
+import { ROLES } from '../../../constaints/role';
 
 const ShowList = ({ listProject }) => {
+    const currentUser = useSelector((state) => state.auth.login?.currentUser)
+ 
     return (
         <Box bgcolor='#F8F8FF' borderRadius='5px' p={3} >
             {listProject?.items?.map((project, index) => (<>
                 <Box mt={1}>
                     <Link
-                        to={`/details/${project?.id}`}
+                    
+                        to={currentUser?.role === ROLES.RECRUITER ? `/details/${project?.id}` : `/detail/${project?.id}`}
                         style={{ textDecoration: 'none', color: 'inherit' }} >
                         <Box mb={3} >
                             <Box display='flex'>
