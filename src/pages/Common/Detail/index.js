@@ -5,7 +5,6 @@ import { styled } from '@mui/system';
 import ListComment from '../../../components/ListComment';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import authApi from '../../../services/authApi';
 import { toast } from 'react-toastify';
 import projectApi from '../../../services/projectApi';
 import biddingApi from '../../../services/biddingApi';

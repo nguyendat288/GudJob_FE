@@ -1,298 +1,303 @@
-import { Box, Divider, IconButton, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { LoadingButton } from '@mui/lab'
-import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState } from 'react';
+import {
+  Box,
+  Button,
+  Typography,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Grid,
+  Paper,
+  Stepper,
+  Step,
+  StepLabel,
+  Container
+} from '@mui/material';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import authApi from '../../../services/authApi';
+import { useNavigate } from 'react-router-dom';
+import skillApi from '../../../services/skillAPI';
 
+const steps = [
+  'Choose Role',
+  'Name',
+  'Details',
+  'Complete Registration'
+];
 
 const Register = () => {
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [step, setStep] = useState(0);
+  const [roles, setRoles] = useState([]); // Initialize as an array
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    skills: [],
+    companyName: '',
+    taxCode: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
 
-  const [showPassword, setShowPassword] = useState(false)
-  const isLoading = useSelector((state) => state.auth.login?.isFetching)
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword)
-  }
+  const handleNext = () => {
+    setStep(prevStep => prevStep + 1);
+  };
+
+  const handleBack = () => {
+    setStep(prevStep => prevStep - 1);
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSelectSkill = (selectedSkills) => {
+    setFormData({ ...formData, skills: selectedSkills });
+  };  
+
+  const handleRoleSelect = (selectedRole) => {
+    setRoles([selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)]);
+    handleNext();
+  };
 
   const handleSubmit = async (e) => {
-    if (email === "" || password === '' || lastName === '' || firstName === '') {
-      toast.error("Not null");
-    } else {
-      e.preventDefault()
-      let data = {
-        email: email,
-        password: password,
-        lastName: lastName,
-        firstName: firstName,
-        roles: ["User"]
-      }
-      await authApi.register(data, navigate);
+    e.preventDefault();
+
+    const requiredFields = [
+      { value: formData.firstName, name: 'First Name' },
+      { value: formData.lastName, name: 'Last Name' },
+      { value: formData.email, name: 'Email' },
+      { value: formData.password, name: 'Password' },
+      { value: formData.confirmPassword, name: 'Confirm Password' }
+    ];
+
+    if (roles.includes('Freelancer')) {
+      requiredFields.push({ value: formData.skills, name: 'Skills' });
+    } else if (roles.includes('Recruiter')) {
+      requiredFields.push(
+        { value: formData.companyName, name: 'Company Name' },
+        { value: formData.taxCode, name: 'Tax Code' }
+      );
     }
-  }
+
+    for (let field of requiredFields) {
+      if (!field.value) {
+        toast.error(`${field.name} is required!`);
+        return;
+      }
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords don't match!");
+    } else {
+      const data = {
+        email: formData.email,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword,
+        name: `${formData.firstName} ${formData.lastName}`,
+        taxCode: formData.taxCode || '',
+        isCompany: roles.includes('Recruiter'),
+        roles: roles,
+        skill: roles.includes('Freelancer') ? formData.skills : []
+      };
+      console.log("data", data);
+      try {
+        await authApi.register(data, navigate);
+        toast.success("Registration successful!");
+      } catch (error) {
+        toast.error("Registration failed. Please try again.");
+      }
+    }
+  };
+
+  const [allSkills, setAllSkills] = useState();
+
+  useEffect(() => {
+    const getData = async () => {
+        let res = await skillApi.GetAllSkill();
+        res.map((val, key) => {
+          if (key === 0) {
+            setFormData({ ...formData, skills: [val.skillName]});
+          }
+        })
+        setAllSkills(res);
+    }
+    getData()
+  }, [])
 
   return (
-    <>
-      <Box>
-        <Box sx={style}>
-          <Box sx={{ textAlign: "center" }} mb={2}>
-            <Typography variant='h4'>Home</Typography>
-            <Typography variant='h6' >Sign Up</Typography>
-            {/* <Button variant='contained'>Continue with Facebook</Button> */}
+    <Container component="main" maxWidth="sm">
+      <Paper elevation={3} sx={{ p: 3, mt: 3, borderRadius: 2 }}>
+        <Typography variant="h4" align="center" gutterBottom>
+          Register
+        </Typography>
+        <Stepper activeStep={step} alternativeLabel>
+          {steps.map((label, index) => (
+            <Step key={index}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+        {step === 0 && (
+          <Box mt={3}>
+            <Typography variant="h6">Choose Role</Typography>
+            <Grid container spacing={2} justifyContent="center">
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleRoleSelect('freelancer')}
+                >
+                  I want to be a freelancer
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => handleRoleSelect('recruiter')}
+                >
+                  I want to be a recruiter
+                </Button>
+              </Grid>
+            </Grid>
           </Box>
-          <Divider />
-          <Box mt={3} display='flex'>
+        )}
+        {step === 1 && (
+          <Box mt={3}>
+            <Typography variant="h6">Name</Typography>
             <TextField
               label="First Name"
               name="firstName"
-              type="firstName"
-              size="small"
-              onChange={(e) => setFirstName(e.target.value)}
+              value={formData.firstName}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
             />
             <TextField
-
               label="Last Name"
               name="lastName"
-              type="lastName"
-              size="small"
-              onChange={(e) => setLastName(e.target.value)}
-            />
-          </Box>
-          <Box mt={3}>
-            <TextField
+              value={formData.lastName}
+              onChange={handleChange}
               fullWidth
+              margin="normal"
+            />
+            <Box mt={2} display="flex" justifyContent="space-between">
+              <Button variant="contained" onClick={handleBack}>
+                Back
+              </Button>
+              <Button variant="contained" color="primary" onClick={handleNext}>
+                Next
+              </Button>
+            </Box>
+          </Box>
+        )}
+        {step === 2 && roles.includes('Freelancer') && (
+          <Box mt={3}>
+            <Typography variant="h6">Select Skill</Typography>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Skills</InputLabel>
+              <Select
+                name="skills"
+                value={formData.skills}
+                onChange={(e) => {
+                  const selectedSkills = e.target.value;
+                  handleSelectSkill(selectedSkills);
+                }}
+              >
+                {allSkills.map((val, key) => (
+                  <MenuItem value={val.skillName} key={key}>{val.skillName}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Box mt={2} display="flex" justifyContent="space-between">
+              <Button variant="contained" onClick={handleBack}>
+                Back
+              </Button>
+              <Button variant="contained" color="primary" onClick={handleNext}>
+                Next
+              </Button>
+            </Box>
+          </Box>
+        )}
+        {step === 2 && roles.includes('Recruiter') && (
+          <Box mt={3}>
+            <Typography variant="h6">Company Information</Typography>
+            <TextField
+              label="Company Name"
+              name="companyName"
+              value={formData.companyName}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Tax Code"
+              name="taxCode"
+              value={formData.taxCode}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+            <Box mt={2} display="flex" justifyContent="space-between">
+              <Button variant="contained" onClick={handleBack}>
+                Back
+              </Button>
+              <Button variant="contained" color="primary" onClick={handleNext}>
+                Next
+              </Button>
+            </Box>
+          </Box>
+        )}
+        {step === 3 && (
+          <Box mt={3} component="form" onSubmit={handleSubmit}>
+            <Typography variant="h6">Complete Registration</Typography>
+            <TextField
               label="Email"
               name="email"
               type="email"
-              size="small"
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
             />
-
             <TextField
-              sx={{ mt: 3 }}
-              required
-              fullWidth
-              name="password"
               label="Password"
-              size="small"
-              type={showPassword ? 'text' : 'password'}
-              id="password"
-              onChange={(e) => setPassword(e.target.value)}
-              InputProps={{
-                endAdornment: (
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    edge="end"
-                    onClick={handleClickShowPassword}
-                    size="small">
-                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                  </IconButton>
-                )
-              }}
-            />
-          </Box>
-          {/* <Box mt={3} display='flex'>
-            <Checkbox {...label} />
-
-            <Typography variant='h8'>
-              I agree to the Freelancer User Agreement and Privacy Policy.
-            </Typography>
-          </Box> */}
-          <Box>
-            <LoadingButton
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
               fullWidth
-              loading={isLoading}
-              size="large"
-              sx={{
-                mt: 2,
-                bgcolor: 'rgb(99, 102, 241)',
-                p: '11px 24px',
-                borderRadius: '12px'
-              }}
-              onClick={(e) => handleSubmit(e)}
-              type="submit"
-              variant="contained">
-              Register
-            </LoadingButton>
-
-          </Box>
-          <Box mt={3} display='flex' justifyContent='center' alignItems='center'>
-            <Typography>
-              Already have an account ?
-            </Typography>
-            <Typography
-              variant="body1"
-              component="span"
-              onClick={() => {
-                navigate('/login')
-              }}
-              style={{
-                cursor: 'pointer',
-                color: 'rgb(99, 102, 241)',
-                marginLeft: '10px',
-                textDecoration: 'underline'
-              }}>
-              Log in
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
-
-
-
-
-      {/* <Box
-        sx={{
-          display: 'flex',
-          flex: '1 1 auto',
-          height: '100vh'
-        }}>
-        <Grid container sx={{ flex: '1 1 auto' }}>
-          <Grid
-            xs={12}
-            lg={6}
-            sx={{
-              backgroundColor: 'background.paper',
-              display: 'flex',
-              flexDirection: 'column',
-              position: 'relative'
-            }}
-            item>
-            <Box
-              sx={{
-                backgroundColor: 'background.paper',
-                flex: '1 1 auto',
-                alignItems: 'center',
-                display: 'flex',
-                justifyContent: 'center'
-              }}>
-              <Box
-                sx={{
-                  maxWidth: 550,
-                  px: 3,
-                  py: '100px',
-                  width: '100%'
-                }}>
-                <div>
-                  <Stack spacing={1} sx={{ mb: 3 }}>
-                    <Typography sx={{ fontSize: '35px', fontWeight: '700' }}>Login</Typography>
-                  </Stack>
-                  <form noValidate onSubmit={handleSubmit}>
-                    <Stack spacing={3}>
-                      <TextField
-                        fullWidth
-                        label="Username"
-                        name="username"
-                        type="username"
-                        onChange={(e) => setUserName(e.target.value)}
-                      />
-                      <TextField
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type={showPassword ? 'text' : 'password'}
-                        id="password"
-                        onChange={(e) => setPassword(e.target.value)}
-                        InputProps={{
-                          endAdornment: (
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              edge="end"
-                              onClick={handleClickShowPassword}
-                              size="large">
-                              {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                            </IconButton>
-                          )
-                        }}
-                      />
-                    </Stack>
-                    <Stack direction="row" justifyContent="space-between" mt={1}>
-
-                      <Typography
-                        variant="body1"
-                        component="span"
-                        onClick={() => {
-                          navigate('/reset-password')
-                        }}
-                        style={{
-                          marginTop: '10px',
-                          cursor: 'pointer',
-                          color: 'rgb(99, 102, 241)'
-                        }}>
-                        Forgot password?
-                      </Typography>
-                    </Stack>
-                    <LoadingButton
-                      fullWidth
-                      loading={isLoading}
-                      size="large"
-                      sx={{
-                        mt: 2,
-                        bgcolor: 'rgb(99, 102, 241)',
-                        p: '11px 24px',
-                        borderRadius: '12px'
-                      }}
-                      type="submit"
-                      variant="contained">
-                      Submit
-                    </LoadingButton>
-
-                    <LoadingButton
-                      fullWidth
-                      size="large"
-                      sx={{
-                        mt: 2,
-                        bgcolor: 'rgb(99, 102, 241)',
-                        p: '11px 24px',
-                        borderRadius: '12px'
-                      }}
-                      onClick={(e) => handleRegister()}
-                      variant="contained">
-                      Register
-                    </LoadingButton>
-                  </form>
-                </div>
-              </Box>
+              margin="normal"
+            />
+            <TextField
+              label="Confirm Password"
+              name="confirmPassword"
+              type="password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+            <Box mt={2} display="flex" justifyContent="space-between">
+              <Button variant="contained" onClick={handleBack}>
+                Back
+              </Button>
+              <Button variant="contained" color="primary" type="submit">
+                Register
+              </Button>
             </Box>
-          </Grid>
-          <Grid
-            xs={12}
-            lg={6}
-            sx={{
-              alignItems: 'center',
-              background: 'radial-gradient(circle, rgba(9,50,121,1) 19%, rgba(0,212,255,1) 100%)',
-              color: 'white',
-              display: 'flex',
-              justifyContent: 'center',
-              '& img': {
-                maxWidth: '100%'
-              }
-            }}
-            item></Grid>
-        </Grid>
-      </Box> */}
-    </>
-  )
-}
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
+          </Box>
+        )}
+        <ToastContainer />
+      </Paper>
+    </Container>
+  );
 };
 
 export default Register;

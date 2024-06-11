@@ -6,4 +6,7 @@ export const PUBLIC_PATH = {
     CREATE_POST: "/post",
     VIEW_POST: "/view/post",
     DETAIL: "/detail/:projectId",
+    PROFILE: "/profile",
+    SETTING: "/setting",
+    RESET: "/reset-password"
 }

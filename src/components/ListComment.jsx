@@ -1,5 +1,5 @@
 import { Box, Divider, Paper, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React from 'react'
 
 const ListComment = ({list}) => {
 

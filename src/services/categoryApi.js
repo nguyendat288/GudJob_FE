@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { loginFailed, loginStart, loginSuccess } from '../redux/authSlice'
 import { BASE_URL } from '.'
 
 const categoryApi = {

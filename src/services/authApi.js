@@ -23,13 +23,9 @@ const authApi = {
     register: async (data, navigate) => {
         try {
             const response = await axios.post(`${BASE_URL}/api/Identity/Register`, data)
-            toast.success('register success')
             navigate("/login")
             return response
         } catch (error) {
-            // if (error.response.status === 400) {
-            //   toast.error('Something wrong')
-            // }
             if (error.response.data.status === 500) {
                 toast.error("Phone or Email not match format ")
             }
@@ -38,6 +34,38 @@ const authApi = {
             }
         }
     },
+    sendCode: async (email) => {
+        try {
+          const response = await axios.post(`${BASE_URL}/api/Identity/ResetPassword?email=${encodeURIComponent(email)}`);
+          return response;
+        } catch (error) {
+          if (error.response.status === 404) {
+            toast.error('User not found');
+          } else {
+            toast.error('Failed to reset password');
+          }
+          throw error;
+        }
+    },
+    resetPassword: async (email, code) => {
+        try {
+            const secureToken = await axios.post(`${BASE_URL}/api/Identity/ResetPasswordInputCode`, { email, code });
+            return secureToken.data.secureToken;
+        } catch (error) {
+            toast.error('Verify code is expried or not correct');
+          throw error;
+        }
+      },
+    resetNewPassword: async (email, newPassword, newPasswordConfirm, secureToken, navigate) => {
+        try {
+            await axios.post(`${BASE_URL}/api/Identity/ResetNewPassword`, { email, newPassword, newPasswordConfirm, secureToken });
+            toast.success('Password reset successful');
+            navigate("/login");
+        } catch (error) {
+            toast.error('Change password failed');
+          throw error;
+        }
+    }
    
 }
 

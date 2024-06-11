@@ -4,7 +4,6 @@ import Navbar from '../../../components/Navbar.jsx'
 import HeroSection from '../../../components/HeroSection.jsx';
 import CategoryCard from '../../../components/CategoryCard.jsx';
 import { useSelector } from 'react-redux';
-import authApi from '../../../services/authApi.js';
 import projectApi from '../../../services/projectApi.js';
 
 const Home = () => {
@@ -12,7 +11,7 @@ const Home = () => {
   
 
   const [project, setProject] = useState();
-    useEffect(() => {
+  useEffect(() => {
       const getData = async () => {
           let res = await projectApi.GetAllProject(1, 5);
           setProject(res)

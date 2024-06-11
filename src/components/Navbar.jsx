@@ -32,6 +32,9 @@ const Navbar = () => {
   const handleViewPost = () => {
     navigate("/view/post");
   }
+  const handleViewProfile = () => {
+    navigate("/profile");
+  }
   const handleLogOut = () => {
     dispatch(logOutSuccess())
     localStorage.clear();
@@ -51,6 +54,7 @@ const Navbar = () => {
           currentUser && (<>
             <Button color="inherit" onClick={(e) => handleViewPost(e)}>View your post</Button>
             <Button color="inherit" onClick={() => handlePost()}>Create Post</Button>
+            <Button color="inherit" onClick={() => handleViewProfile()}>View Profile</Button>
             <Button color="inherit" onClick={(e) => handleLogOut(e)}>Logout</Button>
           </>)
         }
