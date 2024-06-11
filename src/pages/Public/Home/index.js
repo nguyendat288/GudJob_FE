@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Grid } from '@mui/material';
-import Navbar from '../../../components/Navbar.jsx'
-import HeroSection from '../../../components/HeroSection.jsx';
-import CategoryCard from '../../../components/CategoryCard.jsx';
 import { useSelector } from 'react-redux';
 import projectApi from '../../../services/projectApi.js';
 
@@ -21,8 +18,7 @@ const Home = () => {
 
   return (
     <>
-      <Navbar />
-      <HeroSection />
+ 
       <Container sx={{ mt: 5 }}>
         <Grid container spacing={4}>
           {currentUser ? project?.items.map((job, index) => (

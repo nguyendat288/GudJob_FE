@@ -2,9 +2,9 @@ import { BASE_URL } from '.'
 import axiosClient from '../utils/axiosClient'
 
 const profileApi = {
-    getUserProfile: async () => {
+    getUserProfile: () => {
         try {
-            const response = await axiosClient.get(`${BASE_URL}/api/Users/Profile`)
+            const response = axiosClient.get(`${BASE_URL}/api/Users/Profile`)
             return response;
         } catch (error) {
             throw error

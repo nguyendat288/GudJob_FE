@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../../../components/Navbar'
 import Avatar from '../../../assets/avatar-sample.jpg'
 import About from '../../../assets/about.jpg'
 import Linkedin from '../../../assets/linkedin.png'
@@ -25,7 +24,6 @@ useEffect(() => {
 console.log("profile", profile);
   return (
     <div>
-    <Navbar/>
     <section id='profile'>
         <div className='section__pic-container'>
             <img src={Avatar} alt='Avatar' className='avatar'></img>
@@ -61,13 +59,13 @@ console.log("profile", profile);
                     <div className='details-container'>
                         <img src={Tick} alt='Avatar' className='icon'></img>
                         <h3>Education</h3>
-                        <p>{profile?.educations[0].universityCollege}</p>
+                        <p>{profile?.educations[0]?.universityCollege}</p>
                     </div>
                     <div className='details-container'>
                         <img src={School} alt='Avatar' className='icon'></img>
                         <h3>Experience</h3>
-                        <p>{profile?.qualifications[0].organization}</p>
-                        <p>{profile?.qualifications[0].summary}</p>
+                        <p>{profile?.experiences[0]?.title}</p>
+                        <p>{profile?.experiences[0]?.summary}</p>
                     </div>
                 </div>
                 <div className='text-container'>
