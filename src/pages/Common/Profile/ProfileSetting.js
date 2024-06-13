@@ -22,6 +22,7 @@ function ProfileSetting() {
         setFirstName(res.firstName || '');
         setLastName(res.lastName || '');
         setEmail(res.email || '');
+        setPhoneNumber(res.phoneNumber || '');
       } catch (error) {
         console.error("Error fetching profile data:", error);
         toast.error("Failed to load profile data.");
@@ -33,16 +34,18 @@ function ProfileSetting() {
   const initialData = useMemo(() => ({
     firstName: profile?.firstName || '',
     lastName: profile?.lastName || '',
-    email: profile?.email || ''
+    email: profile?.email || '',
+    phoneNumber: profile?.phoneNumber || ''
   }), [profile]);
 
   const checkIfChanged = useCallback(() => {
     return (
       firstName !== initialData.firstName ||
       lastName !== initialData.lastName ||
-      email !== initialData.email
+      email !== initialData.email ||
+      phoneNumber !== initialData.phoneNumber
     );
-  }, [firstName, lastName, email, initialData]);
+  }, [firstName, lastName, email, initialData, phoneNumber]);
 
   useEffect(() => {
     setIsButtonDisabled(!checkIfChanged());

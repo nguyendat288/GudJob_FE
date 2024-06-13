@@ -47,10 +47,12 @@ const profileApi = {
         }
     },
 
-    updateExperience: async (data, navigate) => {
+    updateExperience: async (data, navigate, type) => {
         try {
             const response = await axiosClient.put(`${BASE_URL}/api/Users/UpdateExperience`, data);
-            navigate('/profile');
+            if (type === 'update') {
+                navigate('/profile');
+            }
             return response;
         } catch (error) {
             console.error("Error during changePassword API call:", error.response || error.message);
