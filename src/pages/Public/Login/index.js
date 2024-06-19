@@ -6,7 +6,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { LoadingButton } from '@mui/lab'
 import { useDispatch, useSelector } from 'react-redux';
 import authApi from '../../../services/authApi';
-
+import { GoogleLogin } from 'react-google-login';
 
 const Login = () => {
   const [userName, setUserName] = useState('')
@@ -20,13 +20,23 @@ const Login = () => {
     setShowPassword(!showPassword)
   }
 
+  const clientId = "450961354950-5c0u9lcvgcrvbgk3u0l7j3c0m0046bkk.apps.googleusercontent.com"
+
+  const onSuccess = (res) => {
+    console.log("Success", res)
+  }
+
+  const onFailure = (res) => {
+    console.log("Failure ", res)
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     let data = {
       email: userName,
       password: password
     }
-      await authApi.loginUser(data, dispatch, navigate);
+    await authApi.loginUser(data, dispatch, navigate);
   }
 
   const handleRegister = (e) => {
@@ -40,7 +50,6 @@ const Login = () => {
           <Box sx={{ textAlign: "center" }} mb={2}>
             <Typography variant='h4'>Home</Typography>
             <Typography variant='h6' >Welcome back</Typography>
-            {/* <Button variant='contained'>Log in with Facebook</Button> */}
           </Box>
           <Divider />
           <Box mt={3}>
@@ -90,6 +99,16 @@ const Login = () => {
               }}>
               Forgot password?
             </Typography>
+            <Box id='signInButton' mt={2}>
+              <GoogleLogin
+                clientId={clientId}
+                buttonText='Login'
+                onFailure={onFailure}
+                onSuccess={onSuccess}
+                cookiePolicy={'single_host_origin'}
+                isSignedIn={true}
+              />
+            </Box>
           </Box>
           <Box>
             <LoadingButton
@@ -126,6 +145,7 @@ const Login = () => {
     </>
   )
 }
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -137,4 +157,5 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
 export default Login;
