@@ -7,14 +7,14 @@ import { gapi } from "gapi-script";
 import { ThemeProvider } from '@mui/material'
 import { theme } from './themes/theme'
 import { Helmet } from "react-helmet";
+import { CLIENT_ID } from "./services";
 
-const clientId = "450961354950-5c0u9lcvgcrvbgk3u0l7j3c0m0046bkk.apps.googleusercontent.com"
 function App() {
 
   useEffect(()=>{
     function start(){
       gapi.client.init({
-        clientId: clientId,
+        clientId: CLIENT_ID,
         scope: ""
       })
     };
