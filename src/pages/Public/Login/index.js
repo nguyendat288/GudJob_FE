@@ -7,6 +7,8 @@ import { LoadingButton } from '@mui/lab'
 import { useDispatch, useSelector } from 'react-redux';
 import authApi from '../../../services/authApi';
 import { GoogleLogin } from 'react-google-login';
+import { CLIENT_ID } from '../../../services';
+
 
 const Login = () => {
   const [userName, setUserName] = useState('')
@@ -20,7 +22,7 @@ const Login = () => {
     setShowPassword(!showPassword)
   }
 
-  const clientId = "450961354950-5c0u9lcvgcrvbgk3u0l7j3c0m0046bkk.apps.googleusercontent.com"
+
 
   const onSuccess = (res) => {
     console.log("Success", res)
@@ -101,7 +103,7 @@ const Login = () => {
             </Typography>
             <Box id='signInButton' mt={2}>
               <GoogleLogin
-                clientId={clientId}
+                clientId={CLIENT_ID}
                 buttonText='Login'
                 onFailure={onFailure}
                 onSuccess={onSuccess}

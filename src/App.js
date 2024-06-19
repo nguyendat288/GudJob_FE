@@ -4,14 +4,15 @@ import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from "react";
 import { gapi } from "gapi-script";
+import { CLIENT_ID } from "./services";
 
-  const clientId = "450961354950-5c0u9lcvgcrvbgk3u0l7j3c0m0046bkk.apps.googleusercontent.com"
+
 function App() {
 
   useEffect(()=>{
     function start(){
       gapi.client.init({
-        clientId: clientId,
+        clientId: CLIENT_ID,
         scope: ""
       })
     };
