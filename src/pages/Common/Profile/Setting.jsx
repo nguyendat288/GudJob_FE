@@ -1,11 +1,11 @@
 import React from 'react'
-import Navbar from '../../../components/Navbar'
 import SideBar from './component/SideBar'
+import TopBarFreelancer from '../../Freelancer/LayOut/TopBarFreelancer'
 
 function Setting() {
   return (
     <>
-        <Navbar/>
+        <TopBarFreelancer/>
         <div className='setting-container'>
           <SideBar/>
         </div>

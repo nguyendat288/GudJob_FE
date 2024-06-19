@@ -10,7 +10,7 @@ const UnAuthorized = () => {
       <hr className="w3-border-white w3-animate-left" style={{ margin: 'auto', width: '50%' }} />
       <h3 className="w3-center w3-animate-right">You dont have permission to view this site.</h3>
       <h3 className="w3-center w3-animate-zoom">🚫🚫🚫🚫</h3>
-      <Button variant='contained' sx={{mt: 1}} onClick={() => navigate(-2)}>Back to dashboard</Button>
+      <Button variant='contained' sx={{mt: 1}} onClick={() => navigate(-1)}>Back to dashboard</Button>
     </div>
   )
 }

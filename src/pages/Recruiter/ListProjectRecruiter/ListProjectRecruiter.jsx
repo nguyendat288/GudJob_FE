@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Divider, Tooltip, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Header from '../LayOutRecruiter/Header'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
@@ -7,10 +7,11 @@ import { useSelector } from 'react-redux';
 import StarIcon from '@mui/icons-material/Star';
 import ProjectDescription from '../../../components/ProjectDescription';
 import ShowList from './ShowList';
+import AddIcon from '@mui/icons-material/Add';
 const ListProjectRecruiter = () => {
     const currentUser = useSelector((state) => state.auth.login?.currentUser)
     const navigate = useNavigate()
-    const [listProject, setListProject] = useState([])
+    const [listProject, setListProject] = useState(null)
 
     useEffect(() => {
         const getData = async () => {
@@ -23,12 +24,23 @@ const ListProjectRecruiter = () => {
     console.log(listProject);
     return (
         <Box m={3}>
-            <Box display='flex'>
-                <Header title='List all project' subtitle="This is all your project" />
+            <Box display='flex' alignItems='center' mb={3}>
+                <Header title='DANH SÁCH DỰ ÁN' subtitle="Danh sách các dự án của bạn" />
                 <Box ml='auto'>
-                    <Button variant='contained' onClick={(e) => navigate("/create-new-project")}> Create new Project</Button>
+                    <Tooltip title="Tạo dự án" arrow>
+                        <Button
+                            sx={{ bgcolor: '#28a745',color: '#fff', fontSize: '12px', '&:hover': { bgcolor: '#00CC00' } }}
+                            onClick={() => navigate("/create-new-project")}
+                            startIcon={<AddIcon />}
+                        >
+                            Tạo dự án
+                        </Button>
+                    </Tooltip>
                 </Box>
             </Box>
+            {listProject == null && (<>
+                <CircularProgress />
+            </>)}
             <ShowList listProject={listProject} />
         </Box>
     )

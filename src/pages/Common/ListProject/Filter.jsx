@@ -4,9 +4,10 @@ import { useParams } from 'react-router-dom'
 import projectApi from '../../../services/projectApi';
 import ShowList from '../../Recruiter/ListProjectRecruiter/ShowList';
 import categoryApi from '../../../services/categoryApi';
+import FilterListIcon from '@mui/icons-material/FilterList';
 const Filter = () => {
-    const {idCate} = useParams()
-    const [listProject, setListProject] = useState([])
+  const { idCate } = useParams()
+  const [listProject, setListProject] = useState(null)
   const [listCategory, setListCategory] = useState([])
   const [categoryId, setCategoryId] = useState(idCate)
   const [listSkill, setListSkill] = useState([])
@@ -17,10 +18,10 @@ const Filter = () => {
 
   useEffect(() => {
     const getData = async () => {
-      let data ={
-        pageIndex : 1,
-        pageSize : 10,
-        categoryId : idCate,
+      let data = {
+        pageIndex: 1,
+        pageSize: 10,
+        categoryId: idCate,
       }
       let res = await projectApi.filterProject(data);
       setListProject(res)
@@ -75,9 +76,9 @@ const Filter = () => {
       <Box flex='3' >
         <ShowList listProject={listProject} />
       </Box>
-      <Box flex='1' ml={3}>
+      <Box flex='1' ml={3} mr={3}>
         <Box bgcolor='#F8F8FF' borderRadius='5px' p={3}>
-          <Typography fontWeight='bold'> Filters </Typography>
+          <Typography fontWeight='bold'><FilterListIcon /> Filters </Typography>
           <Typography fontWeight='bold'> Category </Typography>
           <Select
             fullWidth
@@ -91,20 +92,23 @@ const Filter = () => {
               <MenuItem value={item?.id}>{item?.categoryName}</MenuItem>
             ))}
           </Select>
-          <Typography fontWeight='bold'> List Skill </Typography>
-          {listSkill?.map(item => (
-            <Box key={item.id}>
-              <label>
-                <input
-                  marginLeft='10px'
-                  type="checkbox"
-                  checked={listSkillSelected.includes(item.id)}
-                  onChange={() => handleSelect(item)}
-                />
-                {item.skillName}
-              </label>
-            </Box>
-          ))}
+          {listSkill?.length != 0 && (<>
+            <Typography fontWeight='bold'> List Skill </Typography>
+            {listSkill?.map(item => (
+              <Box key={item.id}>
+                <label>
+                  <input
+                    marginLeft='10px'
+                    type="checkbox"
+                    checked={listSkillSelected.includes(item.id)}
+                    onChange={() => handleSelect(item)}
+                  />
+                  {item.skillName}
+                </label>
+              </Box>
+            ))}
+          </>)}
+
           <Typography fontWeight='bold'> Duration </Typography>
           <TextField
             value={duration}

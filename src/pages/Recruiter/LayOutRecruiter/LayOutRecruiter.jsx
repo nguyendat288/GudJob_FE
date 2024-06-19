@@ -6,12 +6,12 @@ import TopBarRecruiter from './TopBarRecruiter'
 
 const LayOutRecruiter = () => {
   return (
-    <Box display='flex'>
+    <Box display='flex' height="100vh">
       <SideBarRecruiter />
-      <Box flex='4'>
+      <Box flex='4' display='flex' flexDirection='column' height="100%">
         <TopBarRecruiter />
-        <Box>
-      {/* <Outlet /> */}
+        <Box flex="1" overflow="auto">
+          {/* <Outlet /> */}
         </Box>
       </Box>
     </Box>
