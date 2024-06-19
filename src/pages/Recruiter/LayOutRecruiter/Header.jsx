@@ -3,14 +3,18 @@ import React from 'react'
 
 const Header = ({ title, subtitle }) => {
     return (
-        <Box mb="25px">
+        <Box>
             <Typography
-                variant='h5'
+                fontSize='20px'
                 fontWeight='bold'
+                color='#000000'
             >{title}</Typography>
             <Typography
-                variant='h6'
+                fontSize='15px'
+                fontWeight='bold'
+                color='#33CCFF'
             >{subtitle}</Typography>
+           
         </Box>
     )
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
+import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
 import HouseOutlinedIcon from '@mui/icons-material/HouseOutlined';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
@@ -24,24 +24,21 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 
 const SideBarRecruiter = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [selected, setSelected] = useState("recruiter");
-  
-    const currentUser = useSelector((state) => state.auth.login?.currentUser);
-    console.log(currentUser);
+  const [selected, setSelected] = useState("List Project");
+
+  const currentUser = useSelector((state) => state.auth.login?.currentUser);
+  console.log(currentUser);
 
   return (
-    <Box >
-      <Sidebar collapsed={isCollapsed} width='300px'>
+    <Box>
+      <Sidebar collapsed={isCollapsed} width='300px' style={{ height: '100%' }}>
         <Menu iconShape="square"
           menuItemStyles={{
             button: ({ level, active, disabled }) => {
               if (level === 0)
                 return {
-                  color: disabled ? '#f5d9ff' : '#d359ff',
-                  backgroundColor: active ? `#101624` : undefined,
-                  '&:hover': {
-                    backgroundColor: "#808080", // Your custom hover color
-                  },
+                  color: disabled ? '#B0E0E6' : '#000000',
+                  backgroundColor: active ? `#B0E2FF` : undefined,
                 };
             },
           }}
@@ -61,7 +58,7 @@ const SideBarRecruiter = () => {
                 alignItems="center"
                 ml="15px"
               >
-                <Typography variant="h5" >
+                <Typography fontSize='30px'>
                   GoodJob
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
@@ -87,7 +84,7 @@ const SideBarRecruiter = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                 {currentUser?.name}
+                  {currentUser?.name}
                 </Typography>
               </Box>
             </Box>
@@ -109,14 +106,16 @@ const SideBarRecruiter = () => {
             >
               Project
             </Typography>
-            <Item 
-              title="Project Management"
-              to="/list-project-recruiter"
-              icon={<QuizIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-         
+            <SubMenu label="Project Management" icon={<QuizIcon />}>
+              <Item
+                title="List Project"
+                to="/list-project-recruiter"
+                icon={<QuizIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <MenuItem icon={<QuizIcon />}>Ex Professors</MenuItem>
+            </SubMenu>
           </Box>
         </Menu>
       </Sidebar>

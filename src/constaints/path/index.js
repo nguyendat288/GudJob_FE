@@ -7,13 +7,17 @@ export const PUBLIC_PATH = {
     SEARCH_CATEGORY_PROJECT: "/category/:idCate",
     DETAIL: "/detail/:projectId",
     RESET: "/reset-password",
-    SETTING: "/setting",
     NOT_FOUND: '*',
 }
 
 export const FREELANCER_PATH = {
     LAYOUT: "/",
     PROFILE: "/profile",
+    PROFILE_SETTING: "/profile-setting",
+    CHANGE_PASSWORD: "/change-password",
+    EXPERIENCE_EDUCATION: "/experience-education",
+    SETTING: "/setting",
+
 }
 
 export const RECRUITER_PATH = {

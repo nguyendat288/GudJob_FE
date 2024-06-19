@@ -19,9 +19,9 @@ function HeroSection() {
         textAlign: 'center',
       }}
     >
-      <Button variant="contained" color="primary" sx={{ mt: 3 }}>
+      {/* <Button variant="contained" color="primary" sx={{ mt: 3 }}>
         Get Started
-      </Button>
+      </Button> */}
     </Box>
   );
 }

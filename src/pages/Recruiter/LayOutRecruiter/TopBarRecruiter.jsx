@@ -34,7 +34,7 @@ const TopBarRecruiter = () => {
         <>
             <AppBar position="static" sx={{ bgcolor: 'white' }}>
                 <Container maxWidth="xl">
-                    <Toolbar disableGutters>
+                    <Toolbar >
                         <Typography
                             variant="h6"
                             noWrap
@@ -108,7 +108,7 @@ const TopBarRecruiter = () => {
                     </Toolbar>
                 </Container>
             </AppBar>
-            <Box>
+            <Box> 
                 <Outlet />
             </Box>
         </>

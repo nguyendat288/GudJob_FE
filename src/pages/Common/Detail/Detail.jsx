@@ -1,4 +1,4 @@
-import { Box, Button, Divider, FilledInput, FormControl, FormHelperText, InputAdornment, Modal, OutlinedInput, Paper, Tab, TextField, Typography } from '@mui/material'
+import { Box, Button, Divider, FilledInput, FormControl, FormHelperText, InputAdornment, LinearProgress, Modal, OutlinedInput, Paper, Tab, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/system';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -10,6 +10,8 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import ProjectDetail from './ProjectDetail';
 import ListBidding from './ListBidding';
 import { ROLES } from '../../../constaints/role';
+import TypographyTitle from '../../../components/Typography/TypographyTitle';
+import Header from '../../Recruiter/LayOutRecruiter/Header';
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
     borderRadius: '10px',
@@ -29,11 +31,11 @@ const Detail = () => {
     const navigate = useNavigate();
     const { projectId } = useParams()
     const [value, setValue] = useState('1');
-    const [detail, setDetail] = useState();
+    const [detail, setDetail] = useState(null);
     const [budget, setBudget] = useState(0)
     const [comment, setComment] = useState('')
     const [duration, setDuration] = useState(0)
-    const [listBidding, setListBidding] = useState([])
+    const [listBidding, setListBidding] = useState(null)
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -62,22 +64,6 @@ const Detail = () => {
     console.log(detail);
     console.log(listBidding);
 
-    // useEffect(() => {
-    //     const getProjectDetail = async () => {
-    //         let res = await projectApi.GetProjectDetailsById(projectId);
-    //         setDetail(res);
-    //         if (res?.createdBy === currentUser?.userId) {
-    //             const getBidding = async () => {
-    //                 let res1 = await biddingApi.GetBiddingListByProjectId(projectId, 1, 10);
-    //                 setItem(res1?.items);
-    //             }
-    //             getBidding()
-    //         }
-    //     }
-    //     getProjectDetail()
-    // }, [])
-
-
     const handleSubmit = async (e) => {
         if (comment === '' || duration === '' || budget === 0 || budget < detail?.minBudget || budget > detail?.maxBudget) {
             toast.error("Something was error");
@@ -94,42 +80,41 @@ const Detail = () => {
         }
     }
     const handleDelete = async (id) => {
-     await projectApi.DeleteProject(id);
+        await projectApi.DeleteProject(id);
     }
     const handleAccept = async (id) => {
-        let data ={
-            id : id,
-            isAccepted : true
+        let data = {
+            id: id,
+            isAccepted: true
         }
-        await biddingApi.AcceptBidding(data,navigate);
-       }
-       
+        await biddingApi.AcceptBidding(data, navigate);
+    }
+
     return (
         <>
             <Box m={5}>
-                <Box display='flex'>
-                    <Typography fontSize='25px' fontWeight='bold'>{detail?.title} </Typography>
-                    {detail?.statusId === 1 && (<>
-                        <StyledTypography>
-                            Pending
-                        </StyledTypography>
+                <Box mb={3}>
+                    {value == '1' && (<>
+                        <Header title="MÔ TẢ DỰ ÁN" subtitle="Thông tin chi tiết của dự án" />
                     </>)}
-                    {detail?.statusId === 2 && (<>
-                        <StyledTypography>
-                            Done
-                        </StyledTypography>
+                    {value == '2' && (<>
+                        <Header title="DANH SÁCH ĐẤU THẦU" subtitle="Danh sách đấu thầu của dự án" />
                     </>)}
                 </Box>
+
 
                 <Box sx={{ width: '100%' }}>
                     <TabContext value={value}>
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                            <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                <Tab label="Project Detail" sx={{ fontSize: '12px' }} value="1" />
-                                <Tab label="Proposals" sx={{ fontSize: '12px' }} value="2" />
+                            <TabList onChange={handleChange}>
+                                <Tab label="Mô tả dự án" sx={{ fontSize: '12px' }} value="1" />
+                                <Tab label="Đấu thầu" sx={{ fontSize: '12px' }} value="2" />
                             </TabList>
                         </Box>
                         <TabPanel value="1">
+                            {detail == null && (
+                                <LinearProgress />
+                            )}
                             <ProjectDetail detail={detail} navigate={navigate} handleDelete={handleDelete} currentUser={currentUser} />
                             {currentUser != null && currentUser?.role == ROLES.FREELANCER && (
                                 <>
@@ -138,11 +123,14 @@ const Detail = () => {
                             )}
                         </TabPanel>
                         <TabPanel value="2">
-                            <ListBidding 
-                            listBidding={listBidding} 
-                            currentUser={currentUser} 
-                            createdBy={detail?.createdBy}
-                            handleAccept ={handleAccept}
+                        {listBidding == null && (
+                                <LinearProgress />
+                            )}
+                            <ListBidding
+                                listBidding={listBidding}
+                                currentUser={currentUser}
+                                createdBy={detail?.createdBy}
+                                handleAccept={handleAccept}
                             />
                         </TabPanel>
                     </TabContext>

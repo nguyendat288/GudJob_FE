@@ -15,8 +15,8 @@ export default function NotFoundPage() {
       <Container maxWidth="md">
         <Grid container spacing={2}>
           <Grid xs={6}>
-            <Typography variant="h1">404</Typography>
-            <Typography variant="h6">The page you’re looking for doesn’t exist.</Typography>
+            <Typography fontSize="100px" fontWeight='bold'>404</Typography>
+            <Typography fontSize='20px'>The page you’re looking for doesn’t exist.</Typography>
             <Button
               variant="contained"
               onClick={() => navigate(-1)}

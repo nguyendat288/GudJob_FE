@@ -1,12 +1,16 @@
 import { Box, Card, CardContent, CardMedia, Divider, Grid, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import categoryApi from '../../../services/categoryApi'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import HeroSection from '../../../components/HeroSection';
+import TypographyTitle from '../../../components/Typography/TypographyTitle';
+import TypographyHeader from '../../../components/Typography/TypographyHeader';
 
 const Home = () => {
   const [listCategory, setListCategory] = useState([])
+  const navigate = useNavigate()
+
   useEffect(() => {
     const getCategory = async () => {
       const res = await categoryApi.GetAllCategory();
@@ -14,30 +18,50 @@ const Home = () => {
     }
     getCategory()
   }, [])
+  
+  const handleClick = (id) => {
+    navigate(`/category/${id}`)
+  }
   console.log(listCategory);
   return (
     <>
       <HeroSection />
       <Box m={3}>
-        <Box>
-          <Typography fontSize='25px' fontWeight='bold'>Explore popular categories </Typography>
+        <Box mb={3}>
+          <TypographyHeader title="CÁC NGÀNH NỔI BẬT" />
           <Grid container spacing={3} mt={2}>
             {listCategory.length !== 0 && listCategory.map((item, index) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                 <Card
-                  component={Link}
-                  to={`/category/${item.id}`}
-                  sx={{ maxWidth: 345, textDecoration: 'none', cursor: 'pointer' }}
+                onClick={(e) => handleClick(item?.id)}
+                  sx={{   
+                    maxWidth: 345,
+                    textDecoration: 'none',
+                    cursor: 'pointer',
+                    borderRadius: 2,
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                    transition: 'transform 0.3s, box-shadow 0.3s',
+                    '&:hover': {
+                      transform: 'scale(1.05)',
+                      boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+                    },
+                    '&:focus': {
+                      outline: 'none',
+                      boxShadow: '0 0 0 4px rgba(0, 123, 255, 0.5)',
+                    },
+                    '&:active': {
+                      transform: 'scale(0.95)',
+                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                    }
+                  }}
                 >
                   <CardMedia
                     component="img"
                     height="140"
-                    image={item?.image} 
+                    image={item?.image}
                   />
                   <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {item?.categoryName}
-                    </Typography>
+                    <TypographyTitle title={item?.categoryName} />
                   </CardContent>
                 </Card>
               </Grid>
@@ -46,7 +70,7 @@ const Home = () => {
         </Box>
         <Divider />
         <Box mt={3}>
-          <Typography fontSize='25px' fontWeight='bold'>What our website can help you ? </Typography>
+          <TypographyHeader title="Website chúng tôi có thể hỗ trợ các bạn về ?" />
           <Box display="flex">
             <Box flex='1' p={3}>
               <CardMedia
@@ -74,7 +98,7 @@ const Home = () => {
         </Box>
         <Divider />
         <Box mt={3}>
-          <Typography fontSize='25px' fontWeight='bold'> Explore more features with our membership </Typography>
+          <TypographyHeader title="Khám phá nhiều tính năng hơn với tư cách hội viên" />
           <Box display="flex">
             <Box flex='1' p={3}>
               <Typography variant="h6" display="flex" alignItems="center" mb={2}>

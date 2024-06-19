@@ -24,6 +24,7 @@ import TopBarRecruiter from "../pages/Recruiter/LayOutRecruiter/TopBarRecruiter"
 import UpdateProject from "../pages/Recruiter/UpdateProject/UpdateProject";
 import Search from "../pages/Common/ListProject/Search";
 import Filter from "../pages/Common/ListProject/Filter";
+import SideBar from "../pages/Common/Profile/component/SideBar";
 
 export default function Router() {
   let router = useRoutes([
@@ -82,28 +83,6 @@ export default function Router() {
       ]
     },
     {
-      path: PUBLIC_PATH.SETTING,
-      element: <Setting />,
-      children: [
-        {
-          index: true,
-          element: <Navigate to="profile-setting" replace />
-        },
-        {
-          path: "profile-setting",
-          element: <ProfileSetting />
-        },
-        {
-          path: "change-password",
-          element: <ChangePassword />
-        },
-        {
-          path: "experience-education",
-          element: <ExperienceEducation />
-        }
-      ]
-    }, 
-    {
       path: '/unauthorized',
       element: <UnAuthorized />
     },
@@ -126,6 +105,41 @@ export default function Router() {
                 </Suspense>
               )
             }
+          ]
+        }
+      ]
+    },
+    {
+      path: FREELANCER_PATH.LAYOUT,
+      element: <Setting />,
+      children: [
+        {
+          element: <RequireAuth allowedRoles={ROLES.FREELANCER} />,
+          children: [
+            {
+              path: FREELANCER_PATH.PROFILE_SETTING,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <ProfileSetting />
+                </Suspense>
+              )
+            },
+            {
+              path: FREELANCER_PATH.CHANGE_PASSWORD,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <ChangePassword />
+                </Suspense>
+              )
+            },
+            {
+              path: FREELANCER_PATH.EXPERIENCE_EDUCATION,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <ExperienceEducation />
+                </Suspense>
+              )
+            },
           ]
         }
       ]

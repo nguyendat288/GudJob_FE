@@ -33,7 +33,7 @@ const TopBarFreelancer = () => {
   };
 
   const handleSetting = () => {
-    navigate('/setting');
+    navigate('/profile-setting');
   };
   
   const dispatch = useDispatch()
@@ -151,8 +151,8 @@ const TopBarFreelancer = () => {
             currentUser == null && (
               <>
                 <Box display='flex' gap={2}>
-                  <Button onClick={(e) => navigate('/login')}>Sign in</Button>
-                  <Button onClick={(e) => navigate('/register')}>Sign up</Button>
+                  <Button variant="outlined" onClick={(e) => navigate('/login')}>Sign in</Button>
+                  <Button variant="outlined" onClick={(e) => navigate('/register')}>Sign up</Button>
                 </Box>
               </>
             )
