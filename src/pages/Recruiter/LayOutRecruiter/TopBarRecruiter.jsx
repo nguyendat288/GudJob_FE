@@ -48,6 +48,7 @@ const TopBarRecruiter = () => {
                                 letterSpacing: '.3rem',
                                 textDecoration: 'none',
                             }}
+                            className='bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text'
                         >
                             GoodJob
                         </Typography>
@@ -108,7 +109,7 @@ const TopBarRecruiter = () => {
                     </Toolbar>
                 </Container>
             </AppBar>
-            <Box> 
+            <Box>
                 <Outlet />
             </Box>
         </>
