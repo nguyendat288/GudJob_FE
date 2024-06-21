@@ -5,15 +5,15 @@ import { Box, List, ListItemButton, ListItemText } from '@mui/material'
 function SideBar() {
     const sidebarData = [
         {
-            title: "Profile",
+            title: "Hồ sơ cá nhân",
             link:"profile-setting"
         },
         {
-            title: "Change password",
+            title: "Đổi mật khẩu",
             link:"change-password"
         },
         {
-            title: "Experience and Education",
+            title: "Kinh nghiệm và Học vấn",
             link:"experience-education"
         },
     ]

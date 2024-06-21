@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, TextField, Typography, Button, Divider } from '@mui/material';
-import LinearProgress from '@mui/joy/LinearProgress';
+import { Box, TextField, Typography, Button, Divider, LinearProgress } from '@mui/material';
 import DateSelector from './component/DateSelector';
 import profileApi from '../../../services/profileApi';
 import { useNavigate } from 'react-router-dom';
@@ -280,23 +279,25 @@ const ExperienceEducation = () => {
   };
 
   return (
-    <Box p={3} borderRadius={16} border="1px solid #ccc">
-      <Typography variant="h4" gutterBottom>Experience and Education</Typography>
+    <Box p={3} borderRadius={10} border="1px solid #ccc">
+      <Typography sx={{fontSize: "2em"}} gutterBottom>Kinh nghiệm và Học vấn</Typography>
 
       <Box mb={2}>
-        <Typography variant="h6">Experience</Typography>
-        {profile && profile.experiences ? (
+        <Typography sx={{fontSize: "1.5em"}} variant="h6">Kinh nghiệm</Typography>
+
+        {profile ? ((profile.experience === null || profile.experiences.length !== 0) ? (
           profile.experiences.map((exp, index) => (
-            <Box key={index} mb={2} border="1px solid #ccc" borderRadius={8} p={2}>
+            <Box key={index} mb={2} border="1px solid #ccc" borderRadius={5} p={2}>
               <Typography variant="subtitle1">{exp.title}</Typography>
               <Typography variant="body2">{exp.company}</Typography>
               <Typography variant="body2">{`${exp.start.month} ${exp.start.year} - ${exp.end.month} ${exp.end.year}`}</Typography>
               <Typography variant="body2">{exp.summary}</Typography>
-              <Button variant="outlined" onClick={() => handleEditExperience(index)}>Edit</Button>
-              <Button variant="outlined" sx={{marginLeft: 2}} color="error" onClick={() => handleDeleteExperience(index)}>Delete</Button>
+              <Button variant="outlined" onClick={() => handleEditExperience(index)}>Sửa</Button>
+              <Button variant="outlined" sx={{marginLeft: 2}} color="error" onClick={() => handleDeleteExperience(index)}>Xóa</Button>
             </Box>
           )
-        )) : <LinearProgress variant="soft" />}
+        )) : <Typography>Hiện chưa có bất kì kinh nghiệm nào</Typography>) 
+        : <LinearProgress />}
 
         <Button
           variant="contained"
@@ -304,13 +305,13 @@ const ExperienceEducation = () => {
           onClick={handleAddExperience}
           sx={{ mt: 2 }}
         >
-          Add New Experience
+          Thêm kinh nghiệm
         </Button>
 
         {isExperienceFormVisible && (
           <Box component="form" onSubmit={handleExperienceSave}>
             <TextField
-              label="Company/Organization"
+              label="Công ty/Tổ chức"
               variant="outlined"
               fullWidth
               margin="normal"
@@ -330,7 +331,7 @@ const ExperienceEducation = () => {
               showMonths={true}
             />
             <TextField
-              label="Title"
+              label="Tiêu đề"
               variant="outlined"
               fullWidth
               margin="normal"
@@ -338,7 +339,7 @@ const ExperienceEducation = () => {
               onChange={(e) => handleExperienceChange('title', e.target.value)}
             />
             <TextField
-              label="Description"
+              label="Mô tả ngắn gọn"
               variant="outlined"
               fullWidth
               multiline
@@ -360,9 +361,9 @@ const ExperienceEducation = () => {
                 mt: 2
               }}
             >
-              {editIndex !== null ? 'Update Experience' : 'Add Experience'}
+              {editIndex !== null ? 'Cập nhật' : 'Thêm kinh nghiệm mới'}
             </Button>
-            <Button variant="outlined" sx={{mt: 2, marginLeft: 2}} onClick={handleCancelExperience}>Cancel</Button>
+            <Button variant="outlined" sx={{mt: 2, marginLeft: 2}} onClick={handleCancelExperience}>Hủy thay đổi</Button>
           </Box>
         )}
       </Box>
@@ -370,19 +371,21 @@ const ExperienceEducation = () => {
       <Divider sx={{ my: 2 }} />
 
       <Box mb={2}>
-        <Typography variant="h6">Education</Typography>
-        {profile && profile.educations ? (
+        <Typography sx={{fontSize: "1.5em"}}>Học vấn</Typography>
+
+        {profile ? ((profile.educations === null || profile.educations.length !== 0) ? (
           profile.educations.map((edu, index) => (
-            <Box key={index} mb={2} border="1px solid #ccc" borderRadius={8} p={2}>
+            <Box key={index} mb={2} border="1px solid #ccc" borderRadius={5} p={2}>
               <Typography variant="subtitle1">{edu.degree}</Typography>
               <Typography variant="body2">{edu.universityCollege}</Typography>
               <Typography variant="body2">{edu.country}</Typography>
               <Typography variant="body2">{`${edu.start.year} - ${edu.end.year}`}</Typography>
-              <Button variant="outlined" onClick={() => handleEditEducation(index)}>Edit</Button>
-              <Button variant="outlined" sx={{marginLeft: 2}} color="error" onClick={() => handleDeleteEducation(index)}>Delete</Button>
+              <Button variant="outlined" onClick={() => handleEditEducation(index)}>Sửa</Button>
+              <Button variant="outlined" sx={{marginLeft: 2}} color="error" onClick={() => handleDeleteEducation(index)}>Xóa</Button>
             </Box>
           )
-        )) : <LinearProgress variant="soft" />}
+        )) : <Typography>Hiện chưa có bất kì học vấn nào</Typography>) 
+        : <LinearProgress />}
 
         <Button
           variant="contained"
@@ -390,13 +393,13 @@ const ExperienceEducation = () => {
           onClick={handleAddEducation}
           sx={{ mt: 2 }}
         >
-          Add New Education
+          Thêm học vấn
         </Button>
 
         {isEducationFormVisible && (
           <Box component="form" onSubmit={handleEducationSave}>
             <TextField
-              label="University/College"
+              label="Đại học/Cao đẳng"
               variant="outlined"
               fullWidth
               margin="normal"
@@ -404,7 +407,7 @@ const ExperienceEducation = () => {
               onChange={(e) => handleEducationChange('universityCollege', e.target.value)}
             />
             <TextField
-              label="Country"
+              label="Quốc gia"
               variant="outlined"
               fullWidth
               margin="normal"
@@ -412,7 +415,7 @@ const ExperienceEducation = () => {
               onChange={(e) => handleEducationChange('country', e.target.value)}
             />
             <TextField
-              label="Degree"
+              label="Bằng cấp"
               variant="outlined"
               fullWidth
               margin="normal"
@@ -444,9 +447,9 @@ const ExperienceEducation = () => {
                 mt: 2
               }}
             >
-              {editingEducationIndex !== null ? 'Update Education' : 'Add Education'}
+              {editingEducationIndex !== null ? 'Cập nhật' : 'Thêm học vấn mới'}
             </Button>
-            <Button variant="outlined" sx={{mt: 2, marginLeft: 2}} onClick={handleCancelEducation}>Cancel</Button>
+            <Button variant="outlined" sx={{mt: 2, marginLeft: 2}} onClick={handleCancelEducation}>Hủy thay đổi</Button>
           </Box>
         )}
       </Box>

@@ -81,12 +81,12 @@ function ProfileSetting() {
 
   return (
     <Box p={3} borderRadius={5} border="1px solid #ccc" component="form" onSubmit={handleSave}>
-      <Typography variant="h4" gutterBottom>Profile</Typography>
+      <Typography sx={{fontSize: "2em"}} variant="h4" gutterBottom>Hồ sơ của bạn</Typography>
       
       <Box mb={2}>
-        <Typography variant="h6">Name</Typography>
+        <Typography sx={{fontSize: "1.5em"}} variant="h6">Tên</Typography>
         <TextField
-          label="First Name"
+          label="Họ"
           variant="outlined"
           fullWidth
           margin="normal"
@@ -94,7 +94,7 @@ function ProfileSetting() {
           onChange={(e) => setFirstName(e.target.value)}
         />
         <TextField
-          label="Last Name"
+          label="Tên"
           variant="outlined"
           fullWidth
           margin="normal"
@@ -106,7 +106,7 @@ function ProfileSetting() {
       <Divider sx={{ my: 2 }} />
 
       <Box mb={2}>
-        <Typography variant="h6">Email</Typography>
+        <Typography sx={{fontSize: "1.5em"}} variant="h6">Email</Typography>
         <TextField
           label="Email"
           variant="outlined"
@@ -120,9 +120,9 @@ function ProfileSetting() {
       <Divider sx={{ my: 2 }} />
 
       <Box mb={2}>
-        <Typography variant="h6">Personal information</Typography>
+        <Typography sx={{fontSize: "1.5em"}} variant="h6">Thông tin cá nhân</Typography>
         <TextField
-          label="Phone number"
+          label="Số điện thoại"
           variant="outlined"
           fullWidth
           margin="normal"
@@ -143,7 +143,7 @@ function ProfileSetting() {
           }
         }}
       >
-        Save
+        Lưu thay đổi
       </Button>
     </Box>
   );
