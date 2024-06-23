@@ -28,7 +28,7 @@ function Profile() {
             <Grid container spacing={4}>
                 {/* Left Section */}
                 <Grid item xs={12} md={8}>
-                    <section id="profile" className="flex flex-col items-center py-12 bg-gray-100 rounded-lg shadow-md">
+                    <section id="profile" className="flex flex-col items-center py-12 bg-gray-100 rounded-t-none rounded-lg shadow-md">
                         <Avatar alt="Avatar" src={currentUser?.avatar} sx={{ height: 80, width: 80 }} className="shadow-lg" />
                         <Typography sx={{ fontSize: '1.25rem' }} className="mt-4">Hello, I'm</Typography>
                         <Typography sx={{ fontSize: '3rem', fontWeight: 'bold' }} className="font-bold">{profile?.name}</Typography>
@@ -49,9 +49,7 @@ function Profile() {
                         <Typography sx={{ fontSize: '2.125rem', fontWeight: 'bold', textAlign: 'center' }}>About Me</Typography>
                         <Grid container spacing={4} className="mt-8">
                             <Grid item xs={12} md={6}>
-                                <Paper elevation={3} className="p-4">
-                                    <img src={AboutImage} alt="About" className="w-full rounded-lg" />
-                                </Paper>
+                                <img src={AboutImage} alt="About" className="w-full rounded-lg" />
                             </Grid>
                             <Grid item xs={12} md={6} className="space-y-6">
                                 <Paper elevation={3} className="p-4">
@@ -103,7 +101,7 @@ function Profile() {
                 {/* Right Section */}
                 <Grid item xs={12} md={4}>
                     <Box className="space-y-6">
-                        <Paper elevation={3} className="p-4">
+                        <Paper elevation={3} className="p-4" sx={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
                             <Typography sx={{ fontSize: '1.25rem', fontWeight: 'bold' }}>Thông tin xác thực</Typography>
                             <Box className="mt-4 space-y-2">
                                 <Grid container>
