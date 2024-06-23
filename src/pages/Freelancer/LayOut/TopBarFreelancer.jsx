@@ -1,5 +1,5 @@
 import { AppBar, Box, Button, Container, IconButton, InputBase, Menu, Toolbar, Typography } from '@mui/material';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
@@ -14,10 +14,21 @@ import { logOutSuccess } from '../../../redux/authSlice';
 import { toast } from 'react-toastify';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import profileApi from '../../../services/profileApi';
 
 const TopBarFreelancer = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
+  const [profile, setProfile] = useState();
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await profileApi.getUserProfile();
+      console.log(res);
+      setProfile(res);
+    };
+    getData();
+  }, []);
   const [search, setSearch] = useState('')
 
   const handleOpenUserMenu = (event) => {
@@ -35,7 +46,7 @@ const TopBarFreelancer = () => {
   const handleSetting = () => {
     navigate('/profile-setting');
   };
-  
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -46,10 +57,10 @@ const TopBarFreelancer = () => {
     toast.success('Logout successfully!');
   }
 
-  const handleSearch =()=>{
+  const handleSearch = () => {
     navigate(`/search/${search}`)
   }
-  
+
   return (
     <AppBar position="static" sx={{ bgcolor: 'white' }}>
       <Container maxWidth="xl">
@@ -79,12 +90,12 @@ const TopBarFreelancer = () => {
               sx={{ width: '50%' }}
             >
               <InputBase
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder='Seach name project' sx={{ ml: 2, flex: 1 }} />
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder='Seach name project' sx={{ ml: 2, flex: 1 }} />
               <IconButton type='button'
-              onClick={(e)=>handleSearch(e)}
-              p={1}>
+                onClick={(e) => handleSearch(e)}
+                p={1}>
                 <SearchOutlinedIcon />
               </IconButton>
             </Box>
@@ -105,10 +116,10 @@ const TopBarFreelancer = () => {
                 display: 'flex',
                 alignItems: 'center',
                 fontWeight: 'bold'
-              }}>{currentUser?.name}</Typography>
+              }}>{profile?.name}</Typography>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src={currentUser?.avatar} />
+                  <Avatar alt="Remy Sharp" src={profile?.avatar} />
                 </IconButton>
               </Tooltip>
               <Menu
