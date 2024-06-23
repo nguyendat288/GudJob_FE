@@ -10,6 +10,7 @@ function ProfileSetting() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [description, setDescription] = useState('');
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const navigate = useNavigate();
 
@@ -23,6 +24,7 @@ function ProfileSetting() {
         setLastName(res.lastName || '');
         setEmail(res.email || '');
         setPhoneNumber(res.phoneNumber || '');
+        setDescription(res.description || '');
       } catch (error) {
         console.error("Error fetching profile data:", error);
         toast.error("Failed to load profile data.");
@@ -35,7 +37,8 @@ function ProfileSetting() {
     firstName: profile?.firstName || '',
     lastName: profile?.lastName || '',
     email: profile?.email || '',
-    phoneNumber: profile?.phoneNumber || ''
+    phoneNumber: profile?.phoneNumber || '',
+    description: profile?.description || ''
   }), [profile]);
 
   const checkIfChanged = useCallback(() => {
@@ -43,9 +46,10 @@ function ProfileSetting() {
       firstName !== initialData.firstName ||
       lastName !== initialData.lastName ||
       email !== initialData.email ||
-      phoneNumber !== initialData.phoneNumber
+      phoneNumber !== initialData.phoneNumber ||
+      description !== initialData.description
     );
-  }, [firstName, lastName, email, initialData, phoneNumber]);
+  }, [firstName, lastName, email, initialData, phoneNumber, description]);
 
   useEffect(() => {
     setIsButtonDisabled(!checkIfChanged());
@@ -58,6 +62,7 @@ function ProfileSetting() {
       name: `${firstName} ${lastName}`,
       email: email,
       phoneNumber: phoneNumber || "",
+      description: description || "",
       taxCode: profile?.taxCode || "",
       isCompany: profile?.isCompany || false,
       skills: profile?.skills || []
@@ -120,7 +125,7 @@ function ProfileSetting() {
       <Divider sx={{ my: 2 }} />
 
       <Box mb={2}>
-        <Typography sx={{fontSize: "1.5em"}} variant="h6">Thông tin cá nhân</Typography>
+        <Typography sx={{fontSize: "1.5em"}} variant="h6">Cá nhân</Typography>
         <TextField
           label="Số điện thoại"
           variant="outlined"
@@ -128,6 +133,14 @@ function ProfileSetting() {
           margin="normal"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
+        />
+        <TextField
+          label="Mô tả bản thân"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
       </Box>
 
