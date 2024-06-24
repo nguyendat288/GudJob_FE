@@ -14,7 +14,7 @@ export default function NotFoundPage() {
       }}>
       <Container maxWidth="md">
         <Grid container spacing={2}>
-          <Grid xs={6}>
+          <Grid item xs={6}>
             <Typography fontSize="100px" fontWeight='bold'>404</Typography>
             <Typography fontSize='20px'>The page you’re looking for doesn’t exist.</Typography>
             <Button
@@ -24,7 +24,7 @@ export default function NotFoundPage() {
               Back to Dashboard
             </Button>
           </Grid>
-          <Grid xs={6}>
+          <Grid item xs={6}>
             <img
               src="https://cdn.pixabay.com/photo/2017/03/09/12/31/error-2129569__340.jpg"
               alt=""

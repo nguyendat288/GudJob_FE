@@ -31,5 +31,7 @@ export const RECRUITER_PATH = {
 
 export const ADMIN_PATH = {
     LAYOUT: "/",
-    HOME_ADMIN :"/admin"
+    HOME_ADMIN : "/admin",
+    LIST_USERS: "/users-list",
+    ROLES: "/roles"
 }

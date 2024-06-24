@@ -1,22 +1,21 @@
-import { Box } from '@mui/material'
-import React from 'react'
-import SideBarAdmin from './SideBarAdmin'
-import TopBarAdmin from './TopBarAdmin'
-import { Outlet } from 'react-router-dom'
-import TopBarRecruiter from '../../Recruiter/LayOutRecruiter/TopBarRecruiter'
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import TopBarAdmin from './TopBarAdmin';
+import SideBarAdmin from './SideBarAdmin';
+import { Box } from '@mui/material';
 
 const LayOutAdmin = () => {
     return (
-        <Box display='flex'>
+        <Box display="flex">
             <SideBarAdmin />
-            <Box flex='4'>
-                <TopBarRecruiter />
-                <Box>
+            <Box component="main" className="flex-grow p-4 ml-64 mt-16">
+                <TopBarAdmin />
+                <main className="flex-grow p-4 bg-gray-50">
                     <Outlet />
-                </Box>
+                </main>
             </Box>
         </Box>
-    )
-}
+    );
+};
 
-export default LayOutAdmin
+export default LayOutAdmin;

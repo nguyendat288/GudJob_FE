@@ -1,5 +1,5 @@
 import { Navigate, useRoutes } from "react-router-dom";
-import { FREELANCER_PATH, PUBLIC_PATH, RECRUITER_PATH } from "../constaints/path";
+import { ADMIN_PATH, FREELANCER_PATH, PUBLIC_PATH, RECRUITER_PATH } from "../constaints/path";
 import Register from "../pages/Public/Register";
 import Login from "../pages/Public/Login";
 import Profile from "../pages/Common/Profile";
@@ -25,6 +25,10 @@ import UpdateProject from "../pages/Recruiter/UpdateProject/UpdateProject";
 import Search from "../pages/Common/ListProject/Search";
 import Filter from "../pages/Common/ListProject/Filter";
 import SideBar from "../pages/Common/Profile/component/SideBar";
+import HomeAdmin from "../pages/Admin/HomeAdmin/HomeAdmin";
+import LayOutAdmin from "../pages/Admin/LayOutAdmin/LayOutAdmin";
+import TopBarAdmin from "../pages/Admin/LayOutAdmin/TopBarAdmin";
+import ListUsers from "../pages/Admin/ListUsers/ListUsers";
 
 export default function Router() {
   let router = useRoutes([
@@ -209,6 +213,33 @@ export default function Router() {
               element: (
                 <Suspense fallback={<>Loading...</>}>
                   <CreateProject />
+                </Suspense>
+              )
+            },
+          ]
+        }
+      ]
+    },
+    {
+      path: ADMIN_PATH.LAYOUT,
+      element: <LayOutAdmin />,
+      children: [
+        {
+          element: <RequireAuth allowedRoles={ROLES.RECRUITER} />,
+          children: [
+            {
+              path: ADMIN_PATH.HOME_ADMIN,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <HomeAdmin />
+                </Suspense>
+              )
+            },
+            {
+              path: ADMIN_PATH.LIST_USERS,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <ListUsers />
                 </Suspense>
               )
             },
