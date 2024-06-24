@@ -1,4 +1,4 @@
-import { Navigate, useRoutes } from "react-router-dom";
+import { useRoutes } from "react-router-dom";
 import { ADMIN_PATH, FREELANCER_PATH, PUBLIC_PATH, RECRUITER_PATH } from "../constaints/path";
 import Register from "../pages/Public/Register";
 import Login from "../pages/Public/Login";
@@ -24,10 +24,8 @@ import TopBarRecruiter from "../pages/Recruiter/LayOutRecruiter/TopBarRecruiter"
 import UpdateProject from "../pages/Recruiter/UpdateProject/UpdateProject";
 import Search from "../pages/Common/ListProject/Search";
 import Filter from "../pages/Common/ListProject/Filter";
-import SideBar from "../pages/Common/Profile/component/SideBar";
 import HomeAdmin from "../pages/Admin/HomeAdmin/HomeAdmin";
 import LayOutAdmin from "../pages/Admin/LayOutAdmin/LayOutAdmin";
-import TopBarAdmin from "../pages/Admin/LayOutAdmin/TopBarAdmin";
 import ListUsers from "../pages/Admin/ListUsers/ListUsers";
 
 export default function Router() {
@@ -225,7 +223,7 @@ export default function Router() {
       element: <LayOutAdmin />,
       children: [
         {
-          element: <RequireAuth allowedRoles={ROLES.RECRUITER} />,
+          element: <RequireAuth allowedRoles={ROLES.FREELANCER} />,
           children: [
             {
               path: ADMIN_PATH.HOME_ADMIN,

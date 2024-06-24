@@ -5,18 +5,37 @@ const userManagementApi = {
     getAllUsers: () => {
         try {
             const response = axiosClient.get(`${BASE_URL}/api/Users/GetUsers?PageIndex=1&PageSize=10`)
-            console.log("response", response);
             return response;
         } catch (error) {
             throw error
         }
     },
 
-    lockUser: () => {
+    lockUser: async (userId) => {
         try {
-            
+            const response = await axiosClient.post(`${BASE_URL}/api/Users/Lock`, userId, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'accept': '*/*'
+                }
+            });
+            return response;
         } catch (error) {
-            
+            throw error
+        }
+    },
+
+    unlockUser: async (userId) => {
+        try {
+            const response = await axiosClient.post(`${BASE_URL}/api/Users/Unlock`, userId, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'accept': '*/*'
+                }
+            });
+            return response;
+        } catch (error) {
+            throw error
         }
     }
 }
