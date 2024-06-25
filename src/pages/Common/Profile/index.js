@@ -13,6 +13,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ReportIcon from '@mui/icons-material/Report';
 import ReportModal from './component/ReportModal';
 import reportApi from '../../../services/reportApi';
+import { toast } from 'react-toastify';
 
 function Profile() {
     const { userId } = useParams();
@@ -37,6 +38,7 @@ function Profile() {
     const handleReport = async (reportData) => {
         console.log("reportData", reportData);
         await reportApi.createReport(reportData);
+        toast.error('Đã khiếu nại người dùng')
     };
 
     return (

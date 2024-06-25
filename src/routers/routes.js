@@ -26,7 +26,8 @@ import Search from "../pages/Common/ListProject/Search";
 import Filter from "../pages/Common/ListProject/Filter";
 import HomeAdmin from "../pages/Admin/HomeAdmin/HomeAdmin";
 import LayOutAdmin from "../pages/Admin/LayOutAdmin/LayOutAdmin";
-import ListUsers from "../pages/Admin/ListUsers/ListUsers";
+import ListUsers from "../pages/Admin/List/ListUsers";
+import ListReport from "../pages/Admin/List/ListReport";
 
 export default function Router() {
   let router = useRoutes([
@@ -246,6 +247,14 @@ export default function Router() {
               element: (
                 <Suspense fallback={<>Loading...</>}>
                   <ListUsers />
+                </Suspense>
+              )
+            },
+            {
+              path: ADMIN_PATH.REPORT_LIST,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <ListReport />
                 </Suspense>
               )
             },

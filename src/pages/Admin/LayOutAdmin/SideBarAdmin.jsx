@@ -6,6 +6,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import GroupIcon from '@mui/icons-material/Group';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import LogoutIcon from '@mui/icons-material/Logout';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { useSelector } from 'react-redux';
 
 function SideBarAdmin() {
@@ -22,6 +23,11 @@ function SideBarAdmin() {
       title: "Danh Sách Người Dùng",
       link: "/users-list",
       icon: <GroupIcon />
+    },
+    {
+      title: "Báo cáo",
+      link: "/report-list",
+      icon: <ReportProblemIcon />
     },
     {
       title: "Phân Quyền",

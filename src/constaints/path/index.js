@@ -34,5 +34,6 @@ export const ADMIN_PATH = {
     LAYOUT: "/",
     HOME_ADMIN : "/admin",
     LIST_USERS: "/users-list",
+    REPORT_LIST: "report-list",
     ROLES: "/roles"
 }

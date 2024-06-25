@@ -2,6 +2,15 @@ import { BASE_URL } from '.'
 import axiosClient from '../utils/axiosClient'
 
 const reportApi = {
+    getAllReportByUser: async () => {
+        try {
+            const response = await axiosClient.get(`${BASE_URL}/api/Reports/Reports?typeDes=user&PageIndex=1&PageSize=5`)
+            return response;
+        } catch (error) {
+            throw error
+        }
+    },
+
     getReportCategoryByUser: async () => {
         try {
             const response = await axiosClient.get(`${BASE_URL}/api/Reports/Categories?type=user`)
@@ -33,7 +42,26 @@ const reportApi = {
         } catch (error) {
             throw error
         }
-    }
+    },
+
+    approveReport: async (id) => {
+        const formData = new FormData();
+        formData.append('id', id);
+
+        try {
+            const response = await axiosClient.post(`${BASE_URL}/api/Reports/Approve`, formData, {
+                headers: {
+                    'accept': '*/*',
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            console.log("response", response);
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    },
 }
 
 export default reportApi

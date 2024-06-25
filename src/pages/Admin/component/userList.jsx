@@ -9,7 +9,7 @@ const UserList = ({ users, onOpenModal }) => {
   return (
     <Box component="main" className="p-4">
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <h1 className="text-2xl font-semibold">Users</h1>
+      <Typography sx={{fontSize: "1.5rem", fontWeight: "600"}}>Users</Typography>
         <Button variant="contained" startIcon={<AddIcon />}>
           Create
         </Button>
