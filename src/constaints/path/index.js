@@ -7,6 +7,7 @@ export const PUBLIC_PATH = {
     SEARCH_CATEGORY_PROJECT: "/category/:idCate",
     DETAIL: "/detail/:projectId",
     RESET: "/reset-password",
+    USER_PROFILE: "/profile/:userId",
     NOT_FOUND: '*',
 }
 

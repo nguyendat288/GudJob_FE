@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Typography, Box, Container, Grid, IconButton, Paper, LinearProgress, Link } from '@mui/material';
+import { Avatar, Typography, Box, Container, Grid, IconButton, Paper, LinearProgress, Link, Button } from '@mui/material';
 import { LinkedIn, GitHub, CheckCircleOutline, School as SchoolIcon, Description as DescriptionIcon } from '@mui/icons-material';
-import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import profileApi from '../../../services/profileApi';
 import AboutImage from '../../../assets/about.jpg';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
@@ -10,18 +10,34 @@ import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import EmailIcon from '@mui/icons-material/Email';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import EditIcon from '@mui/icons-material/Edit';
+import ReportIcon from '@mui/icons-material/Report';
+import ReportModal from './component/ReportModal';
+import reportApi from '../../../services/reportApi';
 
 function Profile() {
-    const currentUser = useSelector((state) => state.auth.login?.currentUser);
+    const { userId } = useParams();
     const [profile, setProfile] = useState();
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
-            const res = await profileApi.getUserProfile();
+            let res;
+            if (userId) {
+                res = await profileApi.getUserProfileById(userId);
+            } else {
+                res = await profileApi.getUserProfile();
+            }
             setProfile(res);
         };
         getData();
-    }, []);
+    }, [userId]);
+
+    const isOwnProfile = userId === undefined;
+
+    const handleReport = async (reportData) => {
+        console.log("reportData", reportData);
+        await reportApi.createReport(reportData);
+    };
 
     return (
         <Container>
@@ -29,7 +45,7 @@ function Profile() {
                 {/* Left Section */}
                 <Grid item xs={12} md={8}>
                     <section id="profile" className="flex flex-col items-center py-12 bg-gray-100 rounded-t-none rounded-lg shadow-md">
-                        <Avatar alt="Avatar" src={currentUser?.avatar} sx={{ height: 80, width: 80 }} className="shadow-lg" />
+                        <Avatar alt="Avatar" src={profile?.avatar} sx={{ height: 80, width: 80 }} className="shadow-lg" />
                         <Typography sx={{ fontSize: '1.25rem' }} className="mt-4">Hello, I'm</Typography>
                         <Typography sx={{ fontSize: '3rem', fontWeight: 'bold' }} className="font-bold">{profile?.name}</Typography>
                         <Typography sx={{ fontSize: '1.25rem' }} className="text-gray-600">Backend Developer</Typography>
@@ -41,6 +57,16 @@ function Profile() {
                             <IconButton href="https://www.github.com" target="_blank" aria-label="GitHub">
                                 <GitHub />
                             </IconButton>
+                            {!isOwnProfile && (
+                                <Button
+                                    variant="outlined"
+                                    color="error"
+                                    startIcon={<ReportIcon />}
+                                    onClick={() => setIsReportModalOpen(true)}
+                                >
+                                    Report
+                                </Button>
+                            )}
                         </Box>
                     </section>
 
@@ -54,7 +80,7 @@ function Profile() {
                             <Grid item xs={12} md={6} className="space-y-6">
                                 <Paper elevation={3} className="p-4">
                                     <Box>
-                                        <div className="flex items-center mb-2">
+                                        <div className="flex items-center mb={2}">
                                             <CheckCircleOutline color="info" className="mr-3" />
                                             <Typography sx={{ fontSize: '1.25rem' }}>Education</Typography>
                                         </div>
@@ -71,7 +97,7 @@ function Profile() {
                                 </Paper>
                                 <Paper elevation={3} className="p-4">
                                     <Box>
-                                        <div className="flex items-center mb-2">
+                                        <div className="flex items-center mb={2}">
                                             <SchoolIcon color="info" className="mr-3" />
                                             <Typography sx={{ fontSize: '1.25rem' }}>Experience</Typography>
                                         </div>
@@ -87,7 +113,7 @@ function Profile() {
                                     </Box>
                                 </Paper>
                                 <Paper elevation={3} className="p-4">
-                                    <div className="flex items-center mb-2">
+                                    <div className="flex items-center mb={2}">
                                         <DescriptionIcon color="info" className="mr-3" />
                                         <Typography sx={{ fontSize: '1.25rem' }}>Cơ bản về tôi</Typography>
                                     </div>
@@ -111,11 +137,13 @@ function Profile() {
                                             <Typography sx={{ fontSize: '1rem', marginLeft: '0.5rem' }}>Xác thực cá nhân</Typography>
                                         </Box>
                                     </Grid>
-                                    <Grid item xs={12} md={3}>
-                                        <Link href="#" underline="hover">
-                                            <Typography>Xác thực</Typography>
-                                        </Link>
-                                    </Grid>
+                                    {isOwnProfile && (
+                                        <Grid item xs={12} md={3}>
+                                            <Link href="#" underline="hover">
+                                                <Typography>Xác thực</Typography>
+                                            </Link>
+                                        </Grid>
+                                    )}
                                 </Grid>
                                 <Grid container>
                                     <Grid item xs={12} md={9}>
@@ -124,11 +152,13 @@ function Profile() {
                                             <Typography sx={{ fontSize: '1rem', marginLeft: '0.5rem' }}>Xác thực thanh toán</Typography>
                                         </Box>
                                     </Grid>
-                                    <Grid item xs={12} md={3}>
-                                        <Link href="#" underline="hover">
-                                            <Typography>Xác thực</Typography>
-                                        </Link>
-                                    </Grid>
+                                    {isOwnProfile && (
+                                        <Grid item xs={12} md={3}>
+                                            <Link href="#" underline="hover">
+                                                <Typography>Xác thực</Typography>
+                                            </Link>
+                                        </Grid>
+                                    )}
                                 </Grid>
                                 <Grid container>
                                     <Grid item xs={12} md={9}>
@@ -137,11 +167,13 @@ function Profile() {
                                             <Typography sx={{ fontSize: '1rem', marginLeft: '0.5rem' }}>Xác thực số điện thoại</Typography>
                                         </Box>
                                     </Grid>
-                                    <Grid item xs={12} md={3}>
-                                        <Link href="#" underline="hover">
-                                            <Typography>Xác thực</Typography>
-                                        </Link>
-                                    </Grid>
+                                    {isOwnProfile && (
+                                        <Grid item xs={12} md={3}>
+                                            <Link href="#" underline="hover">
+                                                <Typography>Xác thực</Typography>
+                                            </Link>
+                                        </Grid>
+                                    )}
                                 </Grid>
                                 <Grid container>
                                     <Grid item xs={12} md={11}>
@@ -162,19 +194,21 @@ function Profile() {
                                 <Grid item xs={12} md={11}>
                                     <Typography sx={{ fontSize: '1.25rem', fontWeight: 'bold', paddingTop: '8px' }}>Kĩ năng nổi bật</Typography>
                                 </Grid>
-                                <Grid item xs={12} md={1}>
-                                    <IconButton
-                                        sx={{
-                                            '& .MuiSvgIcon-root': {
-                                                transition: 'color 0.3s',
-                                            },
-                                            '&:hover .MuiSvgIcon-root': {
-                                                color: 'blue',
-                                            },
-                                        }}>
-                                        <EditIcon />
-                                    </IconButton>
-                                </Grid>
+                                {isOwnProfile && (
+                                    <Grid item xs={12} md={1}>
+                                        <IconButton
+                                            sx={{
+                                                '& .MuiSvgIcon-root': {
+                                                    transition: 'color 0.3s',
+                                                },
+                                                '&:hover .MuiSvgIcon-root': {
+                                                    color: 'blue',
+                                                },
+                                            }}>
+                                            <EditIcon />
+                                        </IconButton>
+                                    </Grid>
+                                )}
                             </Grid>
                             <Box className="mt-4 space-y-2">
                                 <Typography sx={{ fontSize: '1rem' }}>JavaScript</Typography>
@@ -193,6 +227,12 @@ function Profile() {
                     </Box>
                 </Grid>
             </Grid>
+            <ReportModal
+                open={isReportModalOpen}
+                onClose={() => setIsReportModalOpen(false)}
+                onReport={handleReport}
+                userId={userId}
+            />
         </Container>
     );
 }

@@ -106,6 +106,14 @@ export default function Router() {
                   <Profile />
                 </Suspense>
               )
+            },
+            {
+              path: PUBLIC_PATH.USER_PROFILE,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <Profile />
+                </Suspense>
+              )
             }
           ]
         }
