@@ -8,29 +8,31 @@ import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next'
 
 function SideBarAdmin() {
   const location = useLocation();
+  const {t} = useTranslation(['admin', 'common']);
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
 
   const sidebarData = [
     {
-      title: "Dashboard",
+      title: t("dashboard", { ns: 'common' }),
       link: "/admin",
       icon: <DashboardIcon />
     },
     {
-      title: "Danh Sách Người Dùng",
+      title: t("userList"),
       link: "/users-list",
       icon: <GroupIcon />
     },
     {
-      title: "Báo cáo",
+      title: t("reportList"),
       link: "/report-list",
       icon: <ReportProblemIcon />
     },
     {
-      title: "Phân Quyền",
+      title: t("roles"),
       link: "/roles",
       icon: <AssignmentIndIcon />
     }
@@ -135,7 +137,7 @@ function SideBarAdmin() {
           >
             <div className="flex items-center">
               <LogoutIcon sx={{mr: 1}}/>
-              <ListItemText primary="Đăng xuất" />
+              <ListItemText primary={t('logout', { ns: 'common' })} />
             </div>
           </ListItemButton>
         </div>

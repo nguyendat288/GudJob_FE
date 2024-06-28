@@ -6,9 +6,11 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { DataGrid, useGridApiRef } from '@mui/x-data-grid';
 import userManagementApi from '../../../services/adminApi/userManagementApi';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChange, loading, reloadUsers, totalUsers }) => {
   const apiRef = useGridApiRef();
+  const {t} = useTranslation(['admin', 'common']);
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
@@ -39,7 +41,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
     { field: 'email', headerName: 'Email', width: 200 },
     {
       field: 'phoneNumber',
-      headerName: 'Số điện thoại',
+      headerName: t('phone_number', { ns : 'common' }),
       width: 200,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
@@ -49,7 +51,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
     },
     {
       field: 'isLock',
-      headerName: 'Trạng thái tài khoản',
+      headerName: t('status', { ns : 'common' }),
       width: 220,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
@@ -59,7 +61,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
     },
     {
       field: 'isCompany',
-      headerName: 'Vai trò',
+      headerName: t('role', { ns : 'common' }),
       width: 150,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
@@ -69,7 +71,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
     },
     {
       field: 'actions',
-      headerName: 'Thao tác',
+      headerName: t('action', { ns : 'common' }),
       width: 200,
       sortable: false,
       renderCell: (params) => (
@@ -125,13 +127,13 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
   return (
     <Box component="main" className="p-4">
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography sx={{ fontSize: "1.5rem", fontWeight: "600" }}>Quản Lý Người Dùng</Typography>
+        <Typography sx={{ fontSize: "1.5rem", fontWeight: "600" }}>{t("userList")}</Typography>
         {rowSelectionModel.length ? <Button onClick={handleClickOpen} variant="contained" startIcon={<LockIcon />}>
-          Fast Lock/Unlock
+          {t('fast_lock_unlock')}
         </Button> : <Typography></Typography>}
       </Box>
       <TextField
-        label="Search"
+        label={t('search', { ns : 'common' })}
         variant="outlined"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
@@ -161,18 +163,18 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
           apiRef={apiRef}
           slotProps={{
             pagination: {
-              labelRowsPerPage: "Số lượng người dùng trên 1 trang",
+              labelRowsPerPage: t('rows_per_page'),
               labelDisplayedRows: ({ from, to }) => {
                 const totalPages = Math.ceil(totalUsers / pageSize);
-                return `${from.toLocaleString('en')}-${to.toLocaleString('en')} trên ${totalPages.toLocaleString('en')} trang`
+                return `${from.toLocaleString('en')}-${to.toLocaleString('en')} ${t('of_page')} ${totalPages.toLocaleString('en')} ${t('page')}`
               }
             }
           }}
           localeText={{
             footerRowSelected: (count) =>
               count !== 1
-                ? `Đã chọn ${count.toLocaleString()} người dùng`
-                : `Đã chọn ${count.toLocaleString()} người dùng`,
+                ? `${t('selected')} ${count.toLocaleString()} ${t('users')}`
+                : `${t('selected')} ${count.toLocaleString()} ${t('user')}`,
           }}
         />
       </Box>
