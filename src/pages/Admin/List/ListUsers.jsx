@@ -5,50 +5,50 @@ import ConfirmationModal from '../component/confirmationModal';
 import { toast } from 'react-toastify';
 
 const ListUsers = () => {
-  const [users, setUsers] = useState();
+  const [users, setUsers] = useState([]);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
   const [reloadUsers, setReloadUsers] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalAction, setModalAction] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
+      setLoading(true);
       try {
-        const allUsers = await userManagementApi.getAllUsers();
-        console.log(allUsers);
-        setUsers(prevUsers => {
-          if (JSON.stringify(prevUsers) !== JSON.stringify(allUsers)) {
-            return allUsers;
-          }
-          return prevUsers;
-        });
+        const response = await userManagementApi.getAllUsers(page + 1, pageSize);
+        setUsers(response.items);
+        setTotalUsers(response.totalItemsCount);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchUsers();
-  }, [reloadUsers]);
+  }, [page, pageSize, reloadUsers]);
 
   const handleLockUser = async (userId) => {
     try {
-      const response = await userManagementApi.lockUser(userId);
+      await userManagementApi.lockUser([userId]);
       setReloadUsers(prev => !prev);
-      toast.success('Đã khóa người dùng');
-      console.log('User locked successfully', response);
+      toast.success('User locked successfully');
     } catch (error) {
-      toast.error('Không thể khóa người dùng');
+      toast.error('Unable to lock user');
       console.error('Error locking user', error);
     }
   };
 
   const handleUnlockUser = async (userId) => {
     try {
-      const response = await userManagementApi.unlockUser(userId);
+      await userManagementApi.unlockUser([userId]);
       setReloadUsers(prev => !prev);
-      toast.success('Đã mở khóa người dùng')
-      console.log('User unlocked successfully', response);
+      toast.success('User unlocked successfully');
     } catch (error) {
-      toast.error('Không thể mở khóa người dùng');
+      toast.error('Unable to unlock user');
       console.error('Error unlocking user', error);
     }
   };
@@ -75,11 +75,22 @@ const ListUsers = () => {
     setOpenModal(false);
   };
 
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+
   return (
     <div>
       <UserList
         users={users}
         onOpenModal={handleOpenModal}
+        pageSize={pageSize}
+        page={page}
+        pageChange={handlePageChange}
+        pageSizeChange={setPageSize}
+        loading={loading}
+        reloadUsers={setReloadUsers}
+        totalUsers={totalUsers}
       />
       <ConfirmationModal
         open={openModal}

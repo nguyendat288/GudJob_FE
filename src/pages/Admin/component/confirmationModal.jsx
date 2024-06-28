@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Box, Typography, Button } from '@mui/material';
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 
 const ConfirmationModal = ({ open, onClose, onConfirm, title, description }) => {
   return (
@@ -17,22 +18,25 @@ const ConfirmationModal = ({ open, onClose, onConfirm, title, description }) => 
           transform: 'translate(-50%, -50%)',
           width: 400,
           bgcolor: 'background.paper',
-          border: '2px solid #000',
           boxShadow: 24,
           p: 4,
         }}
       >
-        <Typography id="modal-title" variant="h6" component="h2" sx={{fontSize: '1.875rem'}}>
+        <Typography id="modal-title" variant="h6" component="h2" sx={{ fontSize: '1.875rem' }}>
           {title}
         </Typography>
         <Typography id="modal-description" sx={{ mt: 2 }}>
           {description}
         </Typography>
+        <Typography sx={{ mt: 2 }}>
+          <PriorityHighIcon color='warning'/>
+          You should only do this action when you read Terms and Condition
+        </Typography>
         <Box sx={{ mt: 3, display: 'flex', justifyContent: 'space-between' }}>
-          <Button variant="contained" color="primary" onClick={onConfirm}>
+          <Button color="warning" onClick={onConfirm}>
             Confirm
           </Button>
-          <Button variant="outlined" onClick={onClose}>
+          <Button onClick={onClose}>
             Cancel
           </Button>
         </Box>

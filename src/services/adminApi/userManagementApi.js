@@ -2,18 +2,20 @@ import { BASE_URL } from '../'
 import axiosClient from '../../utils/axiosClient'
 
 const userManagementApi = {
-    getAllUsers: () => {
+    getAllUsers: async (page, pageSize) => {
         try {
-            const response = axiosClient.get(`${BASE_URL}/api/Users/GetUsers?PageIndex=1&PageSize=10`)
+            const response = await axiosClient.get(`${BASE_URL}/api/Users/GetUsers`, {
+                params: { PageIndex: page, PageSize: pageSize }
+            });
             return response;
         } catch (error) {
-            throw error
+            throw error;
         }
     },
 
-    lockUser: async (userId) => {
+    lockUser: async (userIds) => {
         try {
-            const response = await axiosClient.post(`${BASE_URL}/api/Users/Lock`, userId, {
+            const response = await axiosClient.post(`${BASE_URL}/api/Users/Lock`, userIds, {
                 headers: {
                     'Content-Type': 'application/json',
                     'accept': '*/*'
