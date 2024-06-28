@@ -6,10 +6,11 @@ import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import HeroSection from '../../../components/HeroSection';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
 import TypographyHeader from '../../../components/Typography/TypographyHeader';
-
+import { useTranslation } from 'react-i18next';
 const Home = () => {
   const [listCategory, setListCategory] = useState([])
   const navigate = useNavigate()
+  const {t} = useTranslation('home');
 
   useEffect(() => {
     const getCategory = async () => {
@@ -28,7 +29,8 @@ const Home = () => {
       <HeroSection />
       <Box m={3}>
         <Box mb={3}>
-          <TypographyHeader title="CÁC NGÀNH NỔI BẬT" />
+          <TypographyHeader title= {t('popular_category' )} /> 
+          
           <Grid container spacing={3} mt={2}>
             {listCategory.length !== 0 && listCategory.map((item, index) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
