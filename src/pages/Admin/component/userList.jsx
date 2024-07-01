@@ -28,19 +28,21 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
   }, [page, pageSize]);
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
+    { field: 'id', headerName: 'ID', width: 90, flex: 0.5 },
     {
       field: 'avatar',
       headerName: 'Avatar',
       width: 100,
+      flex: 1,
       renderCell: (params) => <Avatar src={params.value} alt={params.row.name} />
     },
-    { field: 'name', headerName: 'Name', width: 150 },
-    { field: 'email', headerName: 'Email', width: 200 },
+    { field: 'name', headerName: 'Name', width: 150, flex: 1 },
+    { field: 'email', headerName: 'Email', width: 200, flex: 1 },
     {
       field: 'phoneNumber',
       headerName: 'Số điện thoại',
       width: 200,
+      flex: 1,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
           <Typography>{params.value ? params.value : 'No information'}</Typography>
@@ -51,6 +53,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
       field: 'isLock',
       headerName: 'Trạng thái tài khoản',
       width: 220,
+      flex: 1,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
           <Typography>{params.row.isLock ? 'Đã khóa' : 'Đang hoạt động'}</Typography>
@@ -61,6 +64,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
       field: 'isCompany',
       headerName: 'Vai trò',
       width: 150,
+      flex: 1,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
           <Typography>{params.row.isCompany ? 'Recruiter' : 'Freelancer'}</Typography>
@@ -71,6 +75,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
       field: 'actions',
       headerName: 'Thao tác',
       width: 200,
+      flex: 1,
       sortable: false,
       renderCell: (params) => (
         <Box>
@@ -123,7 +128,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
   }
 
   return (
-    <Box component="main" className="p-4">
+    <Box component="main" className="p-4" sx={{ width: '100%', overflow: 'auto' }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography sx={{ fontSize: "1.5rem", fontWeight: "600" }}>Quản Lý Người Dùng</Typography>
         {rowSelectionModel.length ? <Button onClick={handleClickOpen} variant="contained" startIcon={<LockIcon />}>
@@ -173,6 +178,24 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
               count !== 1
                 ? `Đã chọn ${count.toLocaleString()} người dùng`
                 : `Đã chọn ${count.toLocaleString()} người dùng`,
+          }}
+          sx={{
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: '#f5f5f5',
+              borderBottom: '1px solid #ddd',
+            },
+            '& .MuiDataGrid-cell': {
+              borderBottom: '1px solid #ddd',
+            },
+            '& .MuiDataGrid-footerContainer': {
+              backgroundColor: '#f5f5f5',
+              borderTop: '1px solid #ddd',
+            },
+            '& .MuiDataGrid-row': {
+              '&:nth-of-type(even)': {
+                backgroundColor: '#f9f9f9',
+              },
+            },
           }}
         />
       </Box>
