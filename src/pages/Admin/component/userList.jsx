@@ -33,11 +33,11 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
     { field: 'id', headerName: 'ID', width: 90 },
     {
       field: 'avatar',
-      headerName: 'Avatar',
+      headerName: t('avatar', {ns:'admin'}),
       width: 100,
       renderCell: (params) => <Avatar src={params.value} alt={params.row.name} />
     },
-    { field: 'name', headerName: 'Name', width: 150 },
+    { field: 'name', headerName: t('name', {ns:'admin'}), width: 150 },
     { field: 'email', headerName: 'Email', width: 200 },
     {
       field: 'phoneNumber',
@@ -45,7 +45,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
       width: 200,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
-          <Typography>{params.value ? params.value : 'No information'}</Typography>
+          <Typography>{params.value ? params.value : t('no_information', {ns:'admin'})}</Typography>
         </Box>
       ),
     },
@@ -55,7 +55,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
       width: 220,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
-          <Typography>{params.row.isLock ? 'Đã khóa' : 'Đang hoạt động'}</Typography>
+          <Typography>{params.row.isLock ? t('locked', {ns:'admin'}) : t('active', {ns:'admin'})}</Typography>
         </Box>
       ),
     },

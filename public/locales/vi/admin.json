@@ -15,5 +15,10 @@
     "description": "Mô tả",
     "approved": "Đã duyệt",
     "pending": "Chờ duyệt",
-    "mark_as_resolved": "Đánh dấu là đã duyệt"
+    "mark_as_resolved": "Đánh dấu là đã duyệt",
+    "avatar": "Ảnh",
+    "name": "Họ và Tên",
+    "no_information": "Không có thông tin",
+    "active": "Đang hoạt động",
+    "locked": "Đã khóa"
 }

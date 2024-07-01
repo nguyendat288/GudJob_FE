@@ -16,5 +16,11 @@
     "description": "Description",
     "approved": "Approved",
     "pending": "Pending",
-    "mark_as_resolved": "Mark as resolved"
+    "mark_as_resolved": "Mark as resolved",
+    "avatar": "Avatar",
+    "name": "Name",
+    "no_information": "No Information",
+    "active":"Active",
+    "locked": "Locked"
+
 }

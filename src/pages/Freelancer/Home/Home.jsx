@@ -72,7 +72,7 @@ const Home = () => {
         </Box>
         <Divider />
         <Box mt={3}>
-          <TypographyHeader title="Website chúng tôi có thể hỗ trợ các bạn về ?" />
+          <TypographyHeader title={t('website_can_help_you_about_?')} />
           <Box display="flex">
             <Box flex='1' p={3}>
               <CardMedia
@@ -100,7 +100,7 @@ const Home = () => {
         </Box>
         <Divider />
         <Box mt={3}>
-          <TypographyHeader title="Khám phá nhiều tính năng hơn với tư cách hội viên" />
+          <TypographyHeader title={t('explore_more_features_with_membership')} />
           <Box display="flex">
             <Box flex='1' p={3}>
               <Typography variant="h6" display="flex" alignItems="center" mb={2}>
