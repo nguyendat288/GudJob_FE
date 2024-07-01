@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import profileApi from '../../../services/profileApi';
+import LanguageSelector from '../../../components/language-selector';
 
 const TopBarFreelancer = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -111,6 +112,7 @@ const TopBarFreelancer = () => {
               <IconButton>
                 <FavoriteBorderOutlinedIcon />
               </IconButton>
+              <LanguageSelector />
               <Typography sx={{
                 color: 'black',
                 display: 'flex',

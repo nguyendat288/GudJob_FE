@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { AppBar, Avatar, Box, Button, Container, Divider, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from '@mui/material';
+import { AppBar, Avatar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -9,6 +9,7 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import LanguageSelector from '../../../components/language-selector';
 
 const TopBarRecruiter = () => {
     const currentUser = useSelector((state) => state.auth.login?.currentUser)
@@ -65,6 +66,7 @@ const TopBarRecruiter = () => {
                             <IconButton>
                                 <SettingsOutlinedIcon />
                             </IconButton>
+                            <LanguageSelector />
                             <Typography sx={{
                                 color: 'black',
                                 display: 'flex',

@@ -1,7 +1,7 @@
 import { Box, Card, CardContent, CardMedia, Divider, Grid, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import categoryApi from '../../../services/categoryApi'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import HeroSection from '../../../components/HeroSection';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
