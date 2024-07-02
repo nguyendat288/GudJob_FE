@@ -2,11 +2,18 @@ import { BASE_URL } from '../'
 import axiosClient from '../../utils/axiosClient'
 
 const userManagementApi = {
-    getAllUsers: async (page, pageSize) => {
+    getAllUsers: async ({ page, pageSize, role, search, email, phone }) => {
         try {
-            const response = await axiosClient.get(`${BASE_URL}/api/Users/GetUsers`, {
-                params: { PageIndex: page, PageSize: pageSize }
-            });
+            const params = {
+                PageIndex: page,
+                PageSize: pageSize,
+                ...(role && { role }),
+                ...(search && { search }),
+                ...(email && { email }),
+                ...(phone && { phone }),
+            };
+
+            const response = await axiosClient.get(`${BASE_URL}/api/Users/GetUsers`, { params });
             return response;
         } catch (error) {
             throw error;

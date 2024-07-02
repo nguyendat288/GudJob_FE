@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box, Button, Typography, IconButton, Tooltip } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Box, Typography, IconButton, Tooltip } from '@mui/material';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -19,9 +18,9 @@ const ReportList = ({ reports, onOpenModal }) => {
         return (
           <Typography>
             {reportToUrl ? `URL user: ${reportToUrl}` :
-            bidName ? `Bid Name: ${bidName}` :
-            projectName ? `Project Name: ${projectName}` :
-            'No Information'}
+              bidName ? `Bid Name: ${bidName}` :
+                projectName ? `Project Name: ${projectName}` :
+                  'No Information'}
           </Typography>
         );
       }
@@ -49,9 +48,11 @@ const ReportList = ({ reports, onOpenModal }) => {
       sortable: false,
       renderCell: (params) => (
         <Tooltip title="Đánh dấu là đã xử lý">
-          <IconButton onClick={() => onOpenModal(params.row.id)} disabled={params.row.isApproved === true}>
-            <FactCheckIcon />
-          </IconButton>
+          <span>
+            <IconButton onClick={() => onOpenModal(params.row.id)} disabled={params.row.isApproved === true}>
+              <FactCheckIcon />
+            </IconButton>
+          </span>
         </Tooltip>
       )
     }
@@ -66,10 +67,23 @@ const ReportList = ({ reports, onOpenModal }) => {
         <DataGrid
           rows={reports?.items || []}
           columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[5, 10, 15, 20, { value: 1000, label: 'All Reports' }]}
+          pageSize={reports?.totalItemsCount}
+          pageSizeOptions={[1, 3, 5, { value: 100, label: 'Tất cả report' }]}
           pagination
-          disableSelectionOnClick
+          slotProps={{
+            pagination: {
+              labelRowsPerPage: "Số lượng report trên 1 trang",
+              labelDisplayedRows: ({ from, to, count }) => {
+                return `${from.toLocaleString('en')}-${to.toLocaleString('en')} trên ${count.toLocaleString('en')} report`
+              }
+            }
+          }}
+          localeText={{
+            footerRowSelected: (count) =>
+              count !== 1
+                ? `Đã chọn ${count.toLocaleString()} report`
+                : `Đã chọn ${count.toLocaleString()} report`,
+          }}
           sx={{
             '& .MuiDataGrid-columnHeaders': {
               backgroundColor: '#f5f5f5',

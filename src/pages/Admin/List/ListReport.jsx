@@ -13,7 +13,6 @@ const ListReport = () => {
         const fetchReport = async () => {
             try {
                 const allReports = await reportApi.getAllReportByUser();
-                console.log(allReports);
                 setReports(allReports);
             } catch (error) {
                 console.error(error);
