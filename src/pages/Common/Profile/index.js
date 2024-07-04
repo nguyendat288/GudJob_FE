@@ -233,7 +233,7 @@ function Profile() {
                 open={isReportModalOpen}
                 onClose={() => setIsReportModalOpen(false)}
                 onReport={handleReport}
-                userId={userId}
+                type="user"
             />
         </Container>
     );

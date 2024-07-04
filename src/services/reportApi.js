@@ -2,21 +2,27 @@ import { BASE_URL } from '.'
 import axiosClient from '../utils/axiosClient'
 
 const reportApi = {
-    getAllReportByUser: async () => {
+    getAllReportByUser: async ({page, pageSize, typeDes}) => {
         try {
-            const response = await axiosClient.get(`${BASE_URL}/api/Reports/Reports?typeDes=user&PageIndex=1&PageSize=5`)
+            const params = {
+                PageIndex: page,
+                PageSize: pageSize,
+                ...(typeDes && { typeDes }),
+            };
+
+            const response = await axiosClient.get(`${BASE_URL}/api/Reports/Reports`, { params })
             return response;
         } catch (error) {
             throw error
         }
     },
 
-    getReportCategoryByUser: async () => {
+    getReportCategoryByUser: async (type) => {
         try {
-            const response = await axiosClient.get(`${BASE_URL}/api/Reports/Categories?type=user`)
+            const response = await axiosClient.get(`${BASE_URL}/api/Reports/Categories?type=${type}`);
             return response;
         } catch (error) {
-            throw error
+            throw error;
         }
     },
 

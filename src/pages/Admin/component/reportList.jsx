@@ -1,11 +1,15 @@
-import React from 'react';
-import { Box, Typography, IconButton, Tooltip } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, IconButton, Tooltip, TextField, InputAdornment, Button, Menu, MenuItem } from '@mui/material';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { DataGrid } from '@mui/x-data-grid';
 
-const ReportList = ({ reports, onOpenModal }) => {
+const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSizeChange, typeDes, setTypeDes, onOpenModal, loading, setLoading }) => {
+  const [search, setSearch] = useState('');
+  const [anchorEl, setAnchorEl] = useState(null);
+
   const columns = [
     { field: 'nameCreatedBy', headerName: 'Created By', width: 150, flex: 1 },
     {
@@ -58,18 +62,79 @@ const ReportList = ({ reports, onOpenModal }) => {
     }
   ];
 
+  const [paginationModel, setPaginationModel] = useState({
+    page: page,
+    pageSize: pageSize,
+  });
+
+  const handleRoleButtonClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleTypeSelect = async (typeDes) => {
+    setTypeDes(typeDes);
+    setLoading(true);
+    handleMenuClose();
+  };
+
   return (
     <Box component="main" className="p-4" sx={{ width: '100%', overflow: 'auto' }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography sx={{ fontSize: "1.5rem", fontWeight: "600" }}>Report List</Typography>
       </Box>
+      <TextField
+        label="Search reporter"
+        variant="outlined"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        fullWidth
+        margin="normal"
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <Button
+                aria-controls="type-menu"
+                aria-haspopup="true"
+                onClick={handleRoleButtonClick}
+                endIcon={<ArrowDropDownIcon />}
+              >
+                {typeDes || 'Type'}
+              </Button>
+              <Menu
+                id="type-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+              >
+                <MenuItem onClick={() => handleTypeSelect('user')}>Report User</MenuItem>
+                <MenuItem onClick={() => handleTypeSelect('bid')}>Report Bid</MenuItem>
+                <MenuItem onClick={() => handleTypeSelect('project')}>Report Project</MenuItem>
+                <MenuItem onClick={() => handleTypeSelect('All')}>All</MenuItem>
+              </Menu>
+            </InputAdornment>
+          ),
+        }}
+      />
       <Box height={400} width="100%">
         <DataGrid
-          rows={reports?.items || []}
+          rows={reports}
           columns={columns}
-          pageSize={reports?.totalItemsCount}
-          pageSizeOptions={[1, 3, 5, { value: 100, label: 'Tất cả report' }]}
-          pagination
+          rowCount={totalReports}
+          paginationModel={paginationModel}
+          onPaginationModelChange={(newModel) => {
+            setPaginationModel(newModel);
+            pageChange(newModel.page);
+            pageSizeChange(newModel.pageSize);
+          }}
+          paginationMode="server"
+          keepNonExistentRowsSelected
+          disableRowSelectionOnClick
+          loading={loading}
+          pageSizeOptions={[5, 10, 15, 20]}
           slotProps={{
             pagination: {
               labelRowsPerPage: "Số lượng report trên 1 trang",

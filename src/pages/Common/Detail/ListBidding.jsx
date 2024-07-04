@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Divider, Paper, Typography } from '@mui/material'
+import { Avatar, Box, Button, Paper, Typography } from '@mui/material'
 import React from 'react'
 import StarIcon from '@mui/icons-material/Star';
 import { ROLES } from '../../../constaints/role';
@@ -7,11 +7,11 @@ const ListBidding = ({ listBidding, currentUser,createdBy,handleAccept }) => {
     return (
         <Box display='flex' >
             <Box flex='4' >
-                {listBidding?.items?.length == 0 && (
+                {listBidding?.items?.length === 0 && (
                     <Typography> Chưa có bidding nào </Typography>
                 )}
                 {listBidding && listBidding?.items?.map((item, index) => (
-                    <>
+                    <div key={index}>
                         <Paper sx={{ bgcolor: '#F8F8FF', borderRadius: '5px', mt: 1 }}>
                             <Box p={3}>
                                 <Box display='flex'>
@@ -60,7 +60,7 @@ const ListBidding = ({ listBidding, currentUser,createdBy,handleAccept }) => {
 
                             </Box>
                         </Paper>
-                    </>
+                    </div>
                 ))}
 
             </Box>
