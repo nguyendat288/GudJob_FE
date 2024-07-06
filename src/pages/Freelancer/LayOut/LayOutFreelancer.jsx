@@ -10,9 +10,7 @@ const LayOutFreelancer = () => {
             <Box display='flex'>
                 <Box flex='4'>
                     <TopBar />
-                    <Box>
-                        <Outlet />
-                    </Box>
+                 
                 </Box>
             </Box>
             <Footer />

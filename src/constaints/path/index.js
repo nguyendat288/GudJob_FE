@@ -17,7 +17,7 @@ export const FREELANCER_PATH = {
     CHANGE_PASSWORD: "/change-password",
     EXPERIENCE_EDUCATION: "/experience-education",
     SETTING: "/setting",
-
+    CHAT :'/chat/:conversationId/:userId'
 }
 
 export const RECRUITER_PATH = {

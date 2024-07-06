@@ -6,14 +6,17 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { CssBaseline } from '@mui/material';
 import { persistor, store } from './redux/store';
+import ChatProvider from './providers/ConnectContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
-  <PersistGate loading={null} persistor={persistor}>
-      <CssBaseline />
-      <App />
-  </PersistGate>
-</Provider>
+    <ChatProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <CssBaseline />
+        <App />
+      </PersistGate>
+    </ChatProvider>
+  </Provider>
 );
 
