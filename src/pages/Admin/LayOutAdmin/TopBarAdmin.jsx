@@ -9,8 +9,11 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import LanguageSelector from '../../../components/language-selector';
+import { useTranslation } from 'react-i18next';
 
 const TopBarAdmin = () => {
+    const { t } = useTranslation('common');
     const currentUser = useSelector((state) => state.auth.login?.currentUser)
     const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -39,7 +42,7 @@ const TopBarAdmin = () => {
                             variant="h6"
                             noWrap
                             component="a"
-                            href="/recruiter"
+                            href="/admin"
                             sx={{
                                 mr: 2,
                                 display: { xs: 'none', md: 'flex' },
@@ -55,23 +58,30 @@ const TopBarAdmin = () => {
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, borderRadius: '30px' }}>
 
                         </Box>
-                        <Box display='flex' gap={2}  >
-                            <IconButton>
-                                <MessageOutlinedIcon />
-                            </IconButton>
-                            <IconButton>
-                                <NotificationsNoneOutlinedIcon />
-                            </IconButton>
-                            <IconButton>
-                                <SettingsOutlinedIcon />
-                            </IconButton>
+                        <Box display='flex' gap={2}>
+                            <Tooltip title={t('message')}>
+                                <IconButton>
+                                    <MessageOutlinedIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title={t('notifications')}>
+                                <IconButton>
+                                    <NotificationsNoneOutlinedIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title={t('settings')}>
+                                <IconButton>
+                                    <SettingsOutlinedIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <LanguageSelector />
                             <Typography sx={{
                                 color: 'black',
                                 display: 'flex',
                                 alignItems: 'center',
                                 fontWeight: 'bold'
                             }}>{currentUser?.name}</Typography>
-                            <Tooltip title="Open settings">
+                            <Tooltip title={t('open_settings')}>
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                     <Avatar alt="Remy Sharp" src={currentUser?.avatar} />
                                 </IconButton>

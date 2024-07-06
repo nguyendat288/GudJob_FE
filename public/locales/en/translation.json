@@ -1,0 +1,7 @@
+{
+    "dashboard": "Dashboard",
+    "description": {
+        "line1": "You are testing translation by i18n",
+        "line2": "Let say it works"
+    }
+}

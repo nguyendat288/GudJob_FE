@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import profileApi from '../../../services/profileApi';
+import LanguageSelector from '../../../components/language-selector';
 import { UseChatState } from '../../../providers/ConnectContext';
 import { MoreVert as MoreVertIcon } from '@mui/icons-material';
 import notificationApi from '../../../services/notificationApi';
@@ -376,6 +377,7 @@ const TopBarFreelancer = () => {
                 <IconButton>
                   <FavoriteBorderOutlinedIcon />
                 </IconButton>
+                <LanguageSelector />
                 <Typography sx={{
                   color: 'black',
                   display: 'flex',
