@@ -114,7 +114,6 @@ const SideBarRecruiter = () => {
                 selected={selected}
                 setSelected={setSelected}
               />
-              <MenuItem icon={<QuizIcon />}>Ex Professors</MenuItem>
             </SubMenu>
           </Box>
         </Menu>

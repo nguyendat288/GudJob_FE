@@ -20,7 +20,6 @@ import LayOutFreelancer from "../pages/Freelancer/LayOut/LayOutFreelancer";
 import ListProjectRecruiter from "../pages/Recruiter/ListProjectRecruiter/ListProjectRecruiter";
 import CreateProject from "../pages/Recruiter/CreateProject/CreateProject";
 import Detail from "../pages/Common/Detail/Detail";
-import TopBarRecruiter from "../pages/Recruiter/LayOutRecruiter/TopBarRecruiter";
 import UpdateProject from "../pages/Recruiter/UpdateProject/UpdateProject";
 import Search from "../pages/Common/ListProject/Search";
 import Filter from "../pages/Common/ListProject/Filter";
@@ -28,6 +27,8 @@ import HomeAdmin from "../pages/Admin/HomeAdmin/HomeAdmin";
 import LayOutAdmin from "../pages/Admin/LayOutAdmin/LayOutAdmin";
 import ListUsers from "../pages/Admin/List/ListUsers";
 import ListReport from "../pages/Admin/List/ListReport";
+import TopBarFreelancer from "../pages/Freelancer/LayOut/TopBarFreelancer";
+import Chat from "../pages/Common/Chat/Chat";
 
 export default function Router() {
   let router = useRoutes([
@@ -122,6 +123,25 @@ export default function Router() {
     },
     {
       path: FREELANCER_PATH.LAYOUT,
+      element: <TopBarFreelancer />,
+      children: [
+        {
+          element: <RequireAuth allowedRoles={[ROLES.FREELANCER,ROLES.RECRUITER,ROLES.ADMIN]} />,
+          children: [
+            {
+              path: FREELANCER_PATH.CHAT,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <Chat />
+                </Suspense>
+              )
+            }
+          ]
+        }
+      ]
+    },
+    {
+      path: FREELANCER_PATH.LAYOUT,
       element: <Setting />,
       children: [
         {
@@ -184,7 +204,6 @@ export default function Router() {
     },
     {
       path: RECRUITER_PATH.LAYOUT,
-      element: <TopBarRecruiter />,
       children: [
         {
           element: <RequireAuth allowedRoles={ROLES.RECRUITER} />,

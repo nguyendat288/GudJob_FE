@@ -1,8 +1,8 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
-import TopBarAdmin from './TopBarAdmin';
-import SideBarAdmin from './SideBarAdmin';
-import { Box } from '@mui/material';
+import { Box } from '@mui/material'
+import SideBarAdmin from './SideBarAdmin'
+import TopBarAdmin from './TopBarAdmin'
+import { Outlet } from 'react-router-dom'
 
 const LayOutAdmin = () => {
     return (
