@@ -3,14 +3,14 @@ import React from 'react'
 import SideBarAdmin from './SideBarAdmin'
 import TopBarAdmin from './TopBarAdmin'
 import { Outlet } from 'react-router-dom'
-import TopBarRecruiter from '../../Recruiter/LayOutRecruiter/TopBarRecruiter'
+import TopBarFreelancer from '../../Freelancer/LayOut/TopBarFreelancer'
 
 const LayOutAdmin = () => {
     return (
         <Box display='flex'>
             <SideBarAdmin />
             <Box flex='4'>
-                <TopBarRecruiter />
+                <TopBarFreelancer />
                 <Box>
                     <Outlet />
                 </Box>

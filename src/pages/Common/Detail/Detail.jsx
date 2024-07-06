@@ -51,18 +51,18 @@ const Detail = () => {
         }
         getProjectDetail()
     }, [])
-
+    
     useEffect(() => {
         const getAllBidding = async () => {
             let res = await biddingApi.GetBiddingListByProjectId(projectId, 1, 10);
-            setListBidding(res);
+            setListBidding(res?.data);
         }
         getAllBidding()
     }, [value])
 
-    console.log(currentUser);
-    console.log(detail);
-    console.log(listBidding);
+    // console.log(currentUser);
+    // console.log(detail);
+    // console.log(listBidding);
 
     const handleSubmit = async (e) => {
         if (comment === '' || duration === '' || budget === 0 || budget < detail?.minBudget || budget > detail?.maxBudget) {
@@ -123,7 +123,7 @@ const Detail = () => {
                             )}
                         </TabPanel>
                         <TabPanel value="2">
-                        {listBidding == null && (
+                            {listBidding == null && (
                                 <LinearProgress />
                             )}
                             <ListBidding

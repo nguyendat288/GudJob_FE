@@ -16,7 +16,7 @@ const biddingApi = {
                 toast.error("Bạn đã đấu thầu dự án này rồi")
             }
             if (error.response.status === 500) {
-                toast.error("Phone or Email not match format ")
+                toast.error("Sai ở đâu đấy r")
             }
             if (error.response.status === 501) {
                 toast.error("Username or Phone or Email exist")
