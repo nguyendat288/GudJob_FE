@@ -9,6 +9,7 @@ const projectApi = {
             const response = await axiosClient.post(`${BASE_URL}/api/Projects/AddProject`, data)
             toast.success('create success')
             navigate("/recruiter")
+            return response
         } catch (error) {
             if (error.response.status === 500) {
                 toast.error("Something was wrong")
@@ -23,6 +24,7 @@ const projectApi = {
             const response = await axiosClient.put(`${BASE_URL}/api/Projects/UpdateProject`, data)
             toast.success('update success')
             navigate("/recruiter")
+            return response
         } catch (error) {
             if (error.response.status === 400) {
                 toast.error("Not null")
@@ -37,6 +39,7 @@ const projectApi = {
             const response = await axiosClient.delete(`${BASE_URL}/api/Projects/DeleteProject?projectId=${projectId}`)
             toast.success('delete success')
             navigate("/recruiter")
+            return response
         } catch (error) {
             if (error.response.status === 400) {
                 toast.error("Not null")

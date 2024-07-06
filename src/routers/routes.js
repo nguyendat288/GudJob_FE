@@ -1,5 +1,5 @@
-import { Navigate, useRoutes } from "react-router-dom";
-import { FREELANCER_PATH, PUBLIC_PATH, RECRUITER_PATH } from "../constaints/path";
+import { useRoutes } from "react-router-dom";
+import { ADMIN_PATH, FREELANCER_PATH, PUBLIC_PATH, RECRUITER_PATH } from "../constaints/path";
 import Register from "../pages/Public/Register";
 import Login from "../pages/Public/Login";
 import Profile from "../pages/Common/Profile";
@@ -23,7 +23,10 @@ import Detail from "../pages/Common/Detail/Detail";
 import UpdateProject from "../pages/Recruiter/UpdateProject/UpdateProject";
 import Search from "../pages/Common/ListProject/Search";
 import Filter from "../pages/Common/ListProject/Filter";
-import SideBar from "../pages/Common/Profile/component/SideBar";
+import HomeAdmin from "../pages/Admin/HomeAdmin/HomeAdmin";
+import LayOutAdmin from "../pages/Admin/LayOutAdmin/LayOutAdmin";
+import ListUsers from "../pages/Admin/List/ListUsers";
+import ListReport from "../pages/Admin/List/ListReport";
 import TopBarFreelancer from "../pages/Freelancer/LayOut/TopBarFreelancer";
 import Chat from "../pages/Common/Chat/Chat";
 
@@ -100,6 +103,14 @@ export default function Router() {
           children: [
             {
               path: FREELANCER_PATH.PROFILE,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <Profile />
+                </Suspense>
+              )
+            },
+            {
+              path: PUBLIC_PATH.USER_PROFILE,
               element: (
                 <Suspense fallback={<>Loading...</>}>
                   <Profile />
@@ -228,6 +239,41 @@ export default function Router() {
               element: (
                 <Suspense fallback={<>Loading...</>}>
                   <CreateProject />
+                </Suspense>
+              )
+            },
+          ]
+        }
+      ]
+    },
+    {
+      path: ADMIN_PATH.LAYOUT,
+      element: <LayOutAdmin />,
+      children: [
+        {
+          element: <RequireAuth allowedRoles={ROLES.FREELANCER} />,
+          children: [
+            {
+              path: ADMIN_PATH.HOME_ADMIN,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <HomeAdmin />
+                </Suspense>
+              )
+            },
+            {
+              path: ADMIN_PATH.LIST_USERS,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <ListUsers />
+                </Suspense>
+              )
+            },
+            {
+              path: ADMIN_PATH.REPORT_LIST,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <ListReport />
                 </Suspense>
               )
             },

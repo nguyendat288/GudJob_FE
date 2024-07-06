@@ -10,6 +10,7 @@ function ProfileSetting() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [description, setDescription] = useState('');
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const navigate = useNavigate();
 
@@ -22,6 +23,8 @@ function ProfileSetting() {
         setFirstName(res.firstName || '');
         setLastName(res.lastName || '');
         setEmail(res.email || '');
+        setPhoneNumber(res.phoneNumber || '');
+        setDescription(res.description || '');
       } catch (error) {
         console.error("Error fetching profile data:", error);
         toast.error("Failed to load profile data.");
@@ -33,16 +36,20 @@ function ProfileSetting() {
   const initialData = useMemo(() => ({
     firstName: profile?.firstName || '',
     lastName: profile?.lastName || '',
-    email: profile?.email || ''
+    email: profile?.email || '',
+    phoneNumber: profile?.phoneNumber || '',
+    description: profile?.description || ''
   }), [profile]);
 
   const checkIfChanged = useCallback(() => {
     return (
       firstName !== initialData.firstName ||
       lastName !== initialData.lastName ||
-      email !== initialData.email
+      email !== initialData.email ||
+      phoneNumber !== initialData.phoneNumber ||
+      description !== initialData.description
     );
-  }, [firstName, lastName, email, initialData]);
+  }, [firstName, lastName, email, initialData, phoneNumber, description]);
 
   useEffect(() => {
     setIsButtonDisabled(!checkIfChanged());
@@ -55,6 +62,7 @@ function ProfileSetting() {
       name: `${firstName} ${lastName}`,
       email: email,
       phoneNumber: phoneNumber || "",
+      description: description || "",
       taxCode: profile?.taxCode || "",
       isCompany: profile?.isCompany || false,
       skills: profile?.skills || []
@@ -78,12 +86,12 @@ function ProfileSetting() {
 
   return (
     <Box p={3} borderRadius={5} border="1px solid #ccc" component="form" onSubmit={handleSave}>
-      <Typography variant="h4" gutterBottom>Profile</Typography>
+      <Typography sx={{fontSize: "2em"}} variant="h4" gutterBottom>Hồ sơ của bạn</Typography>
       
       <Box mb={2}>
-        <Typography variant="h6">Name</Typography>
+        <Typography sx={{fontSize: "1.5em"}} variant="h6">Tên</Typography>
         <TextField
-          label="First Name"
+          label="Họ"
           variant="outlined"
           fullWidth
           margin="normal"
@@ -91,7 +99,7 @@ function ProfileSetting() {
           onChange={(e) => setFirstName(e.target.value)}
         />
         <TextField
-          label="Last Name"
+          label="Tên"
           variant="outlined"
           fullWidth
           margin="normal"
@@ -103,7 +111,7 @@ function ProfileSetting() {
       <Divider sx={{ my: 2 }} />
 
       <Box mb={2}>
-        <Typography variant="h6">Email</Typography>
+        <Typography sx={{fontSize: "1.5em"}} variant="h6">Email</Typography>
         <TextField
           label="Email"
           variant="outlined"
@@ -117,14 +125,22 @@ function ProfileSetting() {
       <Divider sx={{ my: 2 }} />
 
       <Box mb={2}>
-        <Typography variant="h6">Personal information</Typography>
+        <Typography sx={{fontSize: "1.5em"}} variant="h6">Cá nhân</Typography>
         <TextField
-          label="Phone number"
+          label="Số điện thoại"
           variant="outlined"
           fullWidth
           margin="normal"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
+        />
+        <TextField
+          label="Mô tả bản thân"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
       </Box>
 
@@ -140,7 +156,7 @@ function ProfileSetting() {
           }
         }}
       >
-        Save
+        Lưu thay đổi
       </Button>
     </Box>
   );

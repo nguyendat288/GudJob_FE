@@ -1,19 +1,29 @@
-import { Box, Button, Divider, Paper, Typography, styled } from '@mui/material'
-import React from 'react'
-import ProjectDescription from '../../../components/ProjectDescription'
-import StarIcon from '@mui/icons-material/Star';
+import { Box, Button, Divider, Paper, Typography, Tooltip } from '@mui/material';
+import React, { useState } from 'react';
+import ProjectDescription from '../../../components/ProjectDescription';
 import { ROLES } from '../../../constaints/role';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
+import { formatDate } from '../../../utils/formatDate';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import ReportModal from '../Profile/component/ReportModal';
+import reportApi from '../../../services/reportApi';
+import { toast } from 'react-toastify';
 
+const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId }) => {
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
-const ProjectDetail = ({ detail, navigate, handleDelete, currentUser }) => {
+    const handleReport = async (reportData) => {
+        await reportApi.createReport(reportData);
+        toast.error('Đã khiếu nại dự án')
+    };
+
     return (
-        <Box display='flex' mt={1} >
+        <Box display='flex' mt={4}>
             <Box flex='4'>
-                <Paper sx={{ bgcolor: '#F8F8FF' }} >
-                    <Box p={3} display='flex' justifyContent='space-between' justifyItems='center'>
+                <Paper sx={{ bgcolor: '#F8F8FF' }}>
+                    <Box p={4} display='flex' justifyContent='space-between'>
                         <Box>
-                            <Box display='flex'>
+                            <Box display='flex' alignItems='center'>
                                 <TypographyTitle title={detail?.title} color="blue" />
                                 <Box
                                     sx={{
@@ -22,80 +32,86 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser }) => {
                                         backgroundColor: detail?.projectStatus?.statusColor,
                                         borderRadius: '10px',
                                         border: '1px solid #ccc',
+                                        ml: 2,
                                     }}
                                 >
-                                    <Typography fontSize='10px'> {detail?.projectStatus?.statusName} </Typography>
+                                    <Typography fontSize='10px'>{detail?.projectStatus?.statusName}</Typography>
                                 </Box>
+                                <Tooltip title="Report this project">
+                                    <WarningAmberIcon onClick={() => setIsReportModalOpen(true)} className="text-red-600 cursor-pointer ml-2" />
+                                </Tooltip>
                             </Box>
                             <Box
-                                bgcolor='#CCCCCC'
-                                sx={{
-                                    mt: 1,
-                                    borderRadius: '10px',
-                                    padding: '5px',
-                                    display: 'inline-block',
-                                }}
+                                className="mt-2 inline-block rounded-2xl bg-gray-300 p-2"
                             >
-                                <Typography fontSize='15px'> {detail?.category?.categoryName} </Typography>
+                                <Typography fontSize='15px'>{detail?.category?.categoryName}</Typography>
                             </Box>
                         </Box>
-                        <Box>
-                            <Typography fontWeight='bold' fontSize='14px'> Ngân sách : {detail?.minBudget}VND - {detail?.maxBudget}VND </Typography>
-                            <Typography fontWeight='bold' fontSize='14px' > Thời gian : {detail?.duration} ngày </Typography>
+                        <Box className="flex-col items-center">
+                            <Typography className="mr-4 font-bold text-sm">Ngân sách: {detail?.minBudget}VND - {detail?.maxBudget}VND</Typography>
+                            <Typography className="mr-4 font-bold text-sm">Thời gian: {detail?.duration} ngày</Typography>
                         </Box>
                     </Box>
                     <Divider />
-                    <Box p={3}>
+                    <Box p={4}>
                         <Typography fontSize='14px' fontWeight='bold'>Thông tin mô tả</Typography>
-                        <Box m={2}>
+                        <Box mt={2}>
                             <ProjectDescription description={detail?.description} />
                         </Box>
                     </Box>
-                    <Box pl={3}>
+                    <Box pl={4}>
                         <Typography fontSize='14px' fontWeight='bold'>Kỹ năng yêu cầu</Typography>
-                        <Box display='flex'>
+                        <Box display='flex' flexWrap='wrap'>
                             {detail?.skill?.map((item, index) => (
                                 <Box
-                                sx={{
-                                    mt: 1,
-                                    borderRadius: '10px',
-                                    padding: '5px',
-                                    display: 'inline-block',
-                                    ml: 2,
-                                    border: '1px solid blue' // Add border to create an outline effect
-                                }}
-                            >
-                                <Typography fontSize='15px'> {item} </Typography>
-                            </Box>
+                                    key={index}
+                                    className="mt-2 ml-2 inline-block rounded-2xl border border-blue-600 p-2"
+                                >
+                                    <Typography fontSize='15px'>{item}</Typography>
+                                </Box>
                             ))}
                         </Box>
                     </Box>
                     <Box display='flex'>
-                        <Box p={3}>
-                            <Typography fontSize='8px'> Ngày tạo : {detail?.createdDate} </Typography>
+                        <Box p={4}>
+                            <Typography fontSize='12px'>Ngày tạo: {formatDate(detail?.createdDate)}</Typography>
                         </Box>
-                        <Box ml='auto' mr={3}>
-                            {currentUser?.role === ROLES.RECRUITER && currentUser?.userId === detail?.createdBy && (<>
-                                <Button
-                                    sx={{ fontSize: 12 }}
-                                    variant='contained' onClick={() => navigate(`/update-project/${detail?.id}`)}>Update Project</Button>
-                                {detail?.statusId != 2 && (<>
+                        <Box className="ml-auto mr-4 flex space-x-2">
+                            {currentUser?.role === ROLES.RECRUITER && currentUser?.userId === detail?.createdBy && (
+                                <>
                                     <Button
-                                        sx={{ fontSize: 12 }}
-                                        variant='contained' onClick={(e) => handleDelete(detail?.id)}>Delete Project</Button>
-                                </>)}
-                            </>)}
+                                        className="text-xs"
+                                        variant='contained'
+                                        onClick={() => navigate(`/update-project/${detail?.id}`)}
+                                    >
+                                        Update Project
+                                    </Button>
+                                    {detail?.statusId !== 2 && (
+                                        <Button
+                                            className="text-xs"
+                                            variant='contained'
+                                            onClick={(e) => handleDelete(detail?.id)}
+                                        >
+                                            Delete Project
+                                        </Button>
+                                    )}
+                                </>
+                            )}
                         </Box>
                     </Box>
-
                 </Paper>
             </Box>
-            <Box flex='1' ml={2}>
-
+            <Box flex='1' ml={4}>
+                <ReportModal
+                    open={isReportModalOpen}
+                    onClose={() => setIsReportModalOpen(false)}
+                    onReport={handleReport}
+                    type="project"
+                    projectId={projectId}
+                />
             </Box>
-
         </Box>
-    )
-}
+    );
+};
 
-export default ProjectDetail
+export default ProjectDetail;
