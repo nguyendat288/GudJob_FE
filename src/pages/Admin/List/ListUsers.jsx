@@ -14,12 +14,23 @@ const ListUsers = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalAction, setModalAction] = useState('');
   const [loading, setLoading] = useState(false);
+  const [role, setRole] = useState('');
+  const [searchName, setSearchName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
 
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
       try {
-        const response = await userManagementApi.getAllUsers(page + 1, pageSize);
+        const response = await userManagementApi.getAllUsers({
+          page: page + 1,
+          pageSize: pageSize,
+          role: role === 'All' ? "" : role,
+          search: searchName,
+          email: email,
+          phone: phone,
+        });
         setUsers(response.items);
         setTotalUsers(response.totalItemsCount);
       } catch (error) {
@@ -29,7 +40,7 @@ const ListUsers = () => {
       }
     };
     fetchUsers();
-  }, [page, pageSize, reloadUsers]);
+  }, [page, pageSize, searchName, email, phone, role, reloadUsers]);
 
   const handleLockUser = async (userId) => {
     try {
@@ -91,6 +102,12 @@ const ListUsers = () => {
         loading={loading}
         reloadUsers={setReloadUsers}
         totalUsers={totalUsers}
+        setLoading={setLoading}
+        role={role}
+        setRole={setRole}
+        setSearchName={setSearchName}
+        setEmail={setEmail}
+        setPhone={setPhone}
       />
       <ConfirmationModal
         open={openModal}

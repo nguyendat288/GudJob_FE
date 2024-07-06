@@ -1,6 +1,5 @@
-import { Box, Button, Divider, FilledInput, FormControl, FormHelperText, InputAdornment, LinearProgress, Modal, OutlinedInput, Paper, Tab, TextField, Typography } from '@mui/material'
+import { Box, Button, Divider, FilledInput, InputAdornment, LinearProgress, Modal, Tab, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { styled } from '@mui/system';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -10,32 +9,18 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import ProjectDetail from './ProjectDetail';
 import ListBidding from './ListBidding';
 import { ROLES } from '../../../constaints/role';
-import TypographyTitle from '../../../components/Typography/TypographyTitle';
 import Header from '../../Recruiter/LayOutRecruiter/Header';
-
-const StyledTypography = styled(Typography)(({ theme }) => ({
-    borderRadius: '10px',
-    marginLeft: theme.spacing(3),
-    backgroundColor: 'green',
-    color: 'white',
-    padding: '8px 16px',
-    fontSize: '16px',
-    fontWeight: 'bold',
-    display: 'inline-block',
-    textAlign: 'center',
-}));
-
 
 const Detail = () => {
     const currentUser = useSelector((state) => state.auth.login?.currentUser)
     const navigate = useNavigate();
-    const { projectId } = useParams()
+    const { projectId } = useParams();
     const [value, setValue] = useState('1');
     const [detail, setDetail] = useState(null);
-    const [budget, setBudget] = useState(0)
-    const [comment, setComment] = useState('')
-    const [duration, setDuration] = useState(0)
-    const [listBidding, setListBidding] = useState(null)
+    const [budget, setBudget] = useState(0);
+    const [comment, setComment] = useState('');
+    const [duration, setDuration] = useState(0);
+    const [listBidding, setListBidding] = useState(null);
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -50,19 +35,15 @@ const Detail = () => {
             setDetail(res);
         }
         getProjectDetail()
-    }, [])
+    }, [projectId])
 
     useEffect(() => {
         const getAllBidding = async () => {
             let res = await biddingApi.GetBiddingListByProjectId(projectId, 1, 10);
-            setListBidding(res);
+            setListBidding(res?.data);
         }
         getAllBidding()
-    }, [value])
-
-    console.log(currentUser);
-    console.log(detail);
-    console.log(listBidding);
+    }, [value, projectId])
 
     const handleSubmit = async (e) => {
         if (comment === '' || duration === '' || budget === 0 || budget < detail?.minBudget || budget > detail?.maxBudget) {
@@ -74,7 +55,6 @@ const Detail = () => {
                 duration: duration,
                 budget: budget
             }
-            console.log(data);
             await biddingApi.AddBidding(data, navigate);
             setOpen(false);
         }
@@ -94,14 +74,13 @@ const Detail = () => {
         <>
             <Box m={5}>
                 <Box mb={3}>
-                    {value == '1' && (<>
+                    {value === '1' && (<>
                         <Header title="MÔ TẢ DỰ ÁN" subtitle="Thông tin chi tiết của dự án" />
                     </>)}
-                    {value == '2' && (<>
+                    {value === '2' && (<>
                         <Header title="DANH SÁCH ĐẤU THẦU" subtitle="Danh sách đấu thầu của dự án" />
                     </>)}
                 </Box>
-
 
                 <Box sx={{ width: '100%' }}>
                     <TabContext value={value}>
@@ -115,15 +94,15 @@ const Detail = () => {
                             {detail == null && (
                                 <LinearProgress />
                             )}
-                            <ProjectDetail detail={detail} navigate={navigate} handleDelete={handleDelete} currentUser={currentUser} />
-                            {currentUser != null && currentUser?.role == ROLES.FREELANCER && (
+                            <ProjectDetail detail={detail} navigate={navigate} handleDelete={handleDelete} currentUser={currentUser} projectId={projectId} />
+                            {currentUser != null && currentUser?.role === ROLES.FREELANCER && (
                                 <>
                                     <Button onClick={handleOpen}>Bidding</Button>
                                 </>
                             )}
                         </TabPanel>
                         <TabPanel value="2">
-                        {listBidding == null && (
+                            {listBidding == null && (
                                 <LinearProgress />
                             )}
                             <ListBidding
@@ -212,4 +191,4 @@ const style = {
     boxShadow: 24,
     p: 3,
 };
-export default Detail
+export default Detail;

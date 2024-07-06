@@ -1,18 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, IconButton, Avatar, Typography, Tooltip, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import { Box, Button, IconButton, Avatar, Typography, Tooltip, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, InputAdornment, Menu, MenuItem } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import LockPersonIcon from '@mui/icons-material/LockPerson';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { DataGrid, useGridApiRef } from '@mui/x-data-grid';
 import userManagementApi from '../../../services/adminApi/userManagementApi';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
-const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChange, loading, reloadUsers, totalUsers }) => {
+const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChange, loading, reloadUsers, totalUsers, setLoading, role, setRole, setSearchName, setEmail, setPhone }) => {
   const apiRef = useGridApiRef();
   const {t} = useTranslation(['admin', 'common']);
   const [search, setSearch] = useState('');
+  const [searchBy, setSearchBy] = useState('');
   const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElSearch, setAnchorElSearch] = useState();
+
+  const handleSearchBySelect = (selectedSearchBy) => {
+    setSearchBy(selectedSearchBy);
+    handleMenuClose();
+  };
+
+  const handleSearchButtonClick = (event) => {
+    setAnchorElSearch(event.currentTarget);
+  };
+
+  const handleRoleButtonClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setAnchorElSearch(null);
+  };
+
+  const handleRoleSelect = async (role) => {
+    setRole(role);
+    setLoading(true);
+    handleMenuClose();
+  };
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -30,19 +59,21 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
   }, [page, pageSize]);
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
+    { field: 'id', headerName: 'ID', width: 90, flex: 0.5 },
     {
       field: 'avatar',
       headerName: t('avatar', {ns:'admin'}),
       width: 100,
+      flex: 1,
       renderCell: (params) => <Avatar src={params.value} alt={params.row.name} />
     },
-    { field: 'name', headerName: t('name', {ns:'admin'}), width: 150 },
-    { field: 'email', headerName: 'Email', width: 200 },
+    { field: 'name', headerName: t('name', {ns:'admin'}), width: 150, flex: 1 },
+    { field: 'email', headerName: 'Email', width: 200, flex: 1 },
     {
       field: 'phoneNumber',
       headerName: t('phone_number', { ns : 'common' }),
       width: 200,
+      flex: 1,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
           <Typography>{params.value ? params.value : t('no_information', {ns:'admin'})}</Typography>
@@ -53,6 +84,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
       field: 'isLock',
       headerName: t('status', { ns : 'common' }),
       width: 220,
+      flex: 1,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
           <Typography>{params.row.isLock ? t('locked', {ns:'admin'}) : t('active', {ns:'admin'})}</Typography>
@@ -63,6 +95,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
       field: 'isCompany',
       headerName: t('role', { ns : 'common' }),
       width: 150,
+      flex: 1,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
           <Typography>{params.row.isCompany ? 'Recruiter' : 'Freelancer'}</Typography>
@@ -73,6 +106,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
       field: 'actions',
       headerName: t('action', { ns : 'common' }),
       width: 200,
+      flex: 1,
       sortable: false,
       renderCell: (params) => (
         <Box>
@@ -124,8 +158,37 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
     handleClose();
   }
 
+  const handleKeyPress = async (event) => {
+    if (event.key === 'Enter') {
+      setLoading(true);
+      switch (searchBy) {
+        case 'Name':
+          setEmail('');
+          setPhone('');
+          setSearchName(search);
+          break;
+        case 'Email':
+          setSearchName('');
+          setPhone('');
+          setEmail(search);
+          break;
+        case 'Phone Number':
+          setSearchName('');
+          setEmail('');
+          setPhone(search);
+          break;
+        default:
+          setSearchName('');
+          setEmail('');
+          setPhone('');
+          break;
+      }
+      setLoading(false);
+    }
+  };
+
   return (
-    <Box component="main" className="p-4">
+    <Box component="main" className="p-4" sx={{ width: '100%', overflow: 'auto' }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography sx={{ fontSize: "1.5rem", fontWeight: "600" }}>{t("userList")}</Typography>
         {rowSelectionModel.length ? <Button onClick={handleClickOpen} variant="contained" startIcon={<LockIcon />}>
@@ -136,9 +199,58 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
         label={t('search', { ns : 'common' })}
         variant="outlined"
         value={search}
+        disabled={searchBy ? false : true}
         onChange={(e) => setSearch(e.target.value)}
+        onKeyDown={handleKeyPress}
         fullWidth
         margin="normal"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Button
+                aria-controls="search-by-menu"
+                aria-haspopup="true"
+                onClick={handleSearchButtonClick}
+                endIcon={<ArrowDropDownIcon />}
+              >
+                {searchBy || 'Search By'}
+              </Button>
+              <Menu
+                id="search-by-menu"
+                anchorEl={anchorElSearch}
+                open={Boolean(anchorElSearch)}
+                onClose={handleMenuClose}
+              >
+                <MenuItem onClick={() => handleSearchBySelect('Name')}>Name</MenuItem>
+                <MenuItem onClick={() => handleSearchBySelect('Email')}>Email</MenuItem>
+                <MenuItem onClick={() => handleSearchBySelect('Phone Number')}>Phone Number</MenuItem>
+              </Menu>
+            </InputAdornment>
+          ),
+          endAdornment: (
+            <InputAdornment position="end">
+              <Button
+                aria-controls="role-menu"
+                aria-haspopup="true"
+                onClick={handleRoleButtonClick}
+                endIcon={<ArrowDropDownIcon />}
+              >
+                {role || 'Role'}
+              </Button>
+              <Menu
+                id="role-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+              >
+                <MenuItem onClick={() => handleRoleSelect('Admin')}>Admin</MenuItem>
+                <MenuItem onClick={() => handleRoleSelect('Freelancer')}>Freelancer</MenuItem>
+                <MenuItem onClick={() => handleRoleSelect('Recruiter')}>Recruiter</MenuItem>
+                <MenuItem onClick={() => handleRoleSelect('All')}>All</MenuItem>
+              </Menu>
+            </InputAdornment>
+          ),
+        }}
       />
       <Box height={400} width="100%">
         <DataGrid
@@ -156,7 +268,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
           keepNonExistentRowsSelected
           disableRowSelectionOnClick
           loading={loading}
-          pageSizeOptions={[5, 10, 15, 20, { value: 1000, label: 'Tất cả người dùng' }]}
+          pageSizeOptions={[5, 10, 15, 20]}
           onRowSelectionModelChange={(newRowSelectionModel) => {
             setRowSelectionModel(newRowSelectionModel);
           }}
@@ -175,6 +287,24 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
               count !== 1
                 ? `${t('selected')} ${count.toLocaleString()} ${t('users')}`
                 : `${t('selected')} ${count.toLocaleString()} ${t('user')}`,
+          }}
+          sx={{
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: '#f5f5f5',
+              borderBottom: '1px solid #ddd',
+            },
+            '& .MuiDataGrid-cell': {
+              borderBottom: '1px solid #ddd',
+            },
+            '& .MuiDataGrid-footerContainer': {
+              backgroundColor: '#f5f5f5',
+              borderTop: '1px solid #ddd',
+            },
+            '& .MuiDataGrid-row': {
+              '&:nth-of-type(even)': {
+                backgroundColor: '#f9f9f9',
+              },
+            },
           }}
         />
       </Box>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Typography, Box, Container, Grid, IconButton, Paper, LinearProgress, Link, Button } from '@mui/material';
+import { Avatar, Typography, Box, Container, Grid, IconButton, Paper, LinearProgress, Link, Button, Rating, TextField } from '@mui/material';
 import { LinkedIn, GitHub, CheckCircleOutline, School as SchoolIcon, Description as DescriptionIcon } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import profileApi from '../../../services/profileApi';
@@ -15,10 +15,26 @@ import ReportModal from './component/ReportModal';
 import reportApi from '../../../services/reportApi';
 import { toast } from 'react-toastify';
 
+const labels = {
+    1: 'Rất tệ',
+    2: 'Tệ',
+    3: 'Bình thường',
+    4: 'Khá tốt',
+    5: 'Xuất sắc',
+};
+
+function getLabelText(value) {
+    return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
+}
+
 function Profile() {
     const { userId } = useParams();
     const [profile, setProfile] = useState();
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+    const [newRating, setNewRating] = useState(0);
+    const [newComment, setNewComment] = useState('');
+    const [submitting, setSubmitting] = useState(false);
+    const [hover, setHover] = useState(-1);
 
     useEffect(() => {
         const getData = async () => {
@@ -34,11 +50,35 @@ function Profile() {
     }, [userId]);
 
     const isOwnProfile = userId === undefined;
-
+console.log("profile", profile);
     const handleReport = async (reportData) => {
         console.log("reportData", reportData);
         await reportApi.createReport(reportData);
-        toast.error('Đã khiếu nại người dùng')
+        toast.error('Đã khiếu nại người dùng');
+    };
+
+    const handleRatingSubmit = async (e) => {
+        e.preventDefault();
+        setSubmitting(true);
+        try {
+            let data = {
+                comment: newComment,
+                star: newRating,
+                rateToUserId: userId
+            }
+            await profileApi.submitRating(data);
+            toast.success('Đánh giá thành công');
+            setProfile((prevProfile) => ({
+                ...prevProfile,
+                ratings: [...prevProfile.ratings, { star: newRating, comment: newComment }]
+            }));
+            setNewRating(0);
+            setNewComment('');
+        } catch (error) {
+            toast.error('Lỗi khi đánh giá');
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
@@ -86,7 +126,7 @@ function Profile() {
                                             <CheckCircleOutline color="info" className="mr-3" />
                                             <Typography sx={{ fontSize: '1.25rem' }}>Education</Typography>
                                         </div>
-                                        {profile ? (profile.educations.length ? (
+                                        {profile ? (profile?.educations?.length ? (
                                             profile.educations.map((edu, index) => (
                                                 <Box key={index} mb={2} border="1px solid #ccc" borderRadius={5} p={2}>
                                                     <Typography sx={{ fontSize: '1rem' }}>Đại học/Cao đẳng: {edu.universityCollege}</Typography>
@@ -103,7 +143,7 @@ function Profile() {
                                             <SchoolIcon color="info" className="mr-3" />
                                             <Typography sx={{ fontSize: '1.25rem' }}>Experience</Typography>
                                         </div>
-                                        {profile ? (profile.experiences.length ? (
+                                        {profile ? (profile?.experiences?.length ? (
                                             profile.experiences.map((exp, index) => (
                                                 <Box key={index} mb={2} border="1px solid #ccc" borderRadius={5} p={2}>
                                                     <Typography sx={{ fontSize: '1.25rem' }}>{exp.title}</Typography>
@@ -150,7 +190,7 @@ function Profile() {
                                 <Grid container>
                                     <Grid item xs={12} md={9}>
                                         <Box className="flex items-center">
-                                            <PaymentIcon color='warning' />
+                                            <PaymentIcon color='error' />
                                             <Typography sx={{ fontSize: '1rem', marginLeft: '0.5rem' }}>Xác thực thanh toán</Typography>
                                         </Box>
                                     </Grid>
@@ -163,9 +203,9 @@ function Profile() {
                                     )}
                                 </Grid>
                                 <Grid container>
-                                    <Grid item xs={12} md={9}>
+                                    <Grid item xs={12} md={11}>
                                         <Box className="flex items-center">
-                                            <PhoneAndroidIcon color='warning' />
+                                            <PhoneAndroidIcon color='error' />
                                             <Typography sx={{ fontSize: '1rem', marginLeft: '0.5rem' }}>Xác thực số điện thoại</Typography>
                                         </Box>
                                     </Grid>
@@ -226,6 +266,61 @@ function Profile() {
                                 <Typography sx={{ fontSize: '1rem' }}>You don't have any certifications yet.</Typography>
                             </Box>
                         </Paper>
+
+                        <Paper elevation={3} className="p-4">
+                            <Typography sx={{ fontSize: '1.25rem', fontWeight: 'bold' }}>Đánh giá</Typography>
+                            <Box className="mt-4 space-y-4">
+                                {profile ? (profile?.ratings?.length ? (
+                                    profile.ratings.map((rating, index) => (
+                                        <Paper key={index} elevation={2} className="p-4" sx={{ borderRadius: 5 }}>
+                                            <Typography sx={{ fontSize: '1rem', fontWeight: 'bold' }}>{rating.comment}</Typography>
+                                            <Rating name="read-only" value={rating.star} readOnly />
+                                        </Paper>
+                                    ))
+                                ) : <Typography sx={{ fontSize: '1rem' }}>Chưa có đánh giá nào</Typography>) : <LinearProgress />}
+                            </Box>
+                        </Paper>
+
+                        {!isOwnProfile && (
+                            <Paper elevation={3} className="p-4">
+                                <Typography sx={{ fontSize: '1.25rem', fontWeight: 'bold' }}>Đánh giá của bạn</Typography>
+                                <Box className="mt-4">
+                                    <form onSubmit={handleRatingSubmit}>
+                                        <Box className="flex flex-row">
+                                        <Rating
+                                            name="hover-feedback"
+                                            value={newRating}
+                                            getLabelText={getLabelText}
+                                            onChange={(event, newValue) => setNewRating(newValue)}
+                                            onChangeActive={(event, newHover) => {
+                                                setHover(newHover);
+                                            }}
+                                        />
+                                        {newRating !== null && (
+                                            <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : newRating]}</Box>
+                                        )}
+                                        </Box>
+                                        <TextField
+                                            label="Bình luận"
+                                            multiline
+                                            rows={4}
+                                            value={newComment}
+                                            onChange={(e) => setNewComment(e.target.value)}
+                                            fullWidth
+                                            sx={{ marginY: 2 }}
+                                        />
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            color="primary"
+                                            disabled={submitting}
+                                        >
+                                            Gửi đánh giá
+                                        </Button>
+                                    </form>
+                                </Box>
+                            </Paper>
+                        )}
                     </Box>
                 </Grid>
             </Grid>
@@ -233,7 +328,7 @@ function Profile() {
                 open={isReportModalOpen}
                 onClose={() => setIsReportModalOpen(false)}
                 onReport={handleReport}
-                userId={userId}
+                type="user"
             />
         </Container>
     );

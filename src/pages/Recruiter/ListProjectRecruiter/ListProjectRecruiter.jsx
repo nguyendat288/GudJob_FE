@@ -1,11 +1,10 @@
 import { Box, Button, CircularProgress, Divider, Tooltip, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Header from '../LayOutRecruiter/Header'
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import projectApi from '../../../services/projectApi';
 import { useSelector } from 'react-redux';
 import StarIcon from '@mui/icons-material/Star';
-import ProjectDescription from '../../../components/ProjectDescription';
 import ShowList from './ShowList';
 import AddIcon from '@mui/icons-material/Add';
 const ListProjectRecruiter = () => {
