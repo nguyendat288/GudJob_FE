@@ -22,13 +22,14 @@ const TopBarFreelancer = () => {
   const [profile, setProfile] = useState();
 
   useEffect(() => {
-    const getData = async () => {
-      const res = await profileApi.getUserProfile();
-      console.log(res);
-      setProfile(res);
-    };
-    getData();
-  }, []);
+    if (currentUser) {
+      const getData = async () => {
+        const res = await profileApi.getUserProfile();
+        setProfile(res);
+      };
+      getData();
+    }
+  }, [currentUser]);
   const [search, setSearch] = useState('')
 
   const handleOpenUserMenu = (event) => {

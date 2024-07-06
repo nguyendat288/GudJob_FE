@@ -13,7 +13,6 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId 
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
     const handleReport = async (reportData) => {
-        console.log("reportData", reportData);
         await reportApi.createReport(reportData);
         toast.error('Đã khiếu nại dự án')
     };

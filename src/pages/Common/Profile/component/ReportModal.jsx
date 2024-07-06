@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Box, Typography, Button, TextField, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import { Modal, Box, Typography, Button, TextField, MenuItem, Select, FormControl, InputLabel, Tooltip } from '@mui/material';
 import reportApi from '../../../../services/reportApi';
 
-const ReportModal = ({ open, onClose, onReport, type, projectId }) => {
+const ReportModal = ({ open, onClose, onReport, type, projectId, bid }) => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [description, setDescription] = useState('');
   const [url, setUrl] = useState('');
   const [proId, setProId] = useState(projectId);
-  const [bidId, setBidId] = useState('');
+  const [bidId, setBidId] = useState(bid);
+
+  useEffect(() => {
+    setBidId(bid);
+  }, [bid]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -32,36 +36,43 @@ const ReportModal = ({ open, onClose, onReport, type, projectId }) => {
     switch (type) {
       case 'user':
         return (
-          <TextField
-            label="URL"
-            variant="outlined"
-            fullWidth
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            sx={{ mb: 2 }}
-          />
+          <Tooltip title="Copy user's url you want to report in here">
+            <TextField
+              label="URL"
+              variant="outlined"
+              fullWidth
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+          </Tooltip>
         );
       case 'project':
         return (
-          <TextField
-            label="Project ID"
-            variant="outlined"
-            fullWidth
-            value={proId}
-            onChange={(e) => setProId(e.target.value)}
-            sx={{ mb: 2 }}
-          />
+          <Tooltip title="You can detect project ID by getting the number in url">
+            <TextField
+              label="Project ID"
+              variant="outlined"
+              fullWidth
+              value={proId}
+              onChange={(e) => setProId(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+          </Tooltip>
         );
       case 'bid':
         return (
-          <TextField
-            label="Bid ID"
-            variant="outlined"
-            fullWidth
-            value={bidId}
-            onChange={(e) => setBidId(e.target.value)}
-            sx={{ mb: 2 }}
-          />
+          <Tooltip title="You can't change bid id. We will detect this once you report any bid">
+            <TextField
+              label="Bid ID"
+              variant="outlined"
+              disabled
+              fullWidth
+              value={bidId}
+              onChange={(e) => setBidId(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+          </Tooltip>
         );
       default:
         return null;

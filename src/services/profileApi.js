@@ -72,6 +72,15 @@ const profileApi = {
         }
     },
    
+    submitRating: async (data) => {
+        try {
+            const response = await axiosClient.post(`${BASE_URL}/api/Ratings/Rate`, data);
+            return response;
+        } catch (error) {
+            console.error("Error during changePassword API call:", error.response || error.message);
+            throw error;
+        }
+    },
 }
 
 export default profileApi
