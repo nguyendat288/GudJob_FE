@@ -1,5 +1,5 @@
+import React, { useEffect, useState } from 'react'
 import { AppBar, Badge, Box, Button, Container, IconButton, InputBase, List, ListItem, ListItemButton, ListItemText, Menu, Popover, Toolbar, Typography } from '@mui/material';
-import React, { useState } from 'react'
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
@@ -14,16 +14,27 @@ import { logOutSuccess } from '../../../redux/authSlice';
 import { toast } from 'react-toastify';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import profileApi from '../../../services/profileApi';
+import LanguageSelector from '../../../components/language-selector';
 import { UseChatState } from '../../../providers/ConnectContext';
-import {
-  MoreVert as MoreVertIcon,
-} from '@mui/icons-material';
+import { MoreVert as MoreVertIcon } from '@mui/icons-material';
 import notificationApi from '../../../services/notificationApi';
 import ListUser from '../../Common/Chat/ListUser';
 import chatApi from '../../../services/chatApi';
 const TopBarFreelancer = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
+  const [profile, setProfile] = useState();
+
+  useEffect(() => {
+    if (currentUser) {
+      const getData = async () => {
+        const res = await profileApi.getUserProfile();
+        setProfile(res);
+      };
+      getData();
+    }
+  }, [currentUser]);
   const [search, setSearch] = useState('')
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -32,8 +43,6 @@ const TopBarFreelancer = () => {
   const [selectedNotification, setSelectedNotification] = useState(null);
 
   const [anchorElMessage, setAnchorElMessage] = useState(null);
-  const [menuAnchorElMessage, setMenuAnchorElMessage] = useState(null);
-  const [topMenuAnchorElMessage, setTopMenuAnchorElMessage] = useState(null);
 
   const {
     connection,
@@ -46,7 +55,7 @@ const TopBarFreelancer = () => {
     setNumberOfNotification,
     setChatSelect
   } = UseChatState();
-  console.log(currentUser);
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -123,9 +132,6 @@ const TopBarFreelancer = () => {
   const handleTopMenuOpen = (event) => {
     setTopMenuAnchorEl(event.currentTarget);
   };
-  const handleTopMenuMessageOpen = (event) => {
-    setTopMenuAnchorElMessage(event.currentTarget);
-  };
 
   const handleTopMenuClose = () => {
     setTopMenuAnchorEl(null);
@@ -200,7 +206,6 @@ const TopBarFreelancer = () => {
 
   return (
     <>
-
       <AppBar position="static" sx={{ bgcolor: 'white' }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
@@ -267,40 +272,6 @@ const TopBarFreelancer = () => {
                     <ListUser listUser={userConnection}
                       hanldeSelectChat={hanldeSelectChat}
                       currentUser={currentUser} />
-                    {/* <List sx={{ width: '250px' }}>
-                    {listNotification?.length === 0 && (
-                      <ListItem>
-                        <ListItemText secondary='Không có thông báo nào' />
-                      </ListItem>
-                    )}
-                    {listNotification?.length !== 0 &&
-                      listNotification.map((item, index) => (
-                        <ListItemButton
-                          key={index}
-                          sx={{ backgroundColor: getNotificationColor(item?.isRead) }}
-                        >
-                          <ListItemText
-                            onClick={() => handleCheck(item?.link, item?.notificationId, item?.isRead)}
-                            primary={
-                              <React.Fragment>
-                                <span>{item?.description}</span>
-                                <br />
-                                <span style={{ color: 'gray', fontSize: '0.8em' }}>
-                                  {new Date(item?.datetime).toLocaleString()}
-                                </span>
-                              </React.Fragment>
-                            }
-                          />
-                          <IconButton
-                            edge='end'
-                            aria-label='options'
-                            onClick={(event) => handleMenuOpen(event, item)}
-                          >
-                            <MoreVertIcon />
-                          </IconButton>
-                        </ListItemButton>
-                      ))}
-                  </List> */}
                   </Box>
                 </Popover>
 
@@ -406,15 +377,16 @@ const TopBarFreelancer = () => {
                 <IconButton>
                   <FavoriteBorderOutlinedIcon />
                 </IconButton>
+                <LanguageSelector />
                 <Typography sx={{
                   color: 'black',
                   display: 'flex',
                   alignItems: 'center',
                   fontWeight: 'bold'
-                }}>{currentUser?.name}</Typography>
+                }}>{profile?.name}</Typography>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="Remy Sharp" src={currentUser?.avatar} />
+                    <Avatar alt="Remy Sharp" src={profile?.avatar} />
                   </IconButton>
                 </Tooltip>
                 <Menu

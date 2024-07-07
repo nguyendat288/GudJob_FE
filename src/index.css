@@ -1,3 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,11 +10,17 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-size: 1920px 1080px;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.login-body {
+  background-image: url('./assets/background.jpg');
+  background-size: 1920px 1080px;
 }
 
 /* SIDEBAR */
@@ -89,7 +100,7 @@ code {
 
 /* SECTION */
 
-section {
+/* section {
   padding-top: 4vh;
   height: 96vh;
   margin: 0 10rem;
@@ -99,10 +110,10 @@ section {
 
 .section-container {
   display: flex;
-}
+} */
 
 /* PROFILE SECTION  */
-#profile {
+/* #profile {
   display: flex;
   justify-content: center;
   gap: 5rem;
@@ -148,7 +159,7 @@ section {
 
 .avatar {
   border-radius: 2rem;
-}
+} */
 
 /* ICONS */
 

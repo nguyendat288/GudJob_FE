@@ -7,6 +7,7 @@ export const PUBLIC_PATH = {
     SEARCH_CATEGORY_PROJECT: "/category/:idCate",
     DETAIL: "/detail/:projectId",
     RESET: "/reset-password",
+    USER_PROFILE: "/profile/:userId",
     NOT_FOUND: '*',
 }
 
@@ -31,5 +32,8 @@ export const RECRUITER_PATH = {
 
 export const ADMIN_PATH = {
     LAYOUT: "/",
-    HOME_ADMIN :"/admin"
+    HOME_ADMIN : "/admin",
+    LIST_USERS: "/users-list",
+    REPORT_LIST: "report-list",
+    ROLES: "/roles"
 }

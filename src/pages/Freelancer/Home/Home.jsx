@@ -1,15 +1,16 @@
 import { Box, Card, CardContent, CardMedia, Divider, Grid, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import categoryApi from '../../../services/categoryApi'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import HeroSection from '../../../components/HeroSection';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
 import TypographyHeader from '../../../components/Typography/TypographyHeader';
-
+import { useTranslation } from 'react-i18next';
 const Home = () => {
   const [listCategory, setListCategory] = useState([])
   const navigate = useNavigate()
+  const {t} = useTranslation('home');
 
   useEffect(() => {
     const getCategory = async () => {
@@ -28,7 +29,8 @@ const Home = () => {
       <HeroSection />
       <Box m={3}>
         <Box mb={3}>
-          <TypographyHeader title="CÁC NGÀNH NỔI BẬT" />
+          <TypographyHeader title= {t('popular_category' )} /> 
+          
           <Grid container spacing={3} mt={2}>
             {listCategory.length !== 0 && listCategory.map((item, index) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
@@ -70,7 +72,7 @@ const Home = () => {
         </Box>
         <Divider />
         <Box mt={3}>
-          <TypographyHeader title="Website chúng tôi có thể hỗ trợ các bạn về ?" />
+          <TypographyHeader title={t('website_can_help_you_about_?')} />
           <Box display="flex">
             <Box flex='1' p={3}>
               <CardMedia
@@ -98,7 +100,7 @@ const Home = () => {
         </Box>
         <Divider />
         <Box mt={3}>
-          <TypographyHeader title="Khám phá nhiều tính năng hơn với tư cách hội viên" />
+          <TypographyHeader title={t('explore_more_features_with_membership')} />
           <Box display="flex">
             <Box flex='1' p={3}>
               <Typography variant="h6" display="flex" alignItems="center" mb={2}>

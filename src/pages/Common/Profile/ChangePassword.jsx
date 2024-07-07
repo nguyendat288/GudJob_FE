@@ -60,11 +60,11 @@ function ChangePassword() {
 
   return (
     <Box p={3} borderRadius={5} border="1px solid #ccc" component="form" onSubmit={handleSave}>
-      <Typography variant="h4" gutterBottom>Change password</Typography>
+      <Typography sx={{fontSize: "2em"}} variant="h4" gutterBottom>Thay đổi mật khẩu</Typography>
       
       <Box mb={2}>
         <TextField
-          label="Current password"
+          label="Mật khẩu hiện tại"
           variant="outlined"
           fullWidth
           margin="normal"
@@ -73,7 +73,7 @@ function ChangePassword() {
           type="password"
         />
         <TextField
-          label="New password"
+          label="Mật khẩu mới"
           variant="outlined"
           fullWidth
           margin="normal"
@@ -82,7 +82,7 @@ function ChangePassword() {
           type="password"
         />
         <TextField
-          label="Confirm password"
+          label="Xác nhận mật khẩu mới"
           variant="outlined"
           fullWidth
           margin="normal"
@@ -104,7 +104,7 @@ function ChangePassword() {
           }
         }}
       >
-        Save
+        Lưu thay đổi
       </Button>
     </Box>
   );

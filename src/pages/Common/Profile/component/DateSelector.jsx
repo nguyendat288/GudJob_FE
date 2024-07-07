@@ -25,7 +25,7 @@ const DateSelector = ({
       {showMonths && (
         <>
           <FormControl fullWidth margin="normal">
-            <InputLabel>Start Month</InputLabel>
+            <InputLabel>Tháng bắt đầu</InputLabel>
             <Select
               value={startMonth}
               onChange={(e) => { setStartMonth(e.target.value); handleChange(); }}
@@ -38,7 +38,7 @@ const DateSelector = ({
         </>
       )}
       <FormControl fullWidth margin="normal">
-        <InputLabel>Start Year</InputLabel>
+        <InputLabel>Năm bắt đầu</InputLabel>
         <Select
           value={startYear}
           onChange={(e) => { setStartYear(e.target.value); handleChange(); }}
@@ -52,7 +52,7 @@ const DateSelector = ({
       {showMonths && (
         <>
           <FormControl fullWidth margin="normal">
-            <InputLabel>End Month</InputLabel>
+            <InputLabel>Tháng kết thúc</InputLabel>
             <Select
               value={endMonth}
               onChange={(e) => { setEndMonth(e.target.value); handleChange(); }}
@@ -65,7 +65,7 @@ const DateSelector = ({
         </>
       )}
       <FormControl fullWidth margin="normal">
-        <InputLabel>End Year</InputLabel>
+        <InputLabel>Năm kết thúc</InputLabel>
         <Select
           value={endYear}
           onChange={(e) => { setEndYear(e.target.value); handleChange(); }}
