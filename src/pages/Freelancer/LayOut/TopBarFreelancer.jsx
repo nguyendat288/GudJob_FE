@@ -117,7 +117,7 @@ const TopBarFreelancer = () => {
       console.log('Deleting notification');
       // Add your logic to delete all notifications
     }
-    handleMenuClose();
+    handleMenuClose();    
   };
 
   const handleTopMenuOpen = (event) => {
