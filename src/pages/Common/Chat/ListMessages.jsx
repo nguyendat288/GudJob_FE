@@ -12,7 +12,7 @@ const ListMessages = ({ user,messages, currentUser }) => {
         scrollToBottom();
     }, [messages]); // Scroll to bottom whenever messages change
     return (
-        <Box sx={{ height: '400px', overflowY: 'auto' }}>
+        <Box sx={{ height: 'auto', overflowY: 'auto' }}>
             {messages.map((message, index) => (
                 message.senderId === currentUser.userId ? (<>
                     <Box mt={2}>
