@@ -61,7 +61,6 @@ const reportApi = {
                 },
             });
 
-            console.log("response", response);
             return response;
         } catch (error) {
             throw error;

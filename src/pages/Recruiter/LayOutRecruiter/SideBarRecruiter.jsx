@@ -27,7 +27,6 @@ const SideBarRecruiter = () => {
   const [selected, setSelected] = useState("List Project");
 
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
-  console.log(currentUser);
 
   return (
     <Box>

@@ -18,7 +18,6 @@ function ProfileSetting() {
     const getData = async () => {
       try {
         let res = await profileApi.getUserProfile();
-        console.log("res", res);
         setProfile(res);
         setFirstName(res.firstName || '');
         setLastName(res.lastName || '');
@@ -68,11 +67,9 @@ function ProfileSetting() {
       skills: profile?.skills || []
     };
 
-    console.log("Data being sent to the server:", data);
 
     try {
       const response = await profileApi.updateProfile(data, navigate);
-      console.log("Server response:", response);
       toast.success("Profile updated successfully!");
     } catch (error) {
       console.error("Error response from server:", error.response);

@@ -23,10 +23,8 @@ const Login = () => {
       try {
         const accessToken = tokenResponse.access_token.toString();
         const response = await authApi.loginWithGoogle(accessToken, dispatch, navigate);
-        console.log(response);
       } catch (error) {
         if (error.response.status === 415) {
-          console.log('Unsupported Media Type'); 
         }
       }
     }

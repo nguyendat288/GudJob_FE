@@ -32,7 +32,7 @@ const ChatProvider = ({ children }) => {
     useEffect(() => {
         const getData = async () => {
             try {
-                if (!isConnect && currentUser) {
+                if (!isConnect && currentUser!=null) {
                     const connection = new HubConnectionBuilder()
                         .withUrl(`${BASE_URL}/chat`)
                         .configureLogging(LogLevel.Information)
@@ -46,16 +46,14 @@ const ChatProvider = ({ children }) => {
                     });
 
                     connection.on("ReceivedMessage", (data) => {
-                        if (chatSelectRef?.current === data?.conversationId) {
+                        const sound = new Audio(messageSound);
+                        sound.play();
+                        if (chatSelectRef?.current == data?.conversationId) {
                             setListMessage(msg => [...msg, data])
                         }
                         setNumberOfMessage((prevNumber) => prevNumber + 1);
                         setHaveMessage((prevNumber) => prevNumber + 1);
                     })
-
-                    // connection.on("ReceivedUser", (data) => {
-                    //   setListUserMessage(data)
-                    // })
 
                     connection.onclose(e => {
                         setConnection(null);
@@ -68,7 +66,6 @@ const ChatProvider = ({ children }) => {
                     setConnection(connection);
                 }
             } catch (e) {
-                console.log(e);
             }
         }
         getData()

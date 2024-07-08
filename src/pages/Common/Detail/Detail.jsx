@@ -10,6 +10,7 @@ import ProjectDetail from './ProjectDetail';
 import ListBidding from './ListBidding';
 import { ROLES } from '../../../constaints/role';
 import Header from '../../Recruiter/LayOutRecruiter/Header';
+import LoadingComponent from '../../../components/LoadingComponent';
 
 const Detail = () => {
     const currentUser = useSelector((state) => state.auth.login?.currentUser)
@@ -21,6 +22,7 @@ const Detail = () => {
     const [comment, setComment] = useState('');
     const [duration, setDuration] = useState(0);
     const [listBidding, setListBidding] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -31,23 +33,40 @@ const Detail = () => {
 
     useEffect(() => {
         const getProjectDetail = async () => {
-            let res = await projectApi.GetProjectDetailsById(projectId);
-            setDetail(res);
+            setLoading(true);
+            try {
+                let res = await projectApi.GetProjectDetailsById(projectId);
+                setDetail(res);
+            } catch (error) {
+                toast.error("Failed to fetch project details");
+            } finally {
+                setLoading(false);
+            }
         }
         getProjectDetail()
     }, [projectId])
 
     useEffect(() => {
         const getAllBidding = async () => {
-            let res = await biddingApi.GetBiddingListByProjectId(projectId, 1, 10);
-            setListBidding(res?.data);
+            setLoading(true);
+            try {
+                let res = await biddingApi.GetBiddingListByProjectId(projectId, 1, 10);
+                setListBidding(res?.data);
+            } catch (error) {
+                toast.error("Failed to fetch bidding list");
+            } finally {
+                setLoading(false);
+            }
         }
         getAllBidding()
     }, [value, projectId])
 
     const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
         if (comment === '' || duration === '' || budget === 0 || budget < detail?.minBudget || budget > detail?.maxBudget) {
-            toast.error("Something was error");
+            toast.error("Something went wrong. Please check your input.");
+            setLoading(false)
         } else {
             let data = {
                 projectId: projectId,
@@ -55,31 +74,56 @@ const Detail = () => {
                 duration: duration,
                 budget: budget
             }
-            await biddingApi.AddBidding(data, navigate);
-            setOpen(false);
+            try {
+                await biddingApi.AddBidding(data, navigate);
+                setOpen(false);
+            } catch (error) {
+                toast.error("Failed to place bid");
+            } finally {
+                setLoading(false);
+            }
         }
     }
+
     const handleDelete = async (id) => {
-        await projectApi.DeleteProject(id);
+        setLoading(true);
+        try {
+            await projectApi.DeleteProject(id);
+            toast.success("Project deleted successfully");
+        } catch (error) {
+            toast.error("Failed to delete project");
+        } finally {
+            setLoading(false);
+        }
     }
+
     const handleAccept = async (id) => {
+        setLoading(true);
         let data = {
             id: id,
             isAccepted: true
         }
-        await biddingApi.AcceptBidding(data, navigate);
+        try {
+            await biddingApi.AcceptBidding(data, navigate);
+            toast.success("Bidding accepted");
+        } catch (error) {
+            toast.error("Failed to accept bidding");
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
         <>
+            {loading && <LoadingComponent loading={loading} />}
             <Box m={5}>
                 <Box mb={3}>
-                    {value === '1' && (<>
+                    {value === '1' && (
                         <Header title="MÔ TẢ DỰ ÁN" subtitle="Thông tin chi tiết của dự án" />
-                    </>)}
-                    {value === '2' && (<>
+                    )}
+                    {value === '2' && (
                         <Header title="DANH SÁCH ĐẤU THẦU" subtitle="Danh sách đấu thầu của dự án" />
-                    </>)}
+                    )}
                 </Box>
 
                 <Box sx={{ width: '100%' }}>
@@ -91,26 +135,32 @@ const Detail = () => {
                             </TabList>
                         </Box>
                         <TabPanel value="1">
-                            {detail == null && (
+                            {detail == null ? (
                                 <LinearProgress />
+                            ) : (
+                                <ProjectDetail
+                                    detail={detail}
+                                    navigate={navigate}
+                                    handleDelete={handleDelete}
+                                    currentUser={currentUser}
+                                    projectId={projectId}
+                                />
                             )}
-                            <ProjectDetail detail={detail} navigate={navigate} handleDelete={handleDelete} currentUser={currentUser} projectId={projectId} />
                             {currentUser != null && currentUser?.role === ROLES.FREELANCER && (
-                                <>
-                                    <Button onClick={handleOpen}>Bidding</Button>
-                                </>
+                                <Button onClick={handleOpen}>Bidding</Button>
                             )}
                         </TabPanel>
                         <TabPanel value="2">
-                            {listBidding == null && (
+                            {listBidding == null ? (
                                 <LinearProgress />
+                            ) : (
+                                <ListBidding
+                                    listBidding={listBidding}
+                                    currentUser={currentUser}
+                                    createdBy={detail?.createdBy}
+                                    handleAccept={handleAccept}
+                                />
                             )}
-                            <ListBidding
-                                listBidding={listBidding}
-                                currentUser={currentUser}
-                                createdBy={detail?.createdBy}
-                                handleAccept={handleAccept}
-                            />
                         </TabPanel>
                     </TabContext>
                 </Box>
@@ -127,59 +177,54 @@ const Detail = () => {
                     </Box>
                     <Divider />
                     <Box pt={3} pl={3}>
-                        <Typography fontSize='15px'>You will be able to edit your bid until the project is awarded to someone.
-                        </Typography>
+                        <Typography fontSize='15px'>You will be able to edit your bid until the project is awarded to someone.</Typography>
                     </Box>
                     <Box m={5}>
                         <Box display='flex' gap={1}>
                             <Box flex='1'>
-                                <Typography fontWeight='bold'> Bid Amount </Typography>
+                                <Typography fontWeight='bold'>Bid Amount</Typography>
                                 <FilledInput
                                     value={budget}
                                     type='number'
                                     id="filled-adornment-weight"
                                     endAdornment={<InputAdornment position="end">$</InputAdornment>}
                                     aria-describedby="filled-weight-helper-text"
-                                    inputProps={{
-                                        'aria-label': 'weight',
-                                    }}
+                                    inputProps={{ 'aria-label': 'weight' }}
                                     onChange={(e) => setBudget(e.target.value)}
                                 />
                             </Box>
                             <Box flex='1'>
-                                <Typography fontWeight='bold'> Duration</Typography>
+                                <Typography fontWeight='bold'>Duration</Typography>
                                 <FilledInput
                                     type='number'
                                     value={duration}
                                     id="filled-adornment-weight"
                                     endAdornment={<InputAdornment position="end">day</InputAdornment>}
                                     aria-describedby="filled-weight-helper-text"
-                                    inputProps={{
-                                        'aria-label': 'weight',
-                                    }}
+                                    inputProps={{ 'aria-label': 'weight' }}
                                     onChange={(e) => setDuration(e.target.value)}
                                 />
                             </Box>
                         </Box>
                         <Box mt={2}>
-                            <Typography fontWeight='bold'> Comment </Typography>
+                            <Typography fontWeight='bold'>Comment</Typography>
                             <TextField
                                 fullWidth
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
                             />
                         </Box>
-
                     </Box>
-                    <Button variant='contained' onClick={(e) => handleSubmit(e)}> Bid </Button>
+                    <Box display="flex" justifyContent="space-between" p={2}>
+                        <Button variant='contained' onClick={handleSubmit}>Bid</Button>
+                        <Button variant='contained' onClick={() => setLoading(true)}>Loading</Button>
+                    </Box>
                 </Box>
-
-
             </Modal>
-
         </>
     )
 }
+
 const style = {
     position: 'absolute',
     top: '50%',
@@ -191,4 +236,5 @@ const style = {
     boxShadow: 24,
     p: 3,
 };
+
 export default Detail;

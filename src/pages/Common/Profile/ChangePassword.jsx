@@ -41,14 +41,10 @@ function ChangePassword() {
         newPasswordConfirm: confirmPassword
     };
 
-    console.log("Data being sent to the server:", data);
-
     try {
         const response = await profileApi.changePassword(currentPassword, newPassword, confirmPassword);
-        console.log("Server response:", response);
         toast.success("Password changed successfully!");
     } catch (error) {
-        console.error("Error response from server:", error.response);
         if (error.response && error.response.data) {
             toast.error(error.response.data.message || "Something wrong occurred. Please try again.");
         } else {
