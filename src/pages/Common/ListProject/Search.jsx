@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Box, Button, MenuItem, Select, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import projectApi from '../../../services/projectApi';
@@ -69,11 +69,6 @@ const Search = () => {
     setListProject(res)
   }
 
-  console.log(listProject);
-  console.log(categoryId);
-  console.log(listSkill);
-  console.log(listSkillSelected);
-
   return (
     <>
       <Box m={2}>
@@ -96,11 +91,11 @@ const Search = () => {
               value={categoryId}
               onChange={(e) => handleChangeCategory(e.target.value)}
             >
-              {listCategory?.length != 0 && listCategory.map((item, index) => (
+              {listCategory?.length !== 0 && listCategory.map((item, index) => (
                 <MenuItem value={item?.id}>{item?.categoryName}</MenuItem>
               ))}
             </Select>
-            {listSkill != undefined && (<>
+            {listSkill !== undefined && (<>
               <Typography fontWeight='bold'> List Skill </Typography>
               {listSkill?.map(item => (
                 <Box key={item.id}>

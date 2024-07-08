@@ -1,11 +1,9 @@
-import axios from "axios";
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import messageSound from "../assets/sound/message.mp3";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { useSelector } from "react-redux";
 import notificationApi from "../services/notificationApi";
 import { BASE_URL } from "../services";
-import { SettingsInputComponentRounded } from "@mui/icons-material";
 import chatApi from "../services/chatApi";
 
 
@@ -41,7 +39,6 @@ const ChatProvider = ({ children }) => {
                         .build();
 
                     connection.on("ReceivedNotification", (data) => {
-                        console.log(data);
                         const sound = new Audio(messageSound);
                         sound.play();
                         setListNotification((prevNotifications) => [data, ...prevNotifications]);
@@ -49,7 +46,7 @@ const ChatProvider = ({ children }) => {
                     });
 
                     connection.on("ReceivedMessage", (data) => {
-                        if (chatSelectRef?.current == data?.conversationId) {
+                        if (chatSelectRef?.current === data?.conversationId) {
                             setListMessage(msg => [...msg, data])
                         }
                         setNumberOfMessage((prevNumber) => prevNumber + 1);
@@ -75,9 +72,7 @@ const ChatProvider = ({ children }) => {
             }
         }
         getData()
-    }, [currentUser])
-
-    console.log(chatSelectRef);
+    }, [currentUser, isConnect])
 
     useEffect(() => {
         const getNotification = async () => {
@@ -108,7 +103,7 @@ const ChatProvider = ({ children }) => {
             }
         }
         getNotification()
-    }, [])
+    }, [currentUser])
 
     useEffect(() => {
         const getUserConnect = async () => {
@@ -118,7 +113,7 @@ const ChatProvider = ({ children }) => {
             }
         }
         getUserConnect()
-    }, [haveMess])
+    }, [haveMess, currentUser])
 
     useEffect(() => {
         const getListMessages = async () => {
@@ -128,7 +123,7 @@ const ChatProvider = ({ children }) => {
             }
         }
         getListMessages()
-    }, [chatSelect])
+    }, [chatSelect, currentUser])
 
     return (
         <ChatContext.Provider

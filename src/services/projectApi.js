@@ -102,6 +102,17 @@ const projectApi = {
             }
         }
     },
+    changeProjectStatus: async (data) => {
+        try {
+            const response = await axiosClient.post(`${BASE_URL}/api/Projects/UpdateStatus?statusId=2&projectId=${data.projectId}`)
+            return response;
+        } catch (error) {
+            if (error.response.status === 500) {
+                toast.error("Something wrong ")
+            }
+            throw error;
+        }
+    },
 }
 
 export default projectApi

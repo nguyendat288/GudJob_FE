@@ -80,7 +80,7 @@ console.log("profile", profile);
             setSubmitting(false);
         }
     };
-
+console.log("profile.ratings", profile.ratings);
     return (
         <Container>
             <Grid container spacing={4}>
@@ -273,6 +273,7 @@ console.log("profile", profile);
                                 {profile ? (profile?.ratings?.length ? (
                                     profile.ratings.map((rating, index) => (
                                         <Paper key={index} elevation={2} className="p-4" sx={{ borderRadius: 5 }}>
+                                            <Typography sx={{ fontSize: '1rem', fontWeight: 'bold' }}>Người dùng: {rating.userRate}</Typography>
                                             <Typography sx={{ fontSize: '1rem', fontWeight: 'bold' }}>{rating.comment}</Typography>
                                             <Rating name="read-only" value={rating.star} readOnly />
                                         </Paper>

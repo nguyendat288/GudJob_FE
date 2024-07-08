@@ -32,10 +32,15 @@ function SideBarAdmin() {
       icon: <ReportProblemIcon />
     },
     {
+      title: "Project List",
+      link: "/project-list",
+      icon: <AssignmentIndIcon />
+    },
+    {
       title: t("roles"),
       link: "/roles",
       icon: <AssignmentIndIcon />
-    }
+    },
   ];
 
   return (

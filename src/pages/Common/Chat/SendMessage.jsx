@@ -1,5 +1,5 @@
-import { Box, Button, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import { Box, Button, TextField } from '@mui/material'
+import React from 'react'
 import SendIcon from '@mui/icons-material/Send';
 const SendMessage = ({ handleSendMessage, message, setMessage }) => {
     return (

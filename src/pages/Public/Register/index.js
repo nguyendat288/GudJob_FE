@@ -58,7 +58,7 @@ const Register = () => {
 
   const handleSelectSkill = (selectedSkills) => {
     setFormData({ ...formData, skills: selectedSkills });
-  };  
+  };
 
   const handleRoleSelect = (selectedRole) => {
     setRoles([selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)]);
@@ -105,7 +105,7 @@ const Register = () => {
         roles: roles,
         skill: roles.includes('Freelancer') ? formData.skills : []
       };
-      console.log("data", data);
+
       try {
         await authApi.register(data, navigate);
         toast.success("Registration successful!");
@@ -119,16 +119,16 @@ const Register = () => {
 
   useEffect(() => {
     const getData = async () => {
-        let res = await skillApi.GetAllSkill();
-        res.map((val, key) => {
-          if (key === 0) {
-            setFormData({ ...formData, skills: [val.skillName]});
-          }
-        })
-        setAllSkills(res);
-    }
-    getData()
-  }, [])
+      let res = await skillApi.GetAllSkill();
+      res.forEach((val, key) => {
+        if (key === 0) {
+          setFormData(prevFormData => ({ ...prevFormData, skills: [val.skillName] }));
+        }
+      });
+      setAllSkills(res);
+    };
+    getData();
+  }, []);
 
   return (
     <Container component="main" maxWidth="sm">

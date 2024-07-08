@@ -1,13 +1,11 @@
 import axios from 'axios';
-import { BASE_URL } from '.'
-import axiosClient from '../utils/axiosClient'
+import { BASE_URL } from '.';
 import { toast } from 'react-toastify';
 
 const notificationApi = {
     GetAllNotification: async  (userId)  => {
         try {
             const response = await axios.get(`${BASE_URL}/api/Notification/GetNotificationByUserId/${userId}`)
-            console.log(response)
             return response?.data;
         } catch (error) {
             throw error
@@ -16,7 +14,6 @@ const notificationApi = {
     NumberNotification: async  (userId)  => {
         try {
             const response = await axios.get(`${BASE_URL}/api/Notification/numberNotification/${userId}`)
-            console.log(response)
             return response?.data;
         } catch (error) {
             throw error
