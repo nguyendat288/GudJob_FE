@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, Chip, FilledInput, InputAdornment, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
+import { Autocomplete, Box, Button, FilledInput, InputAdornment, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Header from '../LayOutRecruiter/Header'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
@@ -31,7 +31,7 @@ const CreateProject = () => {
 
     useEffect(() => {
         setListSkillSelected([])
-        if (category != "") {
+        if (category !== "") {
             const getSkill = async () => {
                 const res = await categoryApi.GetByCategoryId(category);
                 setListSkill(res?.items)
@@ -57,7 +57,7 @@ const CreateProject = () => {
             skill: listSkillSelected
         }
 
-        if (name == '' || description == '' || category == null || budgetMin == 0 || budgetMax <= budgetMin || duration == '' || listSkillSelected.length == 0) {
+        if (name === '' || description === '' || category === null || budgetMin === 0 || budgetMax <= budgetMin || duration === '' || listSkillSelected.length === 0) {
             toast.error("not empty")
         } else {
             await projectApi.AddProject(data, navigate);
@@ -79,6 +79,7 @@ const CreateProject = () => {
                             letterSpacing: '.3rem',
                             textDecoration: 'none',
                         }}
+                        className='bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text'
                     >
                         GoodJob
                     </Typography>
@@ -118,7 +119,7 @@ const CreateProject = () => {
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
                             >
-                                {listCategory?.length != 0 && listCategory.map((item, index) => (
+                                {listCategory?.length !== 0 && listCategory.map((item, index) => (
                                     <MenuItem value={item?.id}>{item?.categoryName}</MenuItem>
                                 ))}
                             </Select>

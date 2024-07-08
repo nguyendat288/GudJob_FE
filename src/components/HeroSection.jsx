@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import heroImage from '../assets/hero-image.png'
 
 function HeroSection() {
@@ -19,9 +19,6 @@ function HeroSection() {
         textAlign: 'center',
       }}
     >
-      {/* <Button variant="contained" color="primary" sx={{ mt: 3 }}>
-        Get Started
-      </Button> */}
     </Box>
   );
 }

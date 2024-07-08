@@ -1,10 +1,9 @@
-import { Box, Button, CircularProgress, Divider, Tooltip, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Tooltip } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Header from '../LayOutRecruiter/Header'
 import {  useNavigate } from 'react-router-dom';
 import projectApi from '../../../services/projectApi';
 import { useSelector } from 'react-redux';
-import StarIcon from '@mui/icons-material/Star';
 import ShowList from './ShowList';
 import AddIcon from '@mui/icons-material/Add';
 const ListProjectRecruiter = () => {
@@ -18,7 +17,7 @@ const ListProjectRecruiter = () => {
             setListProject(res)
         }
         getData()
-    }, [])
+    }, [currentUser])
 
     return (
         <Box m={3}>

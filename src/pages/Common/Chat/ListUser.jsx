@@ -1,11 +1,10 @@
-import { InsertEmoticon } from '@mui/icons-material';
-import { Avatar, Box, IconButton, ListItemButton, ListItemText, Typography } from '@mui/material';
-import React, { useState } from 'react'
+import { Avatar, Box, ListItemButton, ListItemText, Typography } from '@mui/material';
+import React from 'react'
 
 const ListUser = ({ listUser, currentUser, hanldeSelectChat }) => {
 
     const getMessageColor = (isRead, senderId) => {
-        if (senderId == currentUser?.userId) {
+        if (senderId === currentUser?.userId) {
             return "FFFFFF";
         } else {
             return isRead === 1 ? '#FFFFFF' : '#EEEEEE';
@@ -14,10 +13,10 @@ const ListUser = ({ listUser, currentUser, hanldeSelectChat }) => {
 
     return (
         <Box m={3}>
-            {listUser.length == 0 && (<>
+            {listUser.length === 0 && (<>
                 <Typography fontWeight='bold'>Chưa kết nối ai </Typography>
             </>)}
-            {listUser.length != 0 && listUser.map((item, index) => (
+            {listUser.length !== 0 && listUser.map((item, index) => (
                 <ListItemButton
                     key={index}
                     sx={{ backgroundColor: getMessageColor(item?.isRead, item?.senderId) }}
@@ -29,12 +28,12 @@ const ListUser = ({ listUser, currentUser, hanldeSelectChat }) => {
                             <React.Fragment>
                                 <span>{item?.userName}</span>
                                 <br />
-                                {item?.senderId == currentUser?.userId && (
+                                {item?.senderId === currentUser?.userId && (
                                     <>
                                         <span>Bạn : {item?.messageText}</span>
                                     </>
                                 )}
-                                {item?.senderId != currentUser?.userId && (
+                                {item?.senderId !== currentUser?.userId && (
                                     <>
                                         <span> {item?.messageText}</span>
                                     </>

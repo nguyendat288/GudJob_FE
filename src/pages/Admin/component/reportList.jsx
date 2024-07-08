@@ -1,22 +1,87 @@
-import React, { useState } from 'react';
-import { Box, Typography, IconButton, Tooltip, TextField, InputAdornment, Button, Menu, MenuItem } from '@mui/material';
+import React, { useImperativeHandle, useRef, useState } from 'react';
+import { Box, Typography, IconButton, Tooltip, TextField, InputAdornment, Button, Menu, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+
+function StatusInputValue(props) {
+  const { item, applyValue, focusElementRef } = props;
+
+  const statusRef = useRef(null);
+  useImperativeHandle(focusElementRef, () => ({
+    focus: () => {
+      statusRef.current.focus();
+    },
+  }));
+
+  const handleFilterChange = (event) => {
+    applyValue({ ...item, value: event.target.value });
+  };
+
+  return (
+      <FormControl variant="standard" sx={{ minWidth: 120 }}>
+        <InputLabel shrink={true}>Value</InputLabel>
+        <Select
+          value={item.value || ''}
+          onChange={handleFilterChange}
+          label="Value"
+          inputRef={statusRef}
+        >
+          <MenuItem value=""><em>All</em></MenuItem>
+          <MenuItem value="true">Đã duyệt</MenuItem>
+          <MenuItem value="false">Chờ duyệt</MenuItem>
+        </Select>
+      </FormControl>
+  );
+}
+
+const statusOperators = [
+  {
+    label: 'Is',
+    value: 'is',
+    getApplyFilterFn: (filterItem) => {
+      if (!filterItem.value) {
+        return null;
+      }
+      return (value) => {
+        return String(value) === filterItem.value;
+      };
+    },
+    InputComponent: StatusInputValue,
+  },
+  {
+    label: 'Is not',
+    value: 'is not',
+    getApplyFilterFn: (filterItem) => {
+      if (!filterItem.value) {
+        return null;
+      }
+      return (value) => {
+        return String(value) !== filterItem.value;
+      };
+    },
+    InputComponent: StatusInputValue,
+  },
+];
+
+
+
 
 const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSizeChange, typeDes, setTypeDes, onOpenModal, loading, setLoading }) => {
   const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
 
   const columns = [
-    { field: 'nameCreatedBy', headerName: 'Created By', width: 150, flex: 1 },
+    { field: 'nameCreatedBy', headerName: 'Created By', sortable: false, width: 150, flex: 1 },
     {
       field: 'reportInformation',
       headerName: 'Report Information',
       width: 200,
       flex: 1,
+      filterable: false,
+      sortable: false,
       renderCell: (params) => {
         const { reportToUrl, bidName, projectName } = params.row;
         return (
@@ -29,13 +94,15 @@ const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSiz
         );
       }
     },
-    { field: 'reportName', headerName: 'Report Name', width: 200, flex: 1 },
-    { field: 'description', headerName: 'Description', width: 300, flex: 1 },
+    { field: 'reportName', headerName: 'Report Name', sortable: false, width: 200, flex: 1 },
+    { field: 'description', headerName: 'Description', sortable: false, filterable: false, width: 300, flex: 1 },
     {
       field: 'isApproved',
       headerName: 'Status',
       width: 150,
       flex: 1,
+      sortable: false,
+      filterOperators: statusOperators,
       renderCell: (params) => (
         params.value ? (
           <Typography>Đã Duyệt <CheckCircleOutlineIcon color='success' /></Typography>
@@ -50,6 +117,7 @@ const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSiz
       width: 150,
       flex: 1,
       sortable: false,
+      filterable: false,
       renderCell: (params) => (
         <Tooltip title="Đánh dấu là đã xử lý">
           <span>
@@ -135,12 +203,19 @@ const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSiz
           disableRowSelectionOnClick
           loading={loading}
           pageSizeOptions={[5, 10, 15, 20]}
+          slots={{
+            toolbar: GridToolbar,
+          }}
           slotProps={{
             pagination: {
               labelRowsPerPage: "Số lượng report trên 1 trang",
               labelDisplayedRows: ({ from, to, count }) => {
                 return `${from.toLocaleString('en')}-${to.toLocaleString('en')} trên ${count.toLocaleString('en')} report`
               }
+            },
+            toolbar: {
+              printOptions: { disableToolbarButton: true },
+              csvOptions: { disableToolbarButton: true },
             }
           }}
           localeText={{

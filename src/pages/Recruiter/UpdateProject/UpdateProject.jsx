@@ -1,17 +1,15 @@
-import { Autocomplete, Box, Button, Chip, FilledInput, InputAdornment, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
+import { Autocomplete, Box, Button, FilledInput, InputAdornment, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Header from '../LayOutRecruiter/Header'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import categoryApi from '../../../services/categoryApi';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
 import projectApi from '../../../services/projectApi';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const UpdateProject = () => {
     const { projectId } = useParams()
-    const [project, setProject] = useState()
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [listCategory, setListCategory] = useState([])
@@ -22,7 +20,6 @@ const UpdateProject = () => {
     const [listSkill, setListSkill] = useState([]);
     const [listSkillSelected, setListSkillSelected] = useState([])
 
-    const currentUser = useSelector((state) => state.auth.login?.currentUser)
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -37,7 +34,7 @@ const UpdateProject = () => {
             setListSkillSelected(res?.skill)
         }
         getProject()
-    }, [])
+    }, [projectId])
 
     useEffect(() => {
         const getCategory = async () => {
@@ -49,7 +46,7 @@ const UpdateProject = () => {
 
     useEffect(() => {
         setListSkillSelected([])
-        if (category != "") {
+        if (category !== "") {
             const getSkill = async () => {
                 const res = await categoryApi.GetByCategoryId(category);
                 setListSkill(res?.items.map((s)=>s.skillName))
@@ -75,7 +72,7 @@ const UpdateProject = () => {
             skill: listSkillSelected
         }
 
-        if (name == '' || description == '' || category == null || budgetMin == 0|| duration <= 0   || budgetMax <= budgetMin || duration == '' || listSkillSelected.length == 0) {
+        if (name === '' || description === '' || category === null || budgetMin === 0|| duration <= 0   || budgetMax <= budgetMin || duration === '' || listSkillSelected.length === 0) {
             toast.error("Dữ liệu chưa hợp lệ ")
         } else {
             await projectApi.UpdateProject(data, navigate);
@@ -136,7 +133,7 @@ const UpdateProject = () => {
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
                             >
-                                {listCategory?.length != 0 && listCategory.map((item, index) => (
+                                {listCategory?.length !== 0 && listCategory.map((item, index) => (
                                     <MenuItem  value={item?.id}>{item?.categoryName}</MenuItem>
                                 ))}
                             </Select>

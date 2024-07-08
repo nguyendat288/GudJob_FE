@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { BASE_URL } from '.'
-import axiosClient from '../utils/axiosClient'
+import { BASE_URL } from '.';
 import { toast } from 'react-toastify';
 
 const notificationApi = {

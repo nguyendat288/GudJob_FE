@@ -1,7 +1,5 @@
 import axios from 'axios';
 import { BASE_URL } from '.'
-import axiosClient from '../utils/axiosClient'
-import { toast } from 'react-toastify';
 
 const chatApi = {
     GetMessageByConversation: async (conversationId) => {

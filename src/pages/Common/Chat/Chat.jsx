@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom'
@@ -16,13 +16,10 @@ const Chat = () => {
     const navigate = useNavigate()
 
     const {
-        connection,
         chatSelect,
         setChatSelect,
         listMessages,
-        setListMessage,
-        userConnection,
-        setUserConnection
+        userConnection
     } = UseChatState();
 
     useEffect(() => {
@@ -31,7 +28,7 @@ const Chat = () => {
             setUser(res)
         }
         getUser()
-    }, [chatSelect, conversationId])
+    }, [chatSelect, conversationId, userId])
 
     useEffect(() => {
         const MarkToRead = async () => {
@@ -39,15 +36,17 @@ const Chat = () => {
             setUser(res)
         }
         MarkToRead()
-    }, [chatSelect, conversationId])
+    }, [chatSelect, conversationId, userId])
 
     useEffect(() => {
         setChatSelect(conversationId)
     }, [])
 
+ 
+
     const hanldeSelectChat = async (conversationId, userId, senderId, isRead) => {
         setChatSelect(conversationId)
-        if (senderId != currentUser?.userId && isRead == 0) {
+        if (senderId !== currentUser?.userId && isRead === 0) {
             await chatApi.markToRead(conversationId)
         }
         navigate(`/chat/${conversationId}/${userId}`)
@@ -62,7 +61,6 @@ const Chat = () => {
             isRead: 0,
             sendDate :new Date()
         }
-
        setListMessage(msg => [...msg, data])
         await chatApi.SendMessage(data)
         setMessage('')

@@ -1,17 +1,78 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Button, IconButton, Avatar, Typography, Tooltip, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, InputAdornment, Menu, MenuItem } from '@mui/material';
+import React, { useState, useEffect, useRef, useImperativeHandle } from 'react';
+import { Box, Button, IconButton, Avatar, Typography, Tooltip, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, InputAdornment, Menu, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import LockPersonIcon from '@mui/icons-material/LockPerson';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { DataGrid, useGridApiRef } from '@mui/x-data-grid';
+import { DataGrid, useGridApiRef, GridToolbar, getGridNumericOperators } from '@mui/x-data-grid';
 import userManagementApi from '../../../services/adminApi/userManagementApi';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
+function StatusInputValue(props) {
+  const { item, applyValue, focusElementRef } = props;
+
+  const statusRef = useRef(null);
+  useImperativeHandle(focusElementRef, () => ({
+    focus: () => {
+      statusRef.current.focus();
+    },
+  }));
+
+  const handleFilterChange = (event) => {
+    applyValue({ ...item, value: event.target.value });
+  };
+
+  return (
+      <FormControl variant="standard" sx={{ minWidth: 120 }}>
+        <InputLabel shrink={true}>Value</InputLabel>
+        <Select
+          value={item.value || ''}
+          onChange={handleFilterChange}
+          label="Value"
+          inputRef={statusRef}
+        >
+          <MenuItem value=""><em>All</em></MenuItem>
+          <MenuItem value="true">Unlock</MenuItem>
+          <MenuItem value="null">Lock</MenuItem>
+        </Select>
+      </FormControl>
+  );
+}
+
+const statusOperators = [
+  {
+    label: 'is',
+    value: 'is',
+    getApplyFilterFn: (filterItem) => {
+      if (!filterItem.value) {
+        return null;
+      }
+      return (value) => {
+        console.log("value", value);
+        return String(value) === filterItem.value;
+      };
+    },
+    InputComponent: StatusInputValue,
+  },
+  {
+    label: 'is not',
+    value: 'is not',
+    getApplyFilterFn: (filterItem) => {
+      if (!filterItem.value) {
+        return null;
+      }
+      return (value) => {
+        return String(value) !== filterItem.value;
+      };
+    },
+    InputComponent: StatusInputValue,
+  },
+];
+
 const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChange, loading, reloadUsers, totalUsers, setLoading, role, setRole, setSearchName, setEmail, setPhone }) => {
   const apiRef = useGridApiRef();
-  const {t} = useTranslation(['admin', 'common']);
+  const { t } = useTranslation(['admin', 'common']);
   const [search, setSearch] = useState('');
   const [searchBy, setSearchBy] = useState('');
   const [open, setOpen] = useState(false);
@@ -59,41 +120,63 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
   }, [page, pageSize]);
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 90, flex: 0.5 },
+    { field: 'id', headerName: 'ID', filterable: false, width: 90, flex: 0.5 },
     {
       field: 'avatar',
-      headerName: t('avatar', {ns:'admin'}),
+      headerName: t('avatar', { ns: 'admin' }),
       width: 100,
       flex: 1,
+      filterable: false,
       renderCell: (params) => <Avatar src={params.value} alt={params.row.name} />
     },
-    { field: 'name', headerName: t('name', {ns:'admin'}), width: 150, flex: 1 },
-    { field: 'email', headerName: 'Email', width: 200, flex: 1 },
+    { field: 'name', headerName: t('name', { ns: 'admin' }), filterable: false, width: 150, flex: 1 },
+    { field: 'email', headerName: 'Email', filterable: false, width: 200, flex: 1 },
     {
       field: 'phoneNumber',
-      headerName: t('phone_number', { ns : 'common' }),
+      headerName: t('phone_number', { ns: 'common' }),
+      filterable: false,
       width: 200,
       flex: 1,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
-          <Typography>{params.value ? params.value : t('no_information', {ns:'admin'})}</Typography>
+          <Typography>{params.value ? params.value : t('no_information', { ns: 'admin' })}</Typography>
         </Box>
       ),
     },
     {
+      field: 'totalProject',
+      headerName: 'Total project',
+      filterOperators: getGridNumericOperators().filter(
+        (operator) => operator.value !== 'isAnyOf' && operator.value !== '=' && operator.value !== '!=',
+      ),
+      width: 200,
+      flex: 1
+    },
+    {
+      field: 'totalBid',
+      headerName: 'Total bid',
+      filterOperators: getGridNumericOperators().filter(
+        (operator) => operator.value !== 'isAnyOf' && operator.value !== '=' && operator.value !== '!=',
+      ),
+      width: 200,
+      flex: 1
+    },
+    {
       field: 'isLock',
-      headerName: t('status', { ns : 'common' }),
+      headerName: t('status', { ns: 'common' }),
       width: 220,
       flex: 1,
+      filterOperators: statusOperators,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
-          <Typography>{params.row.isLock ? t('locked', {ns:'admin'}) : t('active', {ns:'admin'})}</Typography>
+          <Typography>{params.row.isLock ? t('locked', { ns: 'admin' }) : t('active', { ns: 'admin' })}</Typography>
         </Box>
       ),
     },
     {
       field: 'isCompany',
-      headerName: t('role', { ns : 'common' }),
+      headerName: t('role', { ns: 'common' }),
+      filterable: false,
       width: 150,
       flex: 1,
       renderCell: (params) => (
@@ -104,7 +187,8 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
     },
     {
       field: 'actions',
-      headerName: t('action', { ns : 'common' }),
+      type: 'actions',
+      headerName: t('action', { ns: 'common' }),
       width: 200,
       flex: 1,
       sortable: false,
@@ -187,6 +271,11 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
     }
   };
 
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState({
+    totalBid: false,
+    totalProject: false,
+  });
+
   return (
     <Box component="main" className="p-4" sx={{ width: '100%', overflow: 'auto' }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -196,7 +285,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
         </Button> : <Typography></Typography>}
       </Box>
       <TextField
-        label={t('search', { ns : 'common' })}
+        label={t('search', { ns: 'common' })}
         variant="outlined"
         value={search}
         disabled={searchBy ? false : true}
@@ -273,6 +362,9 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
             setRowSelectionModel(newRowSelectionModel);
           }}
           apiRef={apiRef}
+          slots={{
+            toolbar: GridToolbar,
+          }}
           slotProps={{
             pagination: {
               labelRowsPerPage: t('rows_per_page'),
@@ -280,8 +372,16 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
                 const totalPages = Math.ceil(totalUsers / pageSize);
                 return `${from.toLocaleString('en')}-${to.toLocaleString('en')} ${t('of_page')} ${totalPages.toLocaleString('en')} ${t('page')}`
               }
+            },
+            toolbar: {
+              printOptions: { disableToolbarButton: true },
+              csvOptions: { disableToolbarButton: true },
             }
           }}
+          columnVisibilityModel={columnVisibilityModel}
+          onColumnVisibilityModelChange={(newModel) =>
+            setColumnVisibilityModel(newModel)
+          }
           localeText={{
             footerRowSelected: (count) =>
               count !== 1
