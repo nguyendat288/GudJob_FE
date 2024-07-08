@@ -1,0 +1,26 @@
+{
+    "dashboard": "Dashboard",
+    "userList": "User Management",
+    "reportList": "Report Management",
+    "roles": "Roles",
+    "rows_per_page": "Users per page",
+    "of_page": "of",
+    "page": "pages",
+    "selected": "Selected",
+    "user": "user",
+    "users": "users",
+    "fast_lock_unlock": "Fast Lock/Unlock",
+    "created_by": "Created By",
+    "report_information": "Report Information",
+    "report_name": "Report Name",
+    "description": "Description",
+    "approved": "Approved",
+    "pending": "Pending",
+    "mark_as_resolved": "Mark as resolved",
+    "avatar": "Avatar",
+    "name": "Name",
+    "no_information": "No Information",
+    "active":"Active",
+    "locked": "Locked"
+
+}
