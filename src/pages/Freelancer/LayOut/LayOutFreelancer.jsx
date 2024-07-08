@@ -1,7 +1,6 @@
 import { Box } from '@mui/material'
 import React from 'react'
 import TopBar from './TopBarFreelancer'
-import { Outlet } from 'react-router-dom'
 import Footer from '../../../components/Footer'
 
 const LayOutFreelancer = () => {
@@ -10,7 +9,6 @@ const LayOutFreelancer = () => {
             <Box display='flex'>
                 <Box flex='4'>
                     <TopBar />
-                 
                 </Box>
             </Box>
             <Footer />

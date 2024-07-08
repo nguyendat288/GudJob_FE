@@ -155,7 +155,7 @@ const TopBarFreelancer = () => {
   };
 
   const handleCheck = async (link, notificationId, isRead) => {
-    if (isRead == 0) {
+    if (isRead === 0) {
       await notificationApi.MarkToRead(notificationId);
       updateNotificationStatus(notificationId);
       navigate(link);
@@ -198,7 +198,7 @@ const TopBarFreelancer = () => {
 
   const hanldeSelectChat = async (conversationId, userId, senderId, isRead) => {
     setChatSelect(conversationId)
-    if (senderId != currentUser?.userId && isRead == 0) {
+    if (senderId !== currentUser?.userId && isRead === 0) {
       await chatApi.markToRead(conversationId)
     }
     navigate(`/chat/${conversationId}/${userId}`)
@@ -222,6 +222,7 @@ const TopBarFreelancer = () => {
                 letterSpacing: '.3rem',
                 textDecoration: 'none',
               }}
+              className='bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text'
             >
               GoodJob
             </Typography>

@@ -29,6 +29,7 @@ import ListUsers from "../pages/Admin/List/ListUsers";
 import ListReport from "../pages/Admin/List/ListReport";
 import TopBarFreelancer from "../pages/Freelancer/LayOut/TopBarFreelancer";
 import Chat from "../pages/Common/Chat/Chat";
+import ListProject from "../pages/Admin/List/ListProject";
 
 export default function Router() {
   let router = useRoutes([
@@ -274,6 +275,14 @@ export default function Router() {
               element: (
                 <Suspense fallback={<>Loading...</>}>
                   <ListReport />
+                </Suspense>
+              )
+            },
+            {
+              path: ADMIN_PATH.PROJECT_LIST,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <ListProject />
                 </Suspense>
               )
             },

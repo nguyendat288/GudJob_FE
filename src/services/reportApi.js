@@ -11,7 +11,6 @@ const reportApi = {
             };
 
             const response = await axiosClient.get(`${BASE_URL}/api/Reports/Reports`, { params })
-            console.log("response", response);
             return response;
         } catch (error) {
             throw error
@@ -44,7 +43,6 @@ const reportApi = {
                     'Content-Type': 'multipart/form-data',
                 }
             });
-            console.log("response", response);
             return response;
         } catch (error) {
             throw error

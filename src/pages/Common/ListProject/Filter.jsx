@@ -27,7 +27,7 @@ const Filter = () => {
       setListProject(res)
     }
     getData()
-  }, [])
+  }, [idCate])
 
   useEffect(() => {
     const getData = async () => {
@@ -88,11 +88,11 @@ const Filter = () => {
             value={categoryId}
             onChange={(e) => handleChangeCategory(e.target.value)}
           >
-            {listCategory?.length != 0 && listCategory.map((item, index) => (
+            {listCategory?.length !== 0 && listCategory.map((item, index) => (
               <MenuItem value={item?.id}>{item?.categoryName}</MenuItem>
             ))}
           </Select>
-          {listSkill?.length != 0 && (<>
+          {listSkill?.length !== 0 && (<>
             <Typography fontWeight='bold'> List Skill </Typography>
             {listSkill?.map(item => (
               <Box key={item.id}>

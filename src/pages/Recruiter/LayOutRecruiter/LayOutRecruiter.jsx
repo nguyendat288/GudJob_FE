@@ -1,6 +1,5 @@
 import { Box } from '@mui/material'
 import React from 'react'
-import { Outlet } from 'react-router-dom'
 import SideBarRecruiter from './SideBarRecruiter'
 import TopBarFreelancer from '../../Freelancer/LayOut/TopBarFreelancer'
 
@@ -10,7 +9,6 @@ const LayOutRecruiter = () => {
       <SideBarRecruiter />
       <Box flex='4' display='flex' flexDirection='column' height="100%">
         <TopBarFreelancer />
-      
       </Box>
     </Box>
   )
