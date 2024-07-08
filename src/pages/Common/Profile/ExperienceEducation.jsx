@@ -92,7 +92,6 @@ const ExperienceEducation = () => {
 
     try {
       const response = await profileApi.updateExperience(updatedExperiences, navigate, "update");
-      console.log("Server response:", response);
       setProfile((prevProfile) => ({
         ...prevProfile,
         experiences: updatedExperiences
@@ -149,7 +148,6 @@ const ExperienceEducation = () => {
 
     try {
       const response = await profileApi.updateEducation(updatedEducation, navigate, "update");
-      console.log("Server response:", response);
       setProfile((prevProfile) => ({
         ...prevProfile,
         educations: updatedEducation
@@ -204,7 +202,6 @@ const ExperienceEducation = () => {
 
     try {
       const response = await profileApi.updateExperience(updatedExperiences, navigate, "delete");
-      console.log("Server response:", response);
       setProfile((prevProfile) => ({
         ...prevProfile,
         experiences: updatedExperiences
@@ -225,7 +222,6 @@ const ExperienceEducation = () => {
 
     try {
       const response = await profileApi.updateEducation(updatedEducations, navigate, "delete");
-      console.log("Server response:", response);
       setProfile((prevProfile) => ({
         ...prevProfile,
         educations: updatedEducations

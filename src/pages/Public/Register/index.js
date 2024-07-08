@@ -105,7 +105,6 @@ const Register = () => {
         roles: roles,
         skill: roles.includes('Freelancer') ? formData.skills : []
       };
-      console.log("data", data);
       try {
         await authApi.register(data, navigate);
         toast.success("Registration successful!");

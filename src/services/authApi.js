@@ -12,7 +12,6 @@ const authApi = {
             dispatch(loginSuccess(response.data))
             localStorage.setItem('token', response.data.accessToken)
             toast.success("Login success");
-            console.log(response.data);
             if (response.data.role === ROLES.ADMIN) {
                 navigate('/admin')
             } else if (response.data.role === ROLES.RECRUITER) {

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import SendIcon from '@mui/icons-material/Send';
 const SendMessage = ({ handleSendMessage, message, setMessage }) => {
     return (
-        <Box display='flex'>
+        <Box display='flex' >
             <TextField
                 fullWidth
                 placeholder='Nhập tin nhắn....'

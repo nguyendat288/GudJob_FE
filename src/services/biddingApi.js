@@ -11,7 +11,6 @@ const biddingApi = {
             navigate(`/detail/${data?.projectId}`)
             return response
         } catch (error) {
-            console.log(error);
             if (error.response.status === 400) {
                 toast.error("Bạn đã đấu thầu dự án này rồi")
             }

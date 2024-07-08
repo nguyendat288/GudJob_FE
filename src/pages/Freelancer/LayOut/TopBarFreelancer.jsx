@@ -119,12 +119,9 @@ const TopBarFreelancer = () => {
     if (option === 'markAsRead') {
       await notificationApi.MarkToRead(selectedNotification?.notificationId);
       updateNotificationStatus(selectedNotification?.notificationId);
-      console.log('Marking notification as read');
     } else if (option === 'delete') {
       await notificationApi.DeleteNotification(selectedNotification?.notificationId);
       removeNotificationStatus(selectedNotification?.notificationId);
-      console.log('Deleting notification');
-      // Add your logic to delete all notifications
     }
     handleMenuClose();    
   };
@@ -141,16 +138,11 @@ const TopBarFreelancer = () => {
     if (option === 'markAllAsRead') {
       await notificationApi.MarkToReadAll(currentUser?.userId)
       updateNotificationStatusAll()
-      //  console.log('Marking all notifications as read');
     } else if (option === 'deleteAll') {
       await notificationApi.DeleteAllNotification(currentUser?.userId)
       removeNotificationStatusAll()
-      //   console.log('Deleting all notifications');
     }
-    else if (option === 'check') {
-      // Add your logic to delete all notifications
-      console.log('check');
-    }
+    
     handleTopMenuClose();
   };
 

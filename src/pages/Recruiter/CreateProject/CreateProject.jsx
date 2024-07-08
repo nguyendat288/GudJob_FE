@@ -56,7 +56,6 @@ const CreateProject = () => {
             createdBy: currentUser?.userId,
             skill: listSkillSelected
         }
-        console.log(data);
 
         if (name == '' || description == '' || category == null || budgetMin == 0 || budgetMax <= budgetMin || duration == '' || listSkillSelected.length == 0) {
             toast.error("not empty")

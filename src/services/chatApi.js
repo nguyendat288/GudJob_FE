@@ -7,7 +7,6 @@ const chatApi = {
     GetMessageByConversation: async (conversationId) => {
         try {
             const response = await axios.get(`${BASE_URL}/api/Chat/messages/${conversationId}`)
-            console.log(response)
             return response?.data;
         } catch (error) {
             throw error
@@ -24,7 +23,6 @@ const chatApi = {
     GetInfo: async (userId) => {
         try {
             const response = await axios.get(`${BASE_URL}/api/Chat/Info/${userId}`)
-            console.log(response)
             return response?.data;
         } catch (error) {
             throw error

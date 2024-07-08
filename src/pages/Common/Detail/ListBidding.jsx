@@ -6,7 +6,7 @@ import reportApi from '../../../services/reportApi';
 import { toast } from 'react-toastify';
 import ReportModal from '../Profile/component/ReportModal';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-
+import FlagCircleIcon from '@mui/icons-material/FlagCircle';
 const ListBidding = ({ listBidding, currentUser, createdBy, handleAccept }) => {
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [bid, setBid] = useState();
@@ -43,7 +43,7 @@ const ListBidding = ({ listBidding, currentUser, createdBy, handleAccept }) => {
                                             <Box display='flex' alignItems='center'>
                                                 <Typography fontSize='15px' fontWeight='bold'> {item?.appUser?.name} </Typography>
                                                 <Tooltip title="Report this project">
-                                                    <WarningAmberIcon onClick={() => handleClickReport(item?.id)} className="text-red-600 cursor-pointer ml-2 mb-2" />
+                                                    <FlagCircleIcon  onClick={() => handleClickReport(item?.id)} className="text-red-600 cursor-pointer ml-2 mb-2" />
                                                 </Tooltip>
                                             </Box>
                                             <Box sx={{ display: 'flex', gap: 1 }}>

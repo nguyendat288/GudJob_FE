@@ -50,9 +50,7 @@ function Profile() {
     }, [userId]);
 
     const isOwnProfile = userId === undefined;
-console.log("profile", profile);
-    const handleReport = async (reportData) => {
-        console.log("reportData", reportData);
+        const handleReport = async (reportData) => {
         await reportApi.createReport(reportData);
         toast.error('Đã khiếu nại người dùng');
     };

@@ -69,11 +69,6 @@ const Search = () => {
     setListProject(res)
   }
 
-  console.log(listProject);
-  console.log(categoryId);
-  console.log(listSkill);
-  console.log(listSkillSelected);
-
   return (
     <>
       <Box m={2}>

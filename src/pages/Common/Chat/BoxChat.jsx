@@ -11,7 +11,7 @@ const BoxChat = ({messages,currentUser,user,handleSendMessage,setMessage,message
         <Box>
             <AppBarChat user ={user}/>
             <ListMessages user={user} messages={messages} currentUser={currentUser} />
-            <Box mt={1}>
+            <Box mt={1} >
                 <SendMessage
                     setMessage ={setMessage}
                     message={message}

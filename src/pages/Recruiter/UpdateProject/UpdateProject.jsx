@@ -74,7 +74,6 @@ const UpdateProject = () => {
             duration: duration,
             skill: listSkillSelected
         }
-        console.log(data);
 
         if (name == '' || description == '' || category == null || budgetMin == 0|| duration <= 0   || budgetMax <= budgetMin || duration == '' || listSkillSelected.length == 0) {
             toast.error("Dữ liệu chưa hợp lệ ")

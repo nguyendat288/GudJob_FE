@@ -6,6 +6,7 @@ import { UseChatState } from '../../../providers/ConnectContext';
 import chatApi from '../../../services/chatApi';
 import ListUser from './ListUser';
 import BoxChat from './BoxChat';
+import { formatDate } from '../../../utils/formatDate';
 
 const Chat = () => {
     const { conversationId, userId } = useParams();
@@ -43,14 +44,9 @@ const Chat = () => {
     useEffect(() => {
         setChatSelect(conversationId)
     }, [])
-    console.log(listMessages);
 
     const hanldeSelectChat = async (conversationId, userId, senderId, isRead) => {
         setChatSelect(conversationId)
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        console.log(senderId);
-        console.log(currentUser?.userId);
-        console.log(isRead);
         if (senderId != currentUser?.userId && isRead == 0) {
             await chatApi.markToRead(conversationId)
         }
@@ -58,12 +54,16 @@ const Chat = () => {
     }
 
     const handleSendMessage = async (message) => {
+        if(message == '') return
         let data = {
             conversationId: chatSelect,
             senderId: currentUser?.userId,
-            messageText: message
+            messageText: message,
+            isRead: 0,
+            sendDate :new Date()
         }
-        console.log(data);
+
+       setListMessage(msg => [...msg, data])
         await chatApi.SendMessage(data)
         setMessage('')
     }

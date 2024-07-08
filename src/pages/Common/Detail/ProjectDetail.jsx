@@ -5,6 +5,8 @@ import { ROLES } from '../../../constaints/role';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
 import { formatDate } from '../../../utils/formatDate';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import FlagCircleIcon from '@mui/icons-material/FlagCircle';
+
 import ReportModal from '../Profile/component/ReportModal';
 import reportApi from '../../../services/reportApi';
 import { toast } from 'react-toastify';
@@ -38,7 +40,7 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId 
                                     <Typography fontSize='10px'>{detail?.projectStatus?.statusName}</Typography>
                                 </Box>
                                 <Tooltip title="Report this project">
-                                    <WarningAmberIcon onClick={() => setIsReportModalOpen(true)} className="text-red-600 cursor-pointer ml-2" />
+                                    <FlagCircleIcon onClick={() => setIsReportModalOpen(true)} className="text-blue-600 cursor-pointer ml-2" /> 
                                 </Tooltip>
                             </Box>
                             <Box

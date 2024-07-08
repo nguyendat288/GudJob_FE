@@ -23,7 +23,6 @@ const Home = () => {
   const handleClick = (id) => {
     navigate(`/category/${id}`)
   }
-  console.log(listCategory);
   return (
     <>
       <HeroSection />

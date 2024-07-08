@@ -20,7 +20,6 @@ const ListProjectRecruiter = () => {
         getData()
     }, [])
 
-    console.log(listProject);
     return (
         <Box m={3}>
             <Box display='flex' alignItems='center' mb={3}>
