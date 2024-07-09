@@ -68,6 +68,14 @@ export default function Router() {
               )
             },
             {
+              path: PUBLIC_PATH.LIST_PROJECT,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <Search />
+                </Suspense>
+              )
+            },
+            {
               path: PUBLIC_PATH.SEARCH_CATEGORY_PROJECT,
               element: (
                 <Suspense fallback={<>Loading...</>}>

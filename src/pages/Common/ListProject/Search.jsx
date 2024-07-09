@@ -20,8 +20,13 @@ const Search = () => {
 
   useEffect(() => {
     const getData = async () => {
-      let res = await projectApi.SearchProjectByName(searchKey, 1, 10);
-      setListProject(res)
+      if(searchKey == undefined ){
+        let res = await projectApi.SearchProjectByName("", 1, 10);
+        setListProject(res)
+      }else{
+        let res = await projectApi.SearchProjectByName(searchKey, 1, 10);
+        setListProject(res)
+      }
     }
     getData()
   }, [searchKey])
@@ -54,6 +59,7 @@ const Search = () => {
     setListSkillSelected([])
     setCategoryId(id)
   }
+
   const hanldeFilter = async () => {
     let data = {
       keyword: searchKey,
@@ -72,7 +78,12 @@ const Search = () => {
   return (
     <>
       <Box m={2}>
-        <Header title="DANH SÁCH DỰ ÁN" subtitle={`Kết quả cho tìm kiếm "${searchKey}"`} />
+        {searchKey == undefined && (<>
+          <Header title="DANH SÁCH DỰ ÁN" />
+        </>)}
+        {searchKey !== undefined && (<>
+          <Header title="DANH SÁCH DỰ ÁN" subtitle={`Kết quả cho tìm kiếm "${searchKey}"`} />
+        </>)}
       </Box>
 
       <Box display='flex' mt={3} ml={3}>

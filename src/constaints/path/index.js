@@ -4,6 +4,7 @@ export const PUBLIC_PATH = {
     HOME:'/home',
     REGISTER: "/register",
     SEARCH_PROJECT: "/search/:searchKey",
+    LIST_PROJECT: "/search",
     SEARCH_CATEGORY_PROJECT: "/category/:idCate",
     DETAIL: "/detail/:projectId",
     RESET: "/reset-password",
