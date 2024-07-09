@@ -19,6 +19,7 @@ const Chat = () => {
         chatSelect,
         setChatSelect,
         listMessages,
+        setListMessage,
         userConnection
     } = UseChatState();
 
