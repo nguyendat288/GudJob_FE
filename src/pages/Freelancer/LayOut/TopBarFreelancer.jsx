@@ -17,7 +17,7 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import profileApi from '../../../services/profileApi';
 import LanguageSelector from '../../../components/language-selector';
 import { UseChatState } from '../../../providers/ConnectContext';
-import { MoreVert as MoreVertIcon } from '@mui/icons-material';
+import { KeyboardReturn, MoreVert as MoreVertIcon } from '@mui/icons-material';
 import notificationApi from '../../../services/notificationApi';
 import ListUser from '../../Common/Chat/ListUser';
 import chatApi from '../../../services/chatApi';
@@ -84,7 +84,11 @@ const TopBarFreelancer = () => {
   }
 
   const handleSearch = () => {
-    navigate(`/search/${search}`)
+    // if(search == '') {
+    //   navigate(`/search`)
+    // }else{
+      navigate(`/search/${search}`)
+    // }
   }
 
   const handleNotificationClick = (event) => {
@@ -196,6 +200,13 @@ const TopBarFreelancer = () => {
     navigate(`/chat/${conversationId}/${userId}`)
   }
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+        event.preventDefault();   
+        handleSearch()
+    }
+};
+
   return (
     <>
       <AppBar position="static" sx={{ bgcolor: 'white' }}>
@@ -228,6 +239,7 @@ const TopBarFreelancer = () => {
                 <InputBase
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
+                  onKeyPress={handleKeyPress}
                   placeholder='Seach name project' sx={{ ml: 2, flex: 1 }} />
                 <IconButton type='button'
                   onClick={(e) => handleSearch(e)}

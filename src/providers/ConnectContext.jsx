@@ -1,9 +1,11 @@
+import axios from "axios";
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import messageSound from "../assets/sound/message.mp3";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { useSelector } from "react-redux";
 import notificationApi from "../services/notificationApi";
 import { BASE_URL } from "../services";
+import { SettingsInputComponentRounded } from "@mui/icons-material";
 import chatApi from "../services/chatApi";
 
 
@@ -55,6 +57,10 @@ const ChatProvider = ({ children }) => {
                         setHaveMessage((prevNumber) => prevNumber + 1);
                     })
 
+                    connection.on("HaveMessage", (data) => {
+                        setHaveMessage(data);
+                    })
+
                     connection.onclose(e => {
                         setConnection(null);
                         setIsConnect(false)
@@ -69,7 +75,7 @@ const ChatProvider = ({ children }) => {
             }
         }
         getData()
-    }, [currentUser, isConnect])
+    }, [currentUser])
 
     useEffect(() => {
         const getNotification = async () => {
@@ -91,7 +97,6 @@ const ChatProvider = ({ children }) => {
         GetNumberMessage()
     }, [currentUser,haveMess])
 
-
     useEffect(() => {
         const getNotification = async () => {
             if (currentUser != null) {
@@ -100,7 +105,7 @@ const ChatProvider = ({ children }) => {
             }
         }
         getNotification()
-    }, [currentUser])
+    }, [])
 
     useEffect(() => {
         const getUserConnect = async () => {
@@ -110,7 +115,7 @@ const ChatProvider = ({ children }) => {
             }
         }
         getUserConnect()
-    }, [haveMess, currentUser])
+    }, [haveMess])
 
     useEffect(() => {
         const getListMessages = async () => {
@@ -120,7 +125,7 @@ const ChatProvider = ({ children }) => {
             }
         }
         getListMessages()
-    }, [chatSelect, currentUser])
+    }, [chatSelect])
 
     return (
         <ChatContext.Provider
