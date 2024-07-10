@@ -5,7 +5,6 @@ import { ROLES } from '../../../constaints/role';
 import reportApi from '../../../services/reportApi';
 import { toast } from 'react-toastify';
 import ReportModal from '../Profile/component/ReportModal';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import FlagCircleIcon from '@mui/icons-material/FlagCircle';
 const ListBidding = ({ listBidding, currentUser, createdBy, handleAccept }) => {
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
@@ -42,9 +41,6 @@ const ListBidding = ({ listBidding, currentUser, createdBy, handleAccept }) => {
                                         <Box ml={2}>
                                             <Box display='flex' alignItems='center'>
                                                 <Typography fontSize='15px' fontWeight='bold'> {item?.appUser?.name} </Typography>
-                                                <Tooltip title="Report this project">
-                                                    <FlagCircleIcon  onClick={() => handleClickReport(item?.id)} className="text-red-600 cursor-pointer ml-2 mb-2" />
-                                                </Tooltip>
                                             </Box>
                                             <Box sx={{ display: 'flex', gap: 1 }}>
                                                 <Typography
@@ -69,8 +65,16 @@ const ListBidding = ({ listBidding, currentUser, createdBy, handleAccept }) => {
                                         <Typography> in {item?.duration} days </Typography>
                                     </Box>
                                 </Box>
-                                <Box mt={1}>
+                                <Box display='flex' justifyContent='space-between' alignItems='center' mt={1}>
                                     <Typography>{item?.proposal} </Typography>
+                                    <Box display='flex' alignItems='center'>
+                                        <Tooltip title="Report this bidding">
+                                            <Box display='flex' alignItems='center' onClick={() => handleClickReport(item?.id)} className="text-blue-600 cursor-pointer">
+                                                <FlagCircleIcon />
+                                                <Typography ml={1} fontSize='12px'>Report Bidding</Typography>
+                                            </Box>
+                                        </Tooltip>
+                                    </Box>
                                 </Box>
                                 {currentUser != null && currentUser?.role === ROLES.RECRUITER && currentUser?.userId === createdBy && (
                                     <>

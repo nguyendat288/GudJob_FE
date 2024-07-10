@@ -1,5 +1,5 @@
 import React, { useImperativeHandle, useRef, useState } from 'react';
-import { Box, Typography, IconButton, Tooltip, TextField, InputAdornment, Button, Menu, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
+import { Box, Typography, IconButton, Tooltip, TextField, InputAdornment, Button, Menu, MenuItem, FormControl, InputLabel, Select, Popover } from '@mui/material';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -21,19 +21,19 @@ function StatusInputValue(props) {
   };
 
   return (
-      <FormControl variant="standard" sx={{ minWidth: 120 }}>
-        <InputLabel shrink={true}>Value</InputLabel>
-        <Select
-          value={item.value || ''}
-          onChange={handleFilterChange}
-          label="Value"
-          inputRef={statusRef}
-        >
-          <MenuItem value=""><em>All</em></MenuItem>
-          <MenuItem value="true">Đã duyệt</MenuItem>
-          <MenuItem value="false">Chờ duyệt</MenuItem>
-        </Select>
-      </FormControl>
+    <FormControl variant="standard" sx={{ minWidth: 120 }}>
+      <InputLabel shrink={true}>Value</InputLabel>
+      <Select
+        value={item.value || ''}
+        onChange={handleFilterChange}
+        label="Value"
+        inputRef={statusRef}
+      >
+        <MenuItem value=""><em>All</em></MenuItem>
+        <MenuItem value="true">Đã duyệt</MenuItem>
+        <MenuItem value="false">Chờ duyệt</MenuItem>
+      </Select>
+    </FormControl>
   );
 }
 
@@ -66,12 +66,23 @@ const statusOperators = [
   },
 ];
 
-
-
-
 const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSizeChange, typeDes, setTypeDes, onOpenModal, loading, setLoading }) => {
   const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElPop, setAnchorElPop] = useState(null);
+  const [popoverContent, setPopoverContent] = useState('');
+
+  const handlePopoverOpen = (event, content) => {
+    setAnchorElPop(event.currentTarget);
+    setPopoverContent(content);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorElPop(null);
+    setPopoverContent('');
+  };
+
+  const open = Boolean(anchorElPop);
 
   const columns = [
     { field: 'nameCreatedBy', headerName: 'Created By', sortable: false, width: 150, flex: 1 },
@@ -94,8 +105,53 @@ const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSiz
         );
       }
     },
-    { field: 'reportName', headerName: 'Report Name', sortable: false, width: 200, flex: 1 },
-    { field: 'description', headerName: 'Description', sortable: false, filterable: false, width: 300, flex: 1 },
+    {
+      field: 'reportName',
+      headerName: 'Report Name',
+      sortable: false,
+      width: 200,
+      flex: 1,
+    },
+    {
+      field: 'description',
+      headerName: 'Description',
+      sortable: false,
+      filterable: false,
+      width: 300,
+      flex: 1,
+      renderCell: (params) => (
+        <div>
+          <Typography
+            aria-owns={open ? 'mouse-over-popover' : undefined}
+            aria-haspopup="true"
+            onMouseEnter={(event) => handlePopoverOpen(event, params.value)}
+            onMouseLeave={handlePopoverClose}
+          >
+            {params.value}
+          </Typography>
+          <Popover
+            id="mouse-over-popover"
+            sx={{
+              pointerEvents: 'none',
+            }}
+            open={open}
+            anchorEl={anchorElPop}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}
+            onClose={handlePopoverClose}
+            disableRestoreFocus
+          >
+            <Typography sx={{ p: 1 }}>{popoverContent}</Typography>
+          </Popover>
+        </div>
+      )
+    },
     {
       field: 'isApproved',
       headerName: 'Status',
