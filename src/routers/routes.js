@@ -30,6 +30,7 @@ import ListReport from "../pages/Admin/List/ListReport";
 import TopBarFreelancer from "../pages/Freelancer/LayOut/TopBarFreelancer";
 import Chat from "../pages/Common/Chat/Chat";
 import ListProject from "../pages/Admin/List/ListProject";
+import CurrentProject from "../pages/Common/Profile/CurrentProject";
 
 export default function Router() {
   let router = useRoutes([
@@ -160,6 +161,7 @@ export default function Router() {
               path: FREELANCER_PATH.PROFILE_SETTING,
               element: (
                 <Suspense fallback={<>Loading...</>}>
+                  <TopBarFreelancer />
                   <ProfileSetting />
                 </Suspense>
               )
@@ -168,6 +170,7 @@ export default function Router() {
               path: FREELANCER_PATH.CHANGE_PASSWORD,
               element: (
                 <Suspense fallback={<>Loading...</>}>
+                  <TopBarFreelancer />
                   <ChangePassword />
                 </Suspense>
               )
@@ -176,7 +179,17 @@ export default function Router() {
               path: FREELANCER_PATH.EXPERIENCE_EDUCATION,
               element: (
                 <Suspense fallback={<>Loading...</>}>
+                  <TopBarFreelancer />
                   <ExperienceEducation />
+                </Suspense>
+              )
+            },
+            {
+              path: FREELANCER_PATH.CURRENT_PROJECT,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <TopBarFreelancer />
+                  <CurrentProject />
                 </Suspense>
               )
             },

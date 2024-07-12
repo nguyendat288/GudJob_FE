@@ -78,7 +78,7 @@ function Profile() {
             setSubmitting(false);
         }
     };
-console.log("profile.ratings", profile.ratings);
+
     return (
         <Container>
             <Grid container spacing={4}>

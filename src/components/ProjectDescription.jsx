@@ -10,9 +10,11 @@ const ProjectDescription = ({ description }) => {
     replace: domNode => {
       if (domNode.name === 'p') {
         return (
-          <Typography variant="body1" paragraph>
-            {domToReact(domNode.children)}
-          </Typography>
+          <Box mb={2}>
+            <Typography variant="body1" component="div">
+              {domToReact(domNode.children)}
+            </Typography>
+          </Box>
         );
       }
       if (domNode.name === 'ul') {

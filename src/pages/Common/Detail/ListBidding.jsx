@@ -6,7 +6,7 @@ import reportApi from '../../../services/reportApi';
 import { toast } from 'react-toastify';
 import ReportModal from '../Profile/component/ReportModal';
 import FlagCircleIcon from '@mui/icons-material/FlagCircle';
-const ListBidding = ({ listBidding, currentUser, createdBy, handleAccept }) => {
+const ListBidding = ({ listBidding, currentUser, createdBy, handleAccept, detail }) => {
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [bid, setBid] = useState();
 
@@ -76,7 +76,7 @@ const ListBidding = ({ listBidding, currentUser, createdBy, handleAccept }) => {
                                         </Tooltip>
                                     </Box>
                                 </Box>
-                                {currentUser != null && currentUser?.role === ROLES.RECRUITER && currentUser?.userId === createdBy && (
+                                {currentUser != null && currentUser?.role === ROLES.RECRUITER && currentUser?.userId === createdBy && detail.projectStatus.id !== 3 && (
                                     <>
                                         <Box display='flex' mt={1} ml='auto'>
                                             <Button variant='contained' onClick={(e) => handleAccept(item?.id)}>Accept</Button>

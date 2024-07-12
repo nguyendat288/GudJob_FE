@@ -127,6 +127,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
       width: 100,
       flex: 1,
       filterable: false,
+      sortable: false,
       renderCell: (params) => <Avatar src={params.value} alt={params.row.name} />
     },
     { field: 'name', headerName: t('name', { ns: 'admin' }), filterable: false, width: 150, flex: 1 },
@@ -137,6 +138,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
       filterable: false,
       width: 200,
       flex: 1,
+      sortable: false,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
           <Typography>{params.value ? params.value : t('no_information', { ns: 'admin' })}</Typography>
@@ -166,6 +168,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
       headerName: t('status', { ns: 'common' }),
       width: 220,
       flex: 1,
+      sortable: false,
       filterOperators: statusOperators,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
@@ -179,6 +182,7 @@ const UserList = ({ users, onOpenModal, pageSizeChange, pageSize, page, pageChan
       filterable: false,
       width: 150,
       flex: 1,
+      sortable: false,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
           <Typography>{params.row.isCompany ? 'Recruiter' : 'Freelancer'}</Typography>

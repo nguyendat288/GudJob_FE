@@ -69,7 +69,7 @@ function ProfileSetting() {
 
 
     try {
-      const response = await profileApi.updateProfile(data, navigate);
+      await profileApi.updateProfile(data, navigate);
       toast.success("Profile updated successfully!");
     } catch (error) {
       console.error("Error response from server:", error.response);
@@ -82,7 +82,7 @@ function ProfileSetting() {
   };
 
   return (
-    <Box p={3} borderRadius={5} border="1px solid #ccc" component="form" onSubmit={handleSave}>
+    <Box p={3} m={3} borderRadius={5} border="1px solid #ccc" component="form" onSubmit={handleSave}>
       <Typography sx={{fontSize: "2em"}} variant="h4" gutterBottom>Hồ sơ của bạn</Typography>
       
       <Box mb={2}>

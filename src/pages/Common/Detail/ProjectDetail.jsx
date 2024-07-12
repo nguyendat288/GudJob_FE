@@ -94,6 +94,7 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId 
                                 <Button
                                     className="text-xs"
                                     variant='contained'
+                                    sx={{marginRight: 2}}
                                     onClick={() => navigate(`/update-project/${detail?.id}`)}
                                 >
                                     Update Project

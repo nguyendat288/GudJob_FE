@@ -91,7 +91,7 @@ const ExperienceEducation = () => {
     }
 
     try {
-      const response = await profileApi.updateExperience(updatedExperiences, navigate, "update");
+      await profileApi.updateExperience(updatedExperiences, navigate, "update");
       setProfile((prevProfile) => ({
         ...prevProfile,
         experiences: updatedExperiences
@@ -147,7 +147,7 @@ const ExperienceEducation = () => {
     }
 
     try {
-      const response = await profileApi.updateEducation(updatedEducation, navigate, "update");
+      await profileApi.updateEducation(updatedEducation, navigate, "update");
       setProfile((prevProfile) => ({
         ...prevProfile,
         educations: updatedEducation
@@ -201,7 +201,7 @@ const ExperienceEducation = () => {
     const updatedExperiences = profile.experiences.filter((_, expIndex) => expIndex !== index);
 
     try {
-      const response = await profileApi.updateExperience(updatedExperiences, navigate, "delete");
+      await profileApi.updateExperience(updatedExperiences, navigate, "delete");
       setProfile((prevProfile) => ({
         ...prevProfile,
         experiences: updatedExperiences
@@ -221,7 +221,7 @@ const ExperienceEducation = () => {
     const updatedEducations = profile.educations.filter((_, eduIndex) => eduIndex !== index);
 
     try {
-      const response = await profileApi.updateEducation(updatedEducations, navigate, "delete");
+      await profileApi.updateEducation(updatedEducations, navigate, "delete");
       setProfile((prevProfile) => ({
         ...prevProfile,
         educations: updatedEducations
@@ -275,14 +275,14 @@ const ExperienceEducation = () => {
   };
 
   return (
-    <Box p={3} borderRadius={10} border="1px solid #ccc">
+    <Box p={3} m={3} borderRadius={10} border="1px solid #ccc">
       <Typography sx={{fontSize: "2em"}} gutterBottom>Kinh nghiệm và Học vấn</Typography>
 
       <Box mb={2}>
         <Typography sx={{fontSize: "1.5em"}} variant="h6">Kinh nghiệm</Typography>
 
-        {profile ? ((profile.experience === null || profile.experiences.length !== 0) ? (
-          profile.experiences.map((exp, index) => (
+        {profile ? ((profile?.experiences !== null || profile?.experiences?.length === 0) ? (
+          profile?.experiences?.map((exp, index) => (
             <Box key={index} mb={2} border="1px solid #ccc" borderRadius={5} p={2}>
               <Typography variant="subtitle1">{exp.title}</Typography>
               <Typography variant="body2">{exp.company}</Typography>
@@ -369,8 +369,8 @@ const ExperienceEducation = () => {
       <Box mb={2}>
         <Typography sx={{fontSize: "1.5em"}}>Học vấn</Typography>
 
-        {profile ? ((profile.educations === null || profile.educations.length !== 0) ? (
-          profile.educations.map((edu, index) => (
+        {profile ? ((profile?.educations !== null || profile?.educations?.length === 0) ? (
+          profile?.educations?.map((edu, index) => (
             <Box key={index} mb={2} border="1px solid #ccc" borderRadius={5} p={2}>
               <Typography variant="subtitle1">{edu.degree}</Typography>
               <Typography variant="body2">{edu.universityCollege}</Typography>
