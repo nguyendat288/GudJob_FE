@@ -8,6 +8,7 @@ const TypographyTitle = ({ title,color }) => {
             fontSize: '18px',
             fontWeight: 'bold',
             color: {color},
+            mt: 2
         }}
         >{title}</Typography>
     )

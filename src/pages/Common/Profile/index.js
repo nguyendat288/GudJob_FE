@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, Typography, Box, Container, Grid, IconButton, Paper, LinearProgress, Link, Button, Rating, TextField } from '@mui/material';
 import { LinkedIn, GitHub, CheckCircleOutline, School as SchoolIcon, Description as DescriptionIcon } from '@mui/icons-material';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import profileApi from '../../../services/profileApi';
 import AboutImage from '../../../assets/about.jpg';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
@@ -14,6 +14,8 @@ import ReportIcon from '@mui/icons-material/Report';
 import ReportModal from './component/ReportModal';
 import reportApi from '../../../services/reportApi';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import chatApi from '../../../services/chatApi';
 
 const labels = {
     1: 'Rất tệ',
@@ -29,13 +31,14 @@ function getLabelText(value) {
 
 function Profile() {
     const { userId } = useParams();
+    const currentUser = useSelector((state) => state.auth.login?.currentUser);
     const [profile, setProfile] = useState();
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [newRating, setNewRating] = useState(0);
     const [newComment, setNewComment] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [hover, setHover] = useState(-1);
-
+const navigate = useNavigate()
     useEffect(() => {
         const getData = async () => {
             let res;
@@ -50,7 +53,7 @@ function Profile() {
     }, [userId]);
 
     const isOwnProfile = userId === undefined;
-        const handleReport = async (reportData) => {
+    const handleReport = async (reportData) => {
         await reportApi.createReport(reportData);
         toast.error('Đã khiếu nại người dùng');
     };
@@ -78,7 +81,12 @@ function Profile() {
             setSubmitting(false);
         }
     };
-console.log("profile.ratings", profile.ratings);
+    const handleContact = async () => {
+       let res = await chatApi.CreateNewConversation(currentUser?.userId, userId)
+       console.log(res)
+        navigate(`/chat/${res}/${userId}`)
+    }
+
     return (
         <Container>
             <Grid container spacing={4}>
@@ -98,14 +106,24 @@ console.log("profile.ratings", profile.ratings);
                                 <GitHub />
                             </IconButton>
                             {!isOwnProfile && (
-                                <Button
-                                    variant="outlined"
-                                    color="error"
-                                    startIcon={<ReportIcon />}
-                                    onClick={() => setIsReportModalOpen(true)}
-                                >
-                                    Report
-                                </Button>
+                                <>
+                                    <Button
+                                        variant="outlined"
+                                        color="error"
+                                        startIcon={<ReportIcon />}
+                                        onClick={() => setIsReportModalOpen(true)}
+                                    >
+                                        Report
+                                    </Button>
+                                    <Button
+                                        variant="outlined"
+                                        color="error"
+                                        startIcon={<ReportIcon />}
+                                        onClick={() => handleContact()}
+                                    >
+                                        Contact
+                                    </Button>
+                                </>
                             )}
                         </Box>
                     </section>
@@ -286,18 +304,18 @@ console.log("profile.ratings", profile.ratings);
                                 <Box className="mt-4">
                                     <form onSubmit={handleRatingSubmit}>
                                         <Box className="flex flex-row">
-                                        <Rating
-                                            name="hover-feedback"
-                                            value={newRating}
-                                            getLabelText={getLabelText}
-                                            onChange={(event, newValue) => setNewRating(newValue)}
-                                            onChangeActive={(event, newHover) => {
-                                                setHover(newHover);
-                                            }}
-                                        />
-                                        {newRating !== null && (
-                                            <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : newRating]}</Box>
-                                        )}
+                                            <Rating
+                                                name="hover-feedback"
+                                                value={newRating}
+                                                getLabelText={getLabelText}
+                                                onChange={(event, newValue) => setNewRating(newValue)}
+                                                onChangeActive={(event, newHover) => {
+                                                    setHover(newHover);
+                                                }}
+                                            />
+                                            {newRating !== null && (
+                                                <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : newRating]}</Box>
+                                            )}
                                         </Box>
                                         <TextField
                                             label="Bình luận"

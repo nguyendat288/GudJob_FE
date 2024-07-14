@@ -1,4 +1,4 @@
-import { Box, Button, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, InputAdornment, MenuItem, OutlinedInput, Pagination, Select,  Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import projectApi from '../../../services/projectApi';
@@ -9,9 +9,11 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 
 const Search = () => {
   const { searchKey } = useParams()
+  const [page, setPage] = useState(1)
+  const [totalPage, setTotalPage] = useState(1)
   const [listProject, setListProject] = useState(null)
   const [listCategory, setListCategory] = useState([])
-  const [categoryId, setCategoryId] = useState()
+  const [categoryId, setCategoryId] = useState(0)
   const [listSkill, setListSkill] = useState([])
   const [listSkillSelected, setListSkillSelected] = useState([])
   const [duration, setDuration] = useState(0)
@@ -20,16 +22,13 @@ const Search = () => {
 
   useEffect(() => {
     const getData = async () => {
-      if(searchKey == undefined ){
-        let res = await projectApi.SearchProjectByName("", 1, 10);
-        setListProject(res)
-      }else{
-        let res = await projectApi.SearchProjectByName(searchKey, 1, 10);
-        setListProject(res)
-      }
-    }
-    getData()
-  }, [searchKey])
+      const res = await projectApi.SearchHomePage(searchKey || '', page, 5);
+      setListProject(res);
+      setTotalPage(Math.ceil(res?.totalItemsCount / 5));
+    };
+    getData();
+  }, [searchKey, page]);
+  
 
   useEffect(() => {
     const getData = async () => {
@@ -74,11 +73,14 @@ const Search = () => {
     let res = await projectApi.filterProject(data);
     setListProject(res)
   }
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
 
   return (
     <>
       <Box m={2}>
-        {searchKey == undefined && (<>
+        {searchKey === undefined && (<>
           <Header title="DANH SÁCH DỰ ÁN" />
         </>)}
         {searchKey !== undefined && (<>
@@ -89,55 +91,92 @@ const Search = () => {
       <Box display='flex' mt={3} ml={3}>
         <Box flex='3' >
           <ShowList listProject={listProject} />
+          <Box mt={2} display='flex' justifyContent='center' alignItems='center'>
+            <Pagination
+              count={totalPage}
+              defaultPage={page}
+              onChange={handlePageChange}
+              color="primary" />
+          </Box>
         </Box>
         <Box flex='1' ml={3} mr={3}>
-        <Box bgcolor='#F8F8FF' borderRadius='5px' p={3}>
-            <Typography fontWeight='bold'><FilterListIcon /> Filters </Typography>
-            <Typography fontWeight='bold'> Category </Typography>
+          <Box bgcolor='#F8F8FF' borderRadius='5px' p={3}>
+            <Typography variant="h6" fontWeight='bold' display='flex' alignItems='center' gutterBottom>
+              <FilterListIcon /> Filters
+            </Typography>
+
+            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Category</Typography>
             <Select
               fullWidth
-              sx={{
-                bgcolor: '#FFFFFF'
-              }}
+              sx={{ bgcolor: '#FFFFFF', mb: 2 }}
               value={categoryId}
               onChange={(e) => handleChangeCategory(e.target.value)}
             >
+              <MenuItem value={0}>Tất cả</MenuItem>
+
               {listCategory?.length !== 0 && listCategory.map((item, index) => (
-                <MenuItem value={item?.id}>{item?.categoryName}</MenuItem>
+                <MenuItem key={index} value={item?.id}>{item?.categoryName}</MenuItem>
               ))}
             </Select>
-            {listSkill !== undefined && (<>
-              <Typography fontWeight='bold'> List Skill </Typography>
-              {listSkill?.map(item => (
-                <Box key={item.id}>
-                  <label>
-                    <input
-                      marginLeft='10px'
-                      type="checkbox"
-                      checked={listSkillSelected.includes(item.id)}
-                      onChange={() => handleSelect(item)}
+
+            {listSkill && listSkill?.length !== 0 && (
+              <>
+                <Typography variant="subtitle1" fontWeight='bold' gutterBottom>List Skill</Typography>
+                {listSkill.map((item) => (
+                  <Box key={item.id} mb={1}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={listSkillSelected.includes(item.id)}
+                          onChange={() => handleSelect(item)}
+                          color="primary"
+                        />
+                      }
+                      label={item.skillName}
                     />
-                    {item.skillName}
-                  </label>
-                </Box>
-              ))}
-            </>)}
-            <Typography fontWeight='bold'> Duration </Typography>
-            <TextField
+                  </Box>
+                ))}
+              </>
+            )}
+
+            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Duration</Typography>
+
+            <OutlinedInput
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
+              sx={{ bgcolor: '#FFFFFF', mb: 2 }}
+              endAdornment={<InputAdornment position="end">ngày</InputAdornment>}
+              fullWidth
+              inputProps={{
+                'aria-label': 'ngày',
+              }}
             />
-            <Typography fontWeight='bold'> Budget Min </Typography>
-            <TextField
+            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Budget Min</Typography>
+
+            <OutlinedInput
               value={minBudget}
               onChange={(e) => setMinBudget(e.target.value)}
+              sx={{ bgcolor: '#FFFFFF', mb: 2 }}
+              endAdornment={<InputAdornment position="end">VND</InputAdornment>}
+              fullWidth
+              inputProps={{
+                'aria-label': 'Min Budget',
+              }}
             />
-            <Typography fontWeight='bold'> Budget Max </Typography>
-            <TextField
+            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Budget Max</Typography>
+            <OutlinedInput
               value={maxBudget}
               onChange={(e) => setMaxBudget(e.target.value)}
+              sx={{ bgcolor: '#FFFFFF', mb: 2 }}
+              endAdornment={<InputAdornment position="end">VND</InputAdornment>}
+              fullWidth
+              inputProps={{
+                'aria-label': 'Max Budget',
+              }}
             />
-            <Button variant='contained' onClick={() => hanldeFilter()}>Filter</Button>
+            <Button variant='contained' color='primary' onClick={() => hanldeFilter()}>
+              Filter
+            </Button>
           </Box>
         </Box>
       </Box >

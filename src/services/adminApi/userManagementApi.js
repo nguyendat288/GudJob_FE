@@ -14,7 +14,6 @@ const userManagementApi = {
             };
 
             const response = await axiosClient.get(`${BASE_URL}/api/Users/GetUsers`, { params });
-            console.log("response", response);
             return response;
         } catch (error) {
             throw error;

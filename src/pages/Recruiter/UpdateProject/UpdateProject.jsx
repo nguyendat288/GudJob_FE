@@ -1,8 +1,8 @@
 import { Autocomplete, Box, Button, FilledInput, InputAdornment, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Header from '../LayOutRecruiter/Header'
-import { CKEditor } from '@ckeditor/ckeditor5-react'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import { CKEditor } from '@ckeditor/ckeditor5-react'
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import categoryApi from '../../../services/categoryApi';
 import { toast } from 'react-toastify';
 import projectApi from '../../../services/projectApi';
@@ -115,11 +115,11 @@ const UpdateProject = () => {
                     <Box mt={2}>
                         <Typography mt={3} fontSize='20px' fontWeight='bold'> Project Description </Typography>
                         <Box mt={2}>
-                            <CKEditor
+                            {/* <CKEditor
                                 editor={ClassicEditor}
                                 data={description}
                                 onChange={handleDescriptionChange}
-                            />
+                            /> */}
                         </Box>
                     </Box>
                     <Box mt={2}>

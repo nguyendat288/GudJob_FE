@@ -30,6 +30,9 @@ import ListReport from "../pages/Admin/List/ListReport";
 import TopBarFreelancer from "../pages/Freelancer/LayOut/TopBarFreelancer";
 import Chat from "../pages/Common/Chat/Chat";
 import ListProject from "../pages/Admin/List/ListProject";
+import CreateBlog from "../pages/Admin/Blog/CreateBlog";
+import ViewBlog from "../pages/Admin/Blog/ViewBlog";
+import TopBarAdmin from "../pages/Admin/LayOutAdmin/TopBarAdmin";
 
 export default function Router() {
   let router = useRoutes([
@@ -108,7 +111,7 @@ export default function Router() {
       element: <LayOutFreelancer />,
       children: [
         {
-          element: <RequireAuth allowedRoles={ROLES.FREELANCER} />,
+          element: <RequireAuth allowedRoles={[ROLES.FREELANCER,ROLES.RECRUITER,ROLES.ADMIN]} />,
           children: [
             {
               path: FREELANCER_PATH.PROFILE,
@@ -213,6 +216,8 @@ export default function Router() {
     },
     {
       path: RECRUITER_PATH.LAYOUT,
+      element: <TopBarFreelancer />,
+
       children: [
         {
           element: <RequireAuth allowedRoles={ROLES.RECRUITER} />,
@@ -291,6 +296,34 @@ export default function Router() {
               element: (
                 <Suspense fallback={<>Loading...</>}>
                   <ListProject />
+                </Suspense>
+              )
+            },
+           
+            {
+              path: ADMIN_PATH.VIEW_BLOG,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <ViewBlog />
+                </Suspense>
+              )
+            },
+          ]
+        }
+      ]
+    },
+    {
+      path: ADMIN_PATH.LAYOUT,
+      element: <TopBarAdmin />,
+      children: [
+        {
+          element: <RequireAuth allowedRoles={ROLES.FREELANCER} />,
+          children: [ 
+            {
+              path: ADMIN_PATH.CREATE_BLOG,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <CreateBlog />
                 </Suspense>
               )
             },

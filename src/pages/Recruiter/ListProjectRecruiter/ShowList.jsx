@@ -18,15 +18,15 @@ const ShowList = ({ listProject }) => {
             navigate(`/detail/${id}`);
         }
     };
-    
+    console.log(listProject);
     return (
         <Box bgcolor="#F8F8FF" borderRadius="5px" p={3}>
             <Box display="flex" mb={2}>
                 <Typography mr={1}> Tổng số dự án : </Typography>
-                <TypographyTitle title={listProject?.items?.length} />
+                <TypographyTitle title={listProject?.totalItemsCount} />
             </Box>
             <Divider />
-            {listProject === undefined && <LinearProgress />}
+            {listProject === undefined || listProject == null && <LinearProgress />}
             {listProject?.items?.length === 0 && (
                 <>
                     <Container maxWidth="md" style={{ marginTop: '20px' }}>
@@ -41,6 +41,7 @@ const ShowList = ({ listProject }) => {
                             <Box
                                 sx={{
                                     '&:hover': {
+                                        padding: '4px 8px',
                                         backgroundColor: '#f0f0f0', // Màu nền khi hover
                                     },
                                     cursor: 'pointer',
@@ -82,9 +83,9 @@ const ShowList = ({ listProject }) => {
                                 </Box>
                                 <Box mt={1}>
                                     <Box m={2}>
-                                        <Typography>
+                                        <Box>
                                             <ProjectDescription description={project?.description} />
-                                        </Typography>
+                                        </Box>
                                     </Box>
                                     <Typography fontWeight="bold" fontSize="14px">
                                         Kỹ năng yêu cầu

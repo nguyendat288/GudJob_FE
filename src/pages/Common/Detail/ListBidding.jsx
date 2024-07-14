@@ -7,10 +7,11 @@ import { toast } from 'react-toastify';
 import ReportModal from '../Profile/component/ReportModal';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import FlagCircleIcon from '@mui/icons-material/FlagCircle';
+import { useNavigate } from 'react-router-dom';
 const ListBidding = ({ listBidding, currentUser, createdBy, handleAccept }) => {
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [bid, setBid] = useState();
-
+const navigate = useNavigate()
     const handleReport = async (reportData) => {
         await reportApi.createReport(reportData);
         toast.error('Đã khiếu nại dự án')
@@ -20,7 +21,9 @@ const ListBidding = ({ listBidding, currentUser, createdBy, handleAccept }) => {
         setBid(id);
         setIsReportModalOpen(true);
     }
-
+    const handleNameClick=(userId)=>{
+        navigate(`/profile/${userId}`)
+    }
     return (
         <Box display='flex' >
             <Box flex='4' >
@@ -41,7 +44,13 @@ const ListBidding = ({ listBidding, currentUser, createdBy, handleAccept }) => {
                                             src={item?.appUser?.avatar} />
                                         <Box ml={2}>
                                             <Box display='flex' alignItems='center'>
-                                                <Typography fontSize='15px' fontWeight='bold'> {item?.appUser?.name} </Typography>
+                                                <Typography 
+                                                fontSize='15px' 
+                                                fontWeight='bold'
+                                                onClick={() => handleNameClick(item?.appUser?.id)}
+                                                sx={{ cursor: 'pointer' }}
+                                                >
+                                                     {item?.appUser?.name} </Typography>
                                                 <Tooltip title="Report this project">
                                                     <FlagCircleIcon  onClick={() => handleClickReport(item?.id)} className="text-red-600 cursor-pointer ml-2 mb-2" />
                                                 </Tooltip>

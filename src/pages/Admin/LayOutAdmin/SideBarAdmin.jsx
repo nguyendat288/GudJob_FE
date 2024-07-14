@@ -9,7 +9,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
-
+import BookIcon from '@mui/icons-material/Book';
 function SideBarAdmin() {
   const location = useLocation();
   const {t} = useTranslation(['admin', 'common']);
@@ -35,6 +35,11 @@ function SideBarAdmin() {
       title: "Project List",
       link: "/project-list",
       icon: <AssignmentIndIcon />
+    },
+    {
+      title: "Blog List",
+      link: "/view-blog",
+      icon: <BookIcon />
     },
     {
       title: t("roles"),

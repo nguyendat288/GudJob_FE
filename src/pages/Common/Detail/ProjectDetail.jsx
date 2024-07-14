@@ -4,7 +4,6 @@ import ProjectDescription from '../../../components/ProjectDescription';
 import { ROLES } from '../../../constaints/role';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
 import { formatDate } from '../../../utils/formatDate';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import FlagCircleIcon from '@mui/icons-material/FlagCircle';
 
 import ReportModal from '../Profile/component/ReportModal';
@@ -16,13 +15,13 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId 
 
     const handleReport = async (reportData) => {
         await reportApi.createReport(reportData);
-        toast.error('Đã khiếu nại dự án')
+        toast.error('Đã khiếu nại dự án');
     };
 
     return (
         <Box display='flex' mt={4}>
             <Box flex='4'>
-                <Paper sx={{ bgcolor: '#F8F8FF' }}>
+                <Paper sx={{ bgcolor: '#FFFFFF', boxShadow: 3, borderRadius: 2 }}>
                     <Box p={4} display='flex' justifyContent='space-between'>
                         <Box>
                             <Box display='flex' alignItems='center'>
@@ -39,9 +38,7 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId 
                                 >
                                     <Typography fontSize='10px'>{detail?.projectStatus?.statusName}</Typography>
                                 </Box>
-                                <Tooltip title="Report this project">
-                                    <FlagCircleIcon onClick={() => setIsReportModalOpen(true)} className="text-blue-600 cursor-pointer ml-2" /> 
-                                </Tooltip>
+                               
                             </Box>
                             <Box
                                 className="mt-2 inline-block rounded-2xl bg-gray-300 p-2"
@@ -68,31 +65,51 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId 
                                 <Box
                                     key={index}
                                     className="mt-2 ml-2 inline-block rounded-2xl border border-blue-600 p-2"
+                                    sx={{ '&:hover': { backgroundColor: '#f0f8ff' } }}
                                 >
                                     <Typography fontSize='15px'>{item}</Typography>
                                 </Box>
                             ))}
                         </Box>
                     </Box>
-                    <Box display='flex'>
+                    <Box display='flex' justifyContent='space-between' alignItems='center'>
                         <Box p={4}>
                             <Typography fontSize='12px'>Ngày tạo: {formatDate(detail?.createdDate)}</Typography>
                         </Box>
-                        <Box className="ml-auto mr-4 flex space-x-2">
+                        <Box p={4}>
+                        {currentUser?.userId != detail?.createdBy && (<>
+                                    <Tooltip title="Report this project">
+                                        <FlagCircleIcon
+                                            onClick={() => setIsReportModalOpen(true)}
+                                            className="text-blue-600 cursor-pointer ml-2"
+                                            sx={{ '&:hover': { color: 'red' } }}
+                                        />
+                                    </Tooltip>
+                                </>)}
+
                             {currentUser?.role === ROLES.RECRUITER && currentUser?.userId === detail?.createdBy && (
                                 <>
                                     <Button
-                                        className="text-xs"
                                         variant='contained'
                                         onClick={() => navigate(`/update-project/${detail?.id}`)}
+                                        sx={{
+                                            bgcolor: '#FF9800',
+                                            '&:hover': { backgroundColor: '#d0e0ff' },
+                                            padding: '4px 8px'
+                                        }}
                                     >
                                         Update Project
                                     </Button>
                                     {detail?.statusId !== 2 && (
                                         <Button
-                                            className="text-xs"
                                             variant='contained'
                                             onClick={(e) => handleDelete(detail?.id)}
+                                            sx={{
+                                                bgcolor: '#f44336',
+                                                ml: 2,
+                                                '&:hover': { backgroundColor: '#ffe0e0' },
+                                                padding: '4px 8px'
+                                            }}
                                         >
                                             Delete Project
                                         </Button>

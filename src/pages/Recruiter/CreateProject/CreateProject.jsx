@@ -1,13 +1,16 @@
 import { Autocomplete, Box, Button, FilledInput, InputAdornment, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect,  useState } from 'react'
 import Header from '../LayOutRecruiter/Header'
-import { CKEditor } from '@ckeditor/ckeditor5-react'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import categoryApi from '../../../services/categoryApi';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import projectApi from '../../../services/projectApi';
 import { useNavigate } from 'react-router-dom';
+import 'ckeditor5/ckeditor5.css';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
+import customUploadAdapter from '../../../firebase/customUploadAdapter';
 
 const CreateProject = () => {
     const [name, setName] = useState('')
@@ -21,6 +24,13 @@ const CreateProject = () => {
     const [listSkillSelected, setListSkillSelected] = useState([])
     const currentUser = useSelector((state) => state.auth.login?.currentUser)
     const navigate = useNavigate();
+
+    function CustomUploadAdapterPlugin(editor) {
+        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+            return customUploadAdapter(loader);
+        };
+    }
+
     useEffect(() => {
         const getCategory = async () => {
             const res = await categoryApi.GetAllCategory();
@@ -56,13 +66,31 @@ const CreateProject = () => {
             createdBy: currentUser?.userId,
             skill: listSkillSelected
         }
-
+        console.log(data);
         if (name === '' || description === '' || category === null || budgetMin === 0 || budgetMax <= budgetMin || duration === '' || listSkillSelected.length === 0) {
             toast.error("not empty")
         } else {
             await projectApi.AddProject(data, navigate);
         }
     }
+
+    // const handleUpload = (e) => {
+    //     if (e !== '') {
+    //         if (e?.name.endsWith('.jpg') || e?.name.endsWith('.png')) {
+    //             const imgRef = ref(imageDb, `file/${v4()}`)
+    //             uploadBytes(imgRef, e).then(value => {
+    //                 getDownloadURL(value.ref).then(url => {
+    //                     setImage(url)
+    //                 })
+    //             })
+    //         } else {
+    //             toast.error('not image')
+    //         }
+    //     } else {
+    //         toast.error('not  dsddsad image')
+    //     }
+    // }
+    // console.log(image);
 
     return (
         <Box m={5}>
@@ -101,11 +129,34 @@ const CreateProject = () => {
                     <Box mt={2}>
                         <Typography mt={3} fontSize='20px' fontWeight='bold'> Project Description </Typography>
                         <Box mt={2}>
+
+                            {/* <input type="file" onChange={(e) => handleUpload(e.target.files[0])} /> */}
                             <CKEditor
                                 editor={ClassicEditor}
                                 data={description}
+                                config={{
+                                    extraPlugins: [CustomUploadAdapterPlugin]
+                                }}
                                 onChange={handleDescriptionChange}
                             />
+
+                            {/* <CKEditor
+                                editor={ClassicEditor}
+                                data={description}
+                                onChange={handleDescriptionChange}
+                            /> */}
+
+                            {/* <div className="main-container">
+                                <div className="editor-container editor-container_classic-editor" ref={editorContainerRef}>
+                                    <div className="editor-container__editor">
+                                        <div ref={editorRef}>{isLayoutReady && <CKEditor 
+                                        data={description}
+                                        onChange={handleDescriptionChange}
+                                        editor={ClassicEditor} config={editorConfig} />}</div>
+                                    </div>
+                                </div>
+                            </div> */}
+
                         </Box>
                     </Box>
                     <Box mt={2}>
@@ -120,7 +171,7 @@ const CreateProject = () => {
                                 onChange={(e) => setCategory(e.target.value)}
                             >
                                 {listCategory?.length !== 0 && listCategory.map((item, index) => (
-                                    <MenuItem value={item?.id}>{item?.categoryName}</MenuItem>
+                                    <MenuItem key={index} value={item?.id}>{item?.categoryName}</MenuItem>
                                 ))}
                             </Select>
                         </Box>
@@ -133,9 +184,9 @@ const CreateProject = () => {
                         <Box mt={2}>
 
                             <Autocomplete
-                             sx={{
-                                bgcolor: '#FFFFFF'
-                            }}
+                                sx={{
+                                    bgcolor: '#FFFFFF'
+                                }}
                                 multiple
                                 options={listSkill}
                                 getOptionLabel={(option) => option?.skillName}
@@ -159,9 +210,9 @@ const CreateProject = () => {
                             <Box>
                                 <Typography> Budget Min</Typography>
                                 <FilledInput
-                                 sx={{
-                                    bgcolor: '#FFFFFF'
-                                }}
+                                    sx={{
+                                        bgcolor: '#FFFFFF'
+                                    }}
                                     value={budgetMin}
                                     type='number'
                                     id="filled-adornment-weight"
@@ -176,9 +227,9 @@ const CreateProject = () => {
                             <Box ml={3}>
                                 <Typography> Budget Max</Typography>
                                 <FilledInput
-                                 sx={{
-                                    bgcolor: '#FFFFFF'
-                                }}
+                                    sx={{
+                                        bgcolor: '#FFFFFF'
+                                    }}
                                     type='number'
                                     value={budgetMax}
                                     id="filled-adornment-weight"
@@ -212,8 +263,8 @@ const CreateProject = () => {
                 </Box>
 
 
-            </Paper>
-        </Box>
+            </Paper >
+        </Box >
     )
 }
 

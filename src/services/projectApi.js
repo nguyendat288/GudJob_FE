@@ -38,8 +38,7 @@ const projectApi = {
         try {
             const response = await axiosClient.delete(`${BASE_URL}/api/Projects/DeleteProject?projectId=${projectId}`)
             toast.success('delete success')
-            navigate("/recruiter")
-            return response
+            navigate("/recruiter");
         } catch (error) {
             if (error.response.status === 400) {
                 toast.error("Not null")
@@ -74,8 +73,8 @@ const projectApi = {
     },
     GetAllProjectByUserId: async (id, index,size) => {
         try {
-            const response = await axios.get(`${BASE_URL}/api/Projects/GetProjectsByUserId?UserId=${id}&PageIndex=${index}&PageSize=${size}`)
-            return response?.data;
+            const response = await axiosClient.get(`${BASE_URL}/api/Projects/GetProjectsByUserId?UserId=${id}&PageIndex=${index}&PageSize=${size}`)
+            return response;
         } catch (error) {
             if (error.response.status === 500) {
                 toast.error("Something wrong ")
@@ -85,6 +84,16 @@ const projectApi = {
     SearchProjectByName: async (Keyword, index,size) => {
         try {
             const response = await axios.get(`${BASE_URL}/api/Projects/Search?Keyword=${Keyword}&PageIndex=${index}&PageSize=${size}`)
+            return response?.data;
+        } catch (error) {
+            if (error.response.status === 500) {
+                toast.error("Something wrong ")
+            }
+        }
+    },
+    SearchHomePage: async (Keyword, index,size) => {
+        try {
+            const response = await axios.get(`${BASE_URL}/api/Projects/SearchHomePage?Keyword=${Keyword}&PageIndex=${index}&PageSize=${size}`)
             return response?.data;
         } catch (error) {
             if (error.response.status === 500) {

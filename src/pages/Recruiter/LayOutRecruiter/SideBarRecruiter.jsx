@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
 import HouseOutlinedIcon from '@mui/icons-material/HouseOutlined';
@@ -14,30 +14,36 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       onClick={() => setSelected(title)}
       icon={icon}
       component={<Link to={to} />}
-
+      style={{
+        color: selected === title ? '#000000' : '#000000',
+        backgroundColor: selected === title ? '#DDDDDD' : 'transparent',
+        cursor: 'pointer'
+      }}
     >
       <Typography>{title}</Typography>
     </MenuItem>
   );
 };
 
-
 const SideBarRecruiter = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [selected, setSelected] = useState("List Project");
+  const [selected, setSelected] = useState('List Project');
 
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
 
   return (
     <Box>
       <Sidebar collapsed={isCollapsed} width='300px' style={{ height: '100%' }}>
-        <Menu iconShape="square"
+        <Menu
+          iconShape='square'
           menuItemStyles={{
             button: ({ level, active, disabled }) => {
               if (level === 0)
                 return {
                   color: disabled ? '#B0E0E6' : '#000000',
-                  backgroundColor: active ? `#B0E2FF` : undefined,
+                  backgroundColor: active ? '#B0E2FF' : undefined,
+                  cursor: 'pointer',
+                  
                 };
             },
           }}
@@ -46,20 +52,19 @@ const SideBarRecruiter = () => {
             onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
             style={{
-              margin: "10px 0 10px 0",
+              margin: '10px 0 10px 0',
               color: '#e0e0e0',
+              cursor: 'pointer'
             }}
           >
             {!isCollapsed && (
               <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                ml="15px"
+                display='flex'
+                justifyContent='space-between'
+                alignItems='center'
+                ml='15px'
               >
-                <Typography fontSize='30px'>
-                  GoodJob
-                </Typography>
+                <Typography fontSize='30px'>GoodJob</Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
                 </IconButton>
@@ -67,48 +72,41 @@ const SideBarRecruiter = () => {
             )}
           </MenuItem>
           {!isCollapsed && (
-            <Box mb="25px">
-              <Box display="flex" justifyContent="center" alignItems="center">
+            <Box mb='25px'>
+              <Box display='flex' justifyContent='center' alignItems='center'>
                 <img
-                  alt="profile-user"
-                  width="80px"
-                  height="80px"
+                  alt='profile-user'
+                  width='80px'
+                  height='80px'
                   src={currentUser?.avatar}
-                  style={{ cursor: "pointer", borderRadius: "50%" }}
+                  style={{ cursor: 'pointer', borderRadius: '50%' }}
                 />
               </Box>
-              <Box textAlign="center">
-                <Typography
-                  variant="h5"
-                  fontWeight="bold"
-                  sx={{ m: "10px 0 0 0" }}
-                >
+              <Box textAlign='center'>
+                <Typography variant='h5' fontWeight='bold' sx={{ m: '10px 0 0 0' }}>
                   {currentUser?.name}
                 </Typography>
               </Box>
             </Box>
           )}
 
-          <Box paddingLeft={isCollapsed ? undefined : "10%"}>
+          <Box paddingLeft={isCollapsed ? undefined : '10%'}>
             <Divider />
             <Item
-              title="Home Recruiter"
-              to="/recruiter"
+              title='Home Recruiter'
+              to='/recruiter'
               icon={<HouseOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Divider />
-            <Typography
-              variant="h6"
-              sx={{ m: "15px 0 5px 20px" }}
-            >
+            <Typography variant='h6' sx={{ m: '15px 0 5px 20px' }}>
               Project
             </Typography>
-            <SubMenu label="Project Management" icon={<QuizIcon />}>
+            <SubMenu label='Project Management' icon={<QuizIcon />}>
               <Item
-                title="List Project"
-                to="/list-project-recruiter"
+                title='List Project'
+                to='/list-project-recruiter'
                 icon={<QuizIcon />}
                 selected={selected}
                 setSelected={setSelected}
@@ -118,8 +116,7 @@ const SideBarRecruiter = () => {
         </Menu>
       </Sidebar>
     </Box>
+  );
+};
 
-  )
-}
-
-export default SideBarRecruiter
+export default SideBarRecruiter;

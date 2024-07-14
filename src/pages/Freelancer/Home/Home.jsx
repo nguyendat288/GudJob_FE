@@ -7,10 +7,12 @@ import HeroSection from '../../../components/HeroSection';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
 import TypographyHeader from '../../../components/Typography/TypographyHeader';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 const Home = () => {
   const [listCategory, setListCategory] = useState([])
   const navigate = useNavigate()
-  const {t} = useTranslation('home');
+  const { t } = useTranslation('home');
+  const currentUser = useSelector((state) => state.auth.login?.currentUser);
 
   useEffect(() => {
     const getCategory = async () => {
@@ -19,7 +21,18 @@ const Home = () => {
     }
     getCategory()
   }, [])
-  
+
+  useEffect(() => {
+    if (currentUser != null) {
+      const role = currentUser?.role;
+      if (role === 'Freelancer') {
+        navigate('/home')
+      }else if (role === "Recruiter" ){
+        navigate('/recruiter')
+      }
+    }
+  }, [])
+
   const handleClick = (id) => {
     navigate(`/category/${id}`)
   }
@@ -29,14 +42,14 @@ const Home = () => {
       <HeroSection />
       <Box m={3}>
         <Box mb={3}>
-          <TypographyHeader title= {t('popular_category' )} /> 
-          
+          <TypographyHeader title={t('popular_category')} />
+
           <Grid container spacing={3} mt={2}>
             {listCategory.length !== 0 && listCategory.map((item, index) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                 <Card
-                onClick={(e) => handleClick(item?.id)}
-                  sx={{   
+                  onClick={(e) => handleClick(item?.id)}
+                  sx={{
                     maxWidth: 345,
                     textDecoration: 'none',
                     cursor: 'pointer',

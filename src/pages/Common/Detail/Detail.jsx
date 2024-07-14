@@ -87,14 +87,8 @@ const Detail = () => {
 
     const handleDelete = async (id) => {
         setLoading(true);
-        try {
-            await projectApi.DeleteProject(id);
-            toast.success("Project deleted successfully");
-        } catch (error) {
-            toast.error("Failed to delete project");
-        } finally {
-            setLoading(false);
-        }
+        await projectApi.DeleteProject(id,navigate);
+        setLoading(false);
     }
 
     const handleAccept = async (id) => {

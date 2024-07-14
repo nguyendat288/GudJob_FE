@@ -37,5 +37,7 @@ export const ADMIN_PATH = {
     LIST_USERS: "/users-list",
     REPORT_LIST: "report-list",
     PROJECT_LIST: "project-list",
+    CREATE_BLOG :"create-blog",
+    VIEW_BLOG :"view-blog",
     ROLES: "/roles"
 }

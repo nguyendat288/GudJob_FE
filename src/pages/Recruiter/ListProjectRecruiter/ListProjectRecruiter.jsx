@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Tooltip } from '@mui/material'
+import { Box, Button, Tooltip } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Header from '../LayOutRecruiter/Header'
 import {  useNavigate } from 'react-router-dom';
@@ -35,10 +35,12 @@ const ListProjectRecruiter = () => {
                     </Tooltip>
                 </Box>
             </Box>
-            {listProject == null && (<>
+            {/* {listProject == null && (<>
                 <CircularProgress />
-            </>)}
+            </>)} */}
             <ShowList listProject={listProject} />
+           {/* <Pagination count={10} /> */}
+
         </Box>
     )
 }

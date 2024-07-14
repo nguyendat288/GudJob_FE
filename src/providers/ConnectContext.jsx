@@ -28,54 +28,59 @@ const ChatProvider = ({ children }) => {
     const [haveMess, setHaveMessage] = useState(0);
 
     useEffect(() => {
-        chatSelectRef.current = chatSelect; // Update the ref whenever chatSelect changes
-    }, [chatSelect]);
-
-    useEffect(() => {
         const getData = async () => {
             try {
-                if (!isConnect && currentUser!=null) {
+                if (!isConnect && currentUser != null) {
                     const connection = new HubConnectionBuilder()
                         .withUrl(`${BASE_URL}/chat`)
                         .configureLogging(LogLevel.Information)
                         .build();
-
-                    connection.on("ReceivedNotification", (data) => {
-                        const sound = new Audio(messageSound);
-                        sound.play();
-                        setListNotification((prevNotifications) => [data, ...prevNotifications]);
-                        setNumberOfNotification((prevNumber) => prevNumber + 1);
-                    });
-
-                    connection.on("ReceivedMessage", (data) => {
-                        const sound = new Audio(messageSound);
-                        sound.play();
-                        if (chatSelectRef?.current == data?.conversationId) {
-                            setListMessage(msg => [...msg, data])
-                        }
-                        setNumberOfMessage((prevNumber) => prevNumber + 1);
-                        setHaveMessage((prevNumber) => prevNumber + 1);
-                    })
-
-                    connection.on("HaveMessage", (data) => {
-                        setHaveMessage(data);
-                    })
-
+                    console.log(connection);
+                    
                     connection.onclose(e => {
                         setConnection(null);
                         setIsConnect(false)
                         setListNotification([])
                     });
-
                     await connection.start();
                     await connection.invoke("SaveUserConnection", currentUser?.userId)
                     setConnection(connection);
+                    setIsConnect(true)
                 }
             } catch (e) {
             }
         }
         getData()
-    }, [currentUser])
+    }, [currentUser,isConnect])
+
+    useEffect(() => {
+        if (isConnect == true && connection != null) {
+            connection.on("ReceivedNotification", (data) => {
+                const sound = new Audio(messageSound);
+                sound.play();
+                setListNotification((prevNotifications) => [data, ...prevNotifications]);
+                setNumberOfNotification((prevNumber) => prevNumber + 1);
+            });
+            connection.on("ReceivedMessage", (data) => {
+                const sound = new Audio(messageSound);
+                sound.play();
+                if (chatSelectRef?.current == data?.conversationId) {
+                    setListMessage(msg => [...msg, data])
+                }
+                setNumberOfMessage((prevNumber) => prevNumber + 1);
+                setHaveMessage((prevNumber) => prevNumber + 1);
+            })
+            connection.on("HaveMessage", (data) => {
+                setHaveMessage(data);
+            })
+        }
+    }, [isConnect])
+
+    useEffect(() => {
+        chatSelectRef.current = chatSelect; // Update the ref whenever chatSelect changes
+    }, [chatSelect]);
+
+    console.log("connectionnnnn " + connection);
 
     useEffect(() => {
         const getNotification = async () => {
@@ -95,7 +100,7 @@ const ChatProvider = ({ children }) => {
             }
         }
         GetNumberMessage()
-    }, [currentUser,haveMess])
+    }, [currentUser, haveMess])
 
     useEffect(() => {
         const getNotification = async () => {
@@ -115,7 +120,7 @@ const ChatProvider = ({ children }) => {
             }
         }
         getUserConnect()
-    }, [haveMess])
+    }, [currentUser, haveMess])
 
     useEffect(() => {
         const getListMessages = async () => {
