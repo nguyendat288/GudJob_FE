@@ -5,7 +5,7 @@ import TopBarFreelancer from '../../Freelancer/LayOut/TopBarFreelancer'
 
 const LayOutRecruiter = () => {
   return (
-    <Box display='flex' height="100vh">
+    <Box display='flex' height="100%">
       <SideBarRecruiter />
       <Box flex='4' display='flex' flexDirection='column' height="100%">
         <TopBarFreelancer />

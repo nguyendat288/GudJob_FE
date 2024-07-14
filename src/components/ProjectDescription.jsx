@@ -68,6 +68,7 @@ const ProjectDescription = ({ description }) => {
           default:
             return undefined; // Use default parsing for other tags
         }
+
       }
     },
   });

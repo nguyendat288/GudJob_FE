@@ -1,4 +1,5 @@
 import axios from 'axios'
+import axiosClient from '../utils/axiosClient'
 import { toast } from 'react-toastify'
 import { BASE_URL } from '.'
 
@@ -16,6 +17,19 @@ const categoryApi = {
             }
         }
     },
+    GetAllCategoryWithPagination: async ({page, pageSize}) => {
+        try {
+            const params = {
+                pageIndex: page,
+                pageSize: pageSize
+            };
+
+            const response = await axiosClient.get(`${BASE_URL}/api/Categories/GetByStatus`, { params })
+            return response;
+        } catch (error) {
+            throw error
+        }
+    },
     GetByCategoryId: async (id) => {
         try {
             const response = await axios.get(`${BASE_URL}/api/Skill/GetByCategoryId?CategoryId=${id}`)
@@ -27,6 +41,38 @@ const categoryApi = {
             if (error.response.status === 501) {
                 toast.error("Username or Phone or Email exist")
             }
+        }
+    },
+    AddCategory: async (params) => {
+        try {
+            const response = await axiosClient.post(`${BASE_URL}/api/Categories/AddCategory`, params)
+            return response
+        } catch (error) {
+            throw error
+        }
+    },
+    UpdateCategory: async (params) => {
+        try {
+            const response = await axiosClient.put(`${BASE_URL}/api/Categories/UpdateCategory`, params)
+            return response
+        } catch (error) {
+            throw error
+        }
+    },
+    DeleteCategory: async (id) => {
+        try {
+            const response = await axiosClient.delete(`${BASE_URL}/api/Categories/DeleteCategory?categoryId=${id}`)
+            return response
+        } catch (error) {
+            throw error
+        }
+    },
+    RestoreDeleted: async (id) => {
+        try {
+            const response = await axiosClient.put(`${BASE_URL}/api/Categories/RestoreDeleted?id=${id}`)
+            return response
+        } catch (error) {
+            throw error
         }
     }
 }

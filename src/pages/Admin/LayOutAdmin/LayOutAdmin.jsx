@@ -10,9 +10,9 @@ const LayOutAdmin = () => {
             <SideBarAdmin />
             <Box component="main" className="flex-grow p-4 ml-64 mt-16">
                 <TopBarAdmin />
-                <main className="flex-grow p-4 bg-gray-50">
-                <Outlet />
-            </main>
+                <div className="flex-grow bg-gray-50">
+                    <Outlet />
+                </div>
             </Box>
         </Box>
     );

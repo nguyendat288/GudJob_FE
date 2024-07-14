@@ -81,6 +81,22 @@ const profileApi = {
             throw error;
         }
     },
+
+    getUserProjectByStatus: async ({statusId, userId, pageIndex, pageSize}) => {
+        try {
+            const params = {
+                statusId: statusId,
+                userId: userId,
+                PageIndex: pageIndex,
+                PageSize: pageSize,
+            };
+
+            const response = await axiosClient.get(`${BASE_URL}/api/Projects/GetByStatus`, { params })
+            return response;
+        } catch (error) {
+            throw error
+        }
+    },
 }
 
 export default profileApi

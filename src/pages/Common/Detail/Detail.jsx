@@ -87,18 +87,20 @@ const Detail = () => {
 
     const handleDelete = async (id) => {
         setLoading(true);
-        await projectApi.DeleteProject(id,navigate);
-        setLoading(false);
+
+        try {
+            await projectApi.DeleteProject(id, navigate);
+            setLoading(false);
+        } catch (error) {
+            toast.error("Failed to delete project");
+        }
     }
 
     const handleAccept = async (id) => {
         setLoading(true);
-        let data = {
-            id: id,
-            isAccepted: true
-        }
+        let bidid = id;
         try {
-            await biddingApi.AcceptBidding(data, navigate);
+            await biddingApi.AcceptBidding(bidid, navigate);
             toast.success("Bidding accepted");
         } catch (error) {
             toast.error("Failed to accept bidding");
@@ -153,6 +155,7 @@ const Detail = () => {
                                     currentUser={currentUser}
                                     createdBy={detail?.createdBy}
                                     handleAccept={handleAccept}
+                                    detail={detail}
                                 />
                             )}
                         </TabPanel>
@@ -211,7 +214,6 @@ const Detail = () => {
                     </Box>
                     <Box display="flex" justifyContent="space-between" p={2}>
                         <Button variant='contained' onClick={handleSubmit}>Bid</Button>
-                        <Button variant='contained' onClick={() => setLoading(true)}>Loading</Button>
                     </Box>
                 </Box>
             </Modal>

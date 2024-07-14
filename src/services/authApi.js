@@ -39,6 +39,10 @@ const authApi = {
             if (error.response.status === 501) {
                 toast.error("Username or Phone or Email exist")
             }
+            if (error.response.status === 409) {
+                toast.error(error.response.message)
+            }
+            toast.error(error.response.data.message)
         }
     },
     sendCode: async (email) => {

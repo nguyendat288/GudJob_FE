@@ -1,10 +1,11 @@
 import React from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Box, Divider, List, ListItemButton, ListItemText } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
 import WorkIcon from '@mui/icons-material/School';
 import Avatar from '@mui/material/Avatar';
+import BallotIcon from '@mui/icons-material/Ballot';
 import { useSelector } from 'react-redux';
 
 function SideBar() {
@@ -27,13 +28,15 @@ function SideBar() {
       link: "experience-education",
       icon: <WorkIcon />
     },
+    {
+      title: "Dự án của bạn",
+      link: "current-project",
+      icon: <BallotIcon />
+    },
   ];
 
   return (
-    <Box display="flex" className="h-screen">
-      {/* Sidebar */}
       <Box className="w-64 bg-gray-100 text-gray-800 border-r-2 border-gray-200">
-        {/* Avatar */}
         <div className="flex items-center justify-center h-20 bg-gray-100">
           <Avatar
             alt="Avatar"
@@ -41,7 +44,6 @@ function SideBar() {
             sx={{ height: 64, width: 64 }} />
         </div>
         <Divider />
-        {/* Sidebar links */}
         <List>
           {sidebarData.map((item, index) => {
             const isSelected = location.pathname.includes(item.link);
@@ -87,11 +89,6 @@ function SideBar() {
           })}
         </List>
       </Box>
-
-      <Box flex={1} p={4} className="overflow-y-auto">
-        <Outlet />
-      </Box>
-    </Box>
   );
 }
 

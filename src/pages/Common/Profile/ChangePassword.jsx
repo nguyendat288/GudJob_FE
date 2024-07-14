@@ -35,14 +35,8 @@ function ChangePassword() {
         return;
     }
 
-    const data = {
-        password: currentPassword,
-        newPassword: newPassword,
-        newPasswordConfirm: confirmPassword
-    };
-
     try {
-        const response = await profileApi.changePassword(currentPassword, newPassword, confirmPassword);
+        await profileApi.changePassword(currentPassword, newPassword, confirmPassword);
         toast.success("Password changed successfully!");
     } catch (error) {
         if (error.response && error.response.data) {
@@ -55,7 +49,7 @@ function ChangePassword() {
 
 
   return (
-    <Box p={3} borderRadius={5} border="1px solid #ccc" component="form" onSubmit={handleSave}>
+    <Box p={3} m={3} borderRadius={5} border="1px solid #ccc" component="form" onSubmit={handleSave}>
       <Typography sx={{fontSize: "2em"}} variant="h4" gutterBottom>Thay đổi mật khẩu</Typography>
       
       <Box mb={2}>

@@ -1,10 +1,12 @@
 import { Box, Button, Checkbox, FormControlLabel, InputAdornment, MenuItem, OutlinedInput, Pagination, Select, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+
 import projectApi from '../../../services/projectApi';
 import ShowList from '../../Recruiter/ListProjectRecruiter/ShowList';
 import categoryApi from '../../../services/categoryApi';
 import FilterListIcon from '@mui/icons-material/FilterList';
+
 const Filter = () => {
   const { idCate } = useParams()
 
@@ -20,17 +22,17 @@ const Filter = () => {
   const [minBudget, setMinBudget] = useState(0)
   const [maxBudget, setMaxBudget] = useState(100)
 
+
   useEffect(() => {
     const getData = async () => {
       let data = {
         pageIndex: page,
         pageSize: 5,
         categoryId: idCate,
-      }
+      };
       let res = await projectApi.filterProject(data);
       setListProject(res)
       setTotalPage(Math.ceil(res?.totalItemsCount / 5));
-
     }
     getData()
   }, [idCate,page])
@@ -38,18 +40,20 @@ const Filter = () => {
   useEffect(() => {
     const getData = async () => {
       let res = await categoryApi.GetAllCategory();
-      setListCategory(res)
-    }
-    getData()
-  }, [])
+      setListCategory(res);
+    };
+    getData();
+  }, []);
 
   useEffect(() => {
     const getData = async () => {
-      let res = await categoryApi.GetByCategoryId(categoryId);
-      setListSkill(res?.items)
-    }
-    getData()
-  }, [categoryId])
+      if (categoryId) {
+        let res = await categoryApi.GetByCategoryId(categoryId);
+        setListSkill(res?.items);
+      }
+    };
+    getData();
+  }, [categoryId]);
 
   const handleSelect = (item) => {
     if (listSkillSelected.includes(item.id)) {
@@ -60,10 +64,11 @@ const Filter = () => {
   };
 
   const handleChangeCategory = (id) => {
-    setListSkillSelected([])
-    setCategoryId(id)
-  }
-  const hanldeFilter = async () => {
+    setListSkillSelected([]);
+    setCategoryId(id);
+  };
+
+  const handleFilter = async () => {
     let data = {
       pageIndex: 1,
       pageSize: 20,
@@ -72,7 +77,7 @@ const Filter = () => {
       minBudget: minBudget,
       maxBudget: maxBudget,
       duration: duration
-    }
+    };
     let res = await projectApi.filterProject(data);
     setListProject(res)
   }
@@ -83,7 +88,7 @@ const Filter = () => {
 
   return (
     <Box display='flex' mt={3} ml={3}>
-      <Box flex='3' >
+      <Box flex='3'>
         <ShowList listProject={listProject} />
         <Box mt={2} display='flex' justifyContent='center' alignItems='center'>
             <Pagination
@@ -168,7 +173,7 @@ const Filter = () => {
                 'aria-label': 'Max Budget',
               }}
             />
-            <Button variant='contained' color='primary' onClick={() => hanldeFilter()}>
+            <Button variant='contained' color='primary' onClick={() => handleFilter()}>
               Filter
             </Button>
           </Box>
@@ -177,4 +182,5 @@ const Filter = () => {
   )
 }
 
-export default Filter
+
+export default Filter;

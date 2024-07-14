@@ -7,6 +7,8 @@ import GroupIcon from '@mui/icons-material/Group';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import CategoryIcon from '@mui/icons-material/Category';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import BookIcon from '@mui/icons-material/Book';
@@ -32,9 +34,14 @@ function SideBarAdmin() {
       icon: <ReportProblemIcon />
     },
     {
-      title: "Project List",
+      title: "Project Management",
       link: "/project-list",
-      icon: <AssignmentIndIcon />
+      icon: <AssignmentIcon />
+    },
+    {
+      title: "Category Management",
+      link: "/category-list",
+      icon: <CategoryIcon />
     },
     {
       title: "Blog List",

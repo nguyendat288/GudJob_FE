@@ -5,13 +5,14 @@ import { ROLES } from '../../../constaints/role';
 import reportApi from '../../../services/reportApi';
 import { toast } from 'react-toastify';
 import ReportModal from '../Profile/component/ReportModal';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import FlagCircleIcon from '@mui/icons-material/FlagCircle';
 import { useNavigate } from 'react-router-dom';
-const ListBidding = ({ listBidding, currentUser, createdBy, handleAccept }) => {
+
+const ListBidding = ({ listBidding, currentUser, createdBy, handleAccept, detail }) => {
+
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [bid, setBid] = useState();
-const navigate = useNavigate()
+    const navigate = useNavigate()
     const handleReport = async (reportData) => {
         await reportApi.createReport(reportData);
         toast.error('Đã khiếu nại dự án')
@@ -21,7 +22,7 @@ const navigate = useNavigate()
         setBid(id);
         setIsReportModalOpen(true);
     }
-    const handleNameClick=(userId)=>{
+    const handleNameClick = (userId) => {
         navigate(`/profile/${userId}`)
     }
     return (
@@ -44,17 +45,16 @@ const navigate = useNavigate()
                                             src={item?.appUser?.avatar} />
                                         <Box ml={2}>
                                             <Box display='flex' alignItems='center'>
-                                                <Typography 
-                                                fontSize='15px' 
-                                                fontWeight='bold'
-                                                onClick={() => handleNameClick(item?.appUser?.id)}
-                                                sx={{ cursor: 'pointer' }}
+
+                                                <Typography
+                                                    fontSize='15px'
+                                                    fontWeight='bold'
+                                                    onClick={() => handleNameClick(item?.appUser?.id)}
+                                                    sx={{ cursor: 'pointer' }}
                                                 >
-                                                     {item?.appUser?.name} </Typography>
-                                                <Tooltip title="Report this project">
-                                                    <FlagCircleIcon  onClick={() => handleClickReport(item?.id)} className="text-red-600 cursor-pointer ml-2 mb-2" />
-                                                </Tooltip>
+                                                    {item?.appUser?.name} </Typography>
                                             </Box>
+                                            
                                             <Box sx={{ display: 'flex', gap: 1 }}>
                                                 <Typography
                                                     sx={{
@@ -78,10 +78,18 @@ const navigate = useNavigate()
                                         <Typography> in {item?.duration} days </Typography>
                                     </Box>
                                 </Box>
-                                <Box mt={1}>
+                                <Box display='flex' justifyContent='space-between' alignItems='center' mt={1}>
                                     <Typography>{item?.proposal} </Typography>
+                                    <Box display='flex' alignItems='center'>
+                                        <Tooltip title="Report this bidding">
+                                            <Box display='flex' alignItems='center' onClick={() => handleClickReport(item?.id)} className="text-blue-600 cursor-pointer">
+                                                <FlagCircleIcon />
+                                                <Typography ml={1} fontSize='12px'>Report Bidding</Typography>
+                                            </Box>
+                                        </Tooltip>
+                                    </Box>
                                 </Box>
-                                {currentUser != null && currentUser?.role === ROLES.RECRUITER && currentUser?.userId === createdBy && (
+                                {currentUser != null && currentUser?.role === ROLES.RECRUITER && currentUser?.userId === createdBy && detail.projectStatus.id !== 3 && (
                                     <>
                                         <Box display='flex' mt={1} ml='auto'>
                                             <Button variant='contained' onClick={(e) => handleAccept(item?.id)}>Accept</Button>

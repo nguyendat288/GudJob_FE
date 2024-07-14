@@ -57,7 +57,7 @@ const Register = () => {
   };
 
   const handleSelectSkill = (selectedSkills) => {
-    setFormData({ ...formData, skills: selectedSkills });
+    setFormData({ ...formData, skills: [selectedSkills] });
   };
 
   const handleRoleSelect = (selectedRole) => {
@@ -106,8 +106,10 @@ const Register = () => {
         skill: roles.includes('Freelancer') ? formData.skills : []
       };
       try {
-        await authApi.register(data, navigate);
-        toast.success("Registration successful!");
+        const respone = await authApi.register(data, navigate);
+        if (respone) {
+          toast.success("Registration successful!");
+        }
       } catch (error) {
         toast.error("Registration failed. Please try again.");
       }
