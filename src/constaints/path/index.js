@@ -18,6 +18,7 @@ export const FREELANCER_PATH = {
     PROFILE_SETTING: "/profile-setting",
     CHANGE_PASSWORD: "/change-password",
     EXPERIENCE_EDUCATION: "/experience-education",
+    CURRENT_PROJECT: "current-project",
     SETTING: "/setting",
     CHAT :'/chat/:conversationId/:userId'
 }
@@ -37,5 +38,6 @@ export const ADMIN_PATH = {
     LIST_USERS: "/users-list",
     REPORT_LIST: "report-list",
     PROJECT_LIST: "project-list",
+    CATEGORY_LIST: "category-list",
     ROLES: "/roles"
 }

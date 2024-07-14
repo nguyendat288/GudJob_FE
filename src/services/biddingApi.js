@@ -23,10 +23,9 @@ const biddingApi = {
         }
     },
 
-    AcceptBidding: async (data,navigate) => {
+    AcceptBidding: async (bidid,navigate) => {
         try {
-            const response = await axiosClient.put(`${BASE_URL}/api/Bid/AcceptBidding`, data)
-            toast.success('accept success')
+            const response = await axiosClient.put(`${BASE_URL}/api/Projects/AcceptBid?bidid=${bidid}`)
             navigate(`/recruiter`)
             return response
         } catch (error) {

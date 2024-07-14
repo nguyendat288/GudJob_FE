@@ -12,7 +12,7 @@
     "fast_lock_unlock": "Fast Lock/Unlock",
     "created_by": "Created By",
     "report_information": "Report Information",
-    "report_name": "Report Name",
+    "report_name": "Reason",
     "description": "Description",
     "approved": "Approved",
     "pending": "Pending",
