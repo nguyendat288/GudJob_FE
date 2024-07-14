@@ -31,6 +31,7 @@ import TopBarFreelancer from "../pages/Freelancer/LayOut/TopBarFreelancer";
 import Chat from "../pages/Common/Chat/Chat";
 import ListProject from "../pages/Admin/List/ListProject";
 import CurrentProject from "../pages/Common/Profile/CurrentProject";
+import ListCategory from "../pages/Admin/List/ListCategory";
 
 export default function Router() {
   let router = useRoutes([
@@ -109,7 +110,7 @@ export default function Router() {
       element: <LayOutFreelancer />,
       children: [
         {
-          element: <RequireAuth allowedRoles={ROLES.FREELANCER} />,
+          element: <RequireAuth allowedRoles={[ROLES.FREELANCER, ROLES.RECRUITER]} />,
           children: [
             {
               path: FREELANCER_PATH.PROFILE,
@@ -155,7 +156,7 @@ export default function Router() {
       element: <Setting />,
       children: [
         {
-          element: <RequireAuth allowedRoles={ROLES.FREELANCER} />,
+          element: <RequireAuth allowedRoles={[ROLES.FREELANCER, ROLES.RECRUITER]} />,
           children: [
             {
               path: FREELANCER_PATH.PROFILE_SETTING,
@@ -273,7 +274,7 @@ export default function Router() {
       element: <LayOutAdmin />,
       children: [
         {
-          element: <RequireAuth allowedRoles={ROLES.FREELANCER} />,
+          element: <RequireAuth allowedRoles={ROLES.ADMIN} />,
           children: [
             {
               path: ADMIN_PATH.HOME_ADMIN,
@@ -304,6 +305,14 @@ export default function Router() {
               element: (
                 <Suspense fallback={<>Loading...</>}>
                   <ListProject />
+                </Suspense>
+              )
+            },
+            {
+              path: ADMIN_PATH.CATEGORY_LIST,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <ListCategory />
                 </Suspense>
               )
             },

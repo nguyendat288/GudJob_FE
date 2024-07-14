@@ -96,18 +96,20 @@ const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSiz
       renderCell: (params) => {
         const { reportToUrl, bidName, projectName } = params.row;
         return (
-          <Typography>
-            {reportToUrl ? `URL user: ${reportToUrl}` :
-              bidName ? `Bid Name: ${bidName}` :
-                projectName ? `Project Name: ${projectName}` :
-                  'No Information'}
-          </Typography>
+          <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
+            <Typography>
+              {reportToUrl ? `URL user: ${reportToUrl}` :
+                bidName ? `Bid Name: ${bidName}` :
+                  projectName ? `Project Name: ${projectName}` :
+                    'No Information'}
+            </Typography>
+          </Box>
         );
       }
     },
     {
       field: 'reportName',
-      headerName: 'Report Name',
+      headerName: 'Reason',
       sortable: false,
       width: 200,
       flex: 1,
@@ -120,7 +122,7 @@ const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSiz
       width: 300,
       flex: 1,
       renderCell: (params) => (
-        <div>
+        <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
           <Typography
             aria-owns={open ? 'mouse-over-popover' : undefined}
             aria-haspopup="true"
@@ -149,7 +151,7 @@ const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSiz
           >
             <Typography sx={{ p: 1 }}>{popoverContent}</Typography>
           </Popover>
-        </div>
+        </Box>
       )
     },
     {
@@ -161,9 +163,13 @@ const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSiz
       filterOperators: statusOperators,
       renderCell: (params) => (
         params.value ? (
-          <Typography>Đã Duyệt <CheckCircleOutlineIcon color='success' /></Typography>
+          <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
+            <Typography>Đã Duyệt <CheckCircleOutlineIcon color='success' /></Typography>
+          </Box>
         ) : (
-          <Typography>Chờ Duyệt <ErrorOutlineIcon color='warning' /></Typography>
+          <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
+            <Typography>Chờ Duyệt <ErrorOutlineIcon color='warning' /></Typography>
+          </Box>
         )
       )
     },
