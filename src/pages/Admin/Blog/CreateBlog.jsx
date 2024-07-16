@@ -1,0 +1,134 @@
+// import { Box } from '@mui/material'
+// import React from 'react'
+
+// const CreateBlog = () => {
+
+//     function CustomUploadAdapterPlugin(editor) {
+//         editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+//           return customUploadAdapter(loader);
+//         };
+//       }
+
+//       const handleUpload = (e) => {
+//         if (e) {
+//           if (e.name.endsWith('.jpg') || e.name.endsWith('.png')) {
+//             setLoading(true);
+//             const imgRef = ref(imageDb, `file/${v4()}`);
+//             uploadBytes(imgRef, e)
+//               .then(value => getDownloadURL(value.ref))
+//               .then(url => setImage(url))
+//               .catch(error => {
+//                 console.error(error);
+//                 toast.error('Upload failed');
+//               })
+//               .finally(() => setLoading(false));
+//           } else {
+//             toast.error('File is not an image');
+//           }
+//         } else {
+//           toast.error('No file selected');
+//         }
+//       };
+//     const handleDescriptionChange = (event, editor) => {
+//         const data = editor.getData();
+//         setDescription(data);
+//       };
+    
+     
+//     const handleCreateBlog = async () => {
+//         if (title.length < 10
+//           || title.length > 100 ||
+//           description.length < 10 ||
+//           description.length > 1000 ||
+//           image == ''
+//         ) {
+//           toast.error("Dữ liệu nhập vào không hợp lệ !!!")
+//           return;
+//         }
+    
+//         setLoading(true)
+//         try {
+//           let data = {
+//             createdBy: userId,
+//             title: title,
+//             description: description,
+//             categoryId: categoryId,
+//             blogImage: image,
+//             isPublished: true
+//           }
+    
+//           await blogApi.CreateBlog(data)
+//         } catch (error) {
+//           console.log(error);
+//         }
+//         setLoading(false)
+//       }
+//     return (
+//         <Box>
+//             {loading && <LoadingComponent loading={loading} />}
+
+//             <Box sx={style}>
+//                 <Box textAlign='center' mb={2}>
+//                     <TypographyHeader title="Tạo bài viết" />
+//                 </Box>
+//                 <Divider />
+
+//                 <TypographyTitle title="Tiêu đề " />
+//                 <TextField
+//                     placeholder='Nhập tiêu đề ....'
+//                     fullWidth
+//                     variant="outlined"
+//                     onChange={(e) => setTitle(e.target.value)}
+//                 />
+
+//                 <TypographyTitle title="Chủ đề của bài viết " />
+//                 <Select
+//                     fullWidth
+//                     sx={{ bgcolor: '#FFFFFF', mb: 2 }}
+//                     value={categoryId}
+//                     onChange={(e) => handleChangeCategory(e.target.value)}
+//                 >
+//                     {listCategory?.length > 0 && listCategory.map((item, index) => (
+//                         <MenuItem key={index} value={item?.id}>{item?.categoryName}</MenuItem>
+//                     ))}
+//                 </Select>
+
+//                 <TypographyTitle mt={1} title="Ảnh chủ đề " />
+//                 <Button
+//                     variant="contained"
+//                     component="label"
+//                 >
+//                     Upload File
+//                     <input
+//                         type="file"
+//                         hidden
+//                         onChange={(e) => handleUpload(e.target.files[0])}
+//                     />
+//                 </Button>
+
+//                 {image && <img src={image} alt="Uploaded" style={{ marginTop: '10px', maxHeight: '200px' }} />}
+
+//                 <TypographyTitle mt={1} title="Mô tả " />
+//                 <CKEditor
+
+//                     editor={ClassicEditor}
+//                     data={description}
+//                     config={{
+//                         extraPlugins: [CustomUploadAdapterPlugin]
+//                     }}
+//                     onReady={editor => {
+//                         editor.ui.view.editable.element.style.height = '100px';
+//                     }}
+//                     onChange={handleDescriptionChange}
+//                 />
+
+//                 <Button variant='contained'
+//                     disabled={loading}
+//                     onClick={(e) => handleCreateBlog(e)}> Tạo bài viết </Button>
+
+//             </Box>
+//         </Box>
+//     )
+// }
+
+// export default CreateBlog

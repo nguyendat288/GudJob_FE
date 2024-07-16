@@ -33,6 +33,7 @@ import ListProject from "../pages/Admin/List/ListProject";
 import ViewBlog from "../pages/Admin/Blog/ViewBlog";
 import CurrentProject from "../pages/Common/Profile/CurrentProject";
 import ListCategory from "../pages/Admin/List/ListCategory";
+import CreateBlog from "../pages/Admin/Blog/CreateBlog";
 
 export default function Router() {
   let router = useRoutes([
@@ -330,7 +331,25 @@ export default function Router() {
           ]
         }
       ]
-    }
+    },
+    // {
+    //   path: ADMIN_PATH.LAYOUT,
+    //   children: [
+    //     {
+    //       element: <RequireAuth allowedRoles={ROLES.ADMIN} />,
+    //       children: [
+    //         {
+    //           path: ADMIN_PATH.CREATE_BLOG,
+    //           element: (
+    //             <Suspense fallback={<>Loading...</>}>
+    //               <CreateBlog />
+    //             </Suspense>
+    //           )
+    //         },
+    //       ]
+    //     }
+    //   ]
+    // }
   ])
   return router
 

@@ -13,6 +13,7 @@ const ListMessages = ({ user, messages, currentUser }) => {
     useEffect(() => {
         scrollToBottom();
     }, [messages]); 
+    
     return (
         <Box sx={{ height: height, overflowY: 'auto' }}>
             {messages.map((message, index) => (

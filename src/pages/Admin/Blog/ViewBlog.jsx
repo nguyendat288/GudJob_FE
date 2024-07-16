@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, Modal, Select, TextField, MenuItem, Tooltip, Typography } from '@mui/material'
+import { Box, Button, FormControl, Modal, Select, TextField, MenuItem, Tooltip, Typography, Divider } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +16,9 @@ import customUploadAdapter from '../../../firebase/customUploadAdapter';
 import 'ckeditor5/ckeditor5.css';
 import categoryApi from '../../../services/categoryApi';
 import LoadingComponent from '../../../components/LoadingComponent';
+import blogApi from '../../../services/blogApi';
+import DataGrids from './DataGrids';
+import { formatDateTime } from '../../../utils/formatDate';
 
 const ViewBlog = () => {
   const userId = useSelector((state) => state.auth.login?.currentUser?.userId);
@@ -27,6 +30,70 @@ const ViewBlog = () => {
   const [image, setImage] = useState("")
   const [description, setDescription] = useState("")
   const [loading, setLoading] = useState(false)
+
+  const [listBlog, setListBlog] = useState([])
+  useEffect(() => {
+    const getData = async () => {
+      let res = await blogApi.GetAllBlog(1, 10);
+      setListBlog(res?.items)
+    }
+    getData()
+  }, [])
+  console.log(listBlog);
+
+  const columns = [
+    {
+      field: "author",
+      headerName: "Tác giả",
+      width: 150,
+    },
+    {
+      field: "categoryName",
+      headerName: "Chủ đề ",
+      width: 250,
+    },
+    {
+      field: "title",
+      headerName: "Tiêu đề",
+      width: 250,
+    },
+    {
+      field: "createDate",
+      headerName: "Ngày tạo",
+      width: 250,
+          renderCell: (params) => (
+            <>
+                <Box mt={2}>
+                    <Typography> {formatDateTime(params?.row?.createDate)} </Typography>
+                </Box>
+            </>
+        )
+    },
+    // {
+    //     field: "score",
+    //     headerName: "Score",
+    //     width: 100,
+    //     renderCell: (params) => (
+    //         <>
+    //             <Box mt={2}>
+
+    //                 <Typography> {params?.row?.score}/{params?.row?.test?.numberQuestion} </Typography>
+    //             </Box>
+    //         </>
+    //     )
+    // },
+    // {
+    //     field: "gg",
+    //     headerName: "Action",
+    //     width: 100,
+    //     renderCell: (params) => (
+    //         <>
+    //             <Button variant='contained' onClick={(e) => handleDetail(params?.row?.testDetailId, params?.row?.testId,params?.row?.user?.userId)}>Detail</Button>
+    //         </>
+    //     )
+    // }
+  ]
+
   useEffect(() => {
     const getData = async () => {
       if (open) {
@@ -73,6 +140,7 @@ const ViewBlog = () => {
     const data = editor.getData();
     setDescription(data);
   };
+
   const handleCreateBlog = async () => {
     if (title.length < 10
       || title.length > 100 ||
@@ -91,9 +159,11 @@ const ViewBlog = () => {
         title: title,
         description: description,
         categoryId: categoryId,
-        blogImage: image
+        blogImage: image,
+        isPublished: true
       }
-      console.log(data);
+
+      await blogApi.CreateBlog(data)
     } catch (error) {
       console.log(error);
     }
@@ -116,8 +186,15 @@ const ViewBlog = () => {
             </Button>
           </Tooltip>
         </Box>
+
+      </Box>
+      <Box>
+        <DataGrids row={listBlog} column={columns} />
       </Box>
 
+
+
+      {/* Modal tạo bài viết blog */}
       <Modal
         open={open}
         onClose={handleClose}
@@ -126,8 +203,10 @@ const ViewBlog = () => {
           {loading && <LoadingComponent loading={loading} />}
 
           <Box sx={style}>
-
+<Box textAlign='center' mb={2}>
             <TypographyHeader title="Tạo bài viết" />
+</Box>
+<Divider/>
 
             <TypographyTitle title="Tiêu đề " />
             <TextField
@@ -166,11 +245,13 @@ const ViewBlog = () => {
 
             <TypographyTitle mt={1} title="Mô tả " />
             <CKEditor
+            
               editor={ClassicEditor}
               data={description}
               config={{
                 extraPlugins: [CustomUploadAdapterPlugin]
               }}
+              
               onChange={handleDescriptionChange}
             />
 
@@ -193,7 +274,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 600,
+  width: 500,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
