@@ -1,7 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import { AppBar, Badge, Box, Button, Container, IconButton, InputBase, List, ListItem, ListItemButton, ListItemText, Menu, Popover, Toolbar, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import {
+  AppBar,
+  Badge,
+  Box,
+  Button,
+  Container,
+  IconButton,
+  InputBase,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Menu,
+  Popover,
+  Toolbar,
+  Typography,
+  Tooltip,
+} from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
@@ -28,7 +44,7 @@ const TopBarFreelancer = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const [profile, setProfile] = useState();
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [topMenuAnchorEl, setTopMenuAnchorEl] = useState(null);
@@ -44,9 +60,8 @@ const TopBarFreelancer = () => {
     setListNotification,
     numberOfNotification,
     setNumberOfNotification,
-    setChatSelect
+    setChatSelect,
   } = UseChatState();
-
 
   useEffect(() => {
     if (currentUser) {
@@ -79,20 +94,18 @@ const TopBarFreelancer = () => {
 
   const handleLogOut = async () => {
     try {
-      dispatch(logOutSuccess())
+      dispatch(logOutSuccess());
       localStorage.clear();
       if (connection != null) {
         await connection.stop();
       }
       navigate('/login');
       toast.success('Logout successfully!');
-    } catch (error) {
-    }
-  }
+    } catch (error) {}
+  };
   const handleSearch = () => {
-    navigate(`/search/${search}`)
-  }
-
+    navigate(`/search/${search}`);
+  };
 
   const handleNotificationClick = (event) => {
     setNumberOfNotification(0);
@@ -127,7 +140,9 @@ const TopBarFreelancer = () => {
       await notificationApi.MarkToRead(selectedNotification?.notificationId);
       updateNotificationStatus(selectedNotification?.notificationId);
     } else if (option === 'delete') {
-      await notificationApi.DeleteNotification(selectedNotification?.notificationId);
+      await notificationApi.DeleteNotification(
+        selectedNotification?.notificationId
+      );
       removeNotificationStatus(selectedNotification?.notificationId);
     }
     handleMenuClose();
@@ -171,7 +186,7 @@ const TopBarFreelancer = () => {
     setListNotification((prevNotifications) =>
       prevNotifications.map((notification) => ({
         ...notification,
-        isRead: 1
+        isRead: 1,
       }))
     );
   };
@@ -188,7 +203,9 @@ const TopBarFreelancer = () => {
 
   const removeNotificationStatus = (notificationId) => {
     setListNotification((prevNotifications) =>
-      prevNotifications.filter((notification) => notification.notificationId !== notificationId)
+      prevNotifications.filter(
+        (notification) => notification.notificationId !== notificationId
+      )
     );
   };
 
@@ -207,10 +224,9 @@ const TopBarFreelancer = () => {
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      handleSearch()
+      handleSearch();
     }
   };
-
 
   return (
     <>
@@ -230,37 +246,40 @@ const TopBarFreelancer = () => {
                 textDecoration: 'none',
                 mr: 2,
               }}
-              className='bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text'
+              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text"
             >
               GoodJob
             </Typography>
 
-            <Box display='flex' flex={1} maxWidth="600px" mx={2}>
-              {
-                currentUser?.role !== "Recruiter" && currentUser?.role !== "Admin" && (
+            <Box display="flex" flex={1} maxWidth="600px" mx={2}>
+              {currentUser?.role !== 'Recruiter' &&
+                currentUser?.role !== 'Admin' && (
                   <Box
-                    display='flex'
+                    display="flex"
                     flex={1}
-                    borderRadius='30px'
-                    bgcolor='#EEEEEE'
+                    borderRadius="30px"
+                    bgcolor="#EEEEEE"
                   >
                     <InputBase
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       onKeyDown={handleKeyPress}
-                      placeholder='Seach name project' sx={{ ml: 2, flex: 1 }} />
-                    <IconButton type='button'
+                      placeholder="Seach name project"
+                      sx={{ ml: 2, flex: 1 }}
+                    />
+                    <IconButton
+                      type="button"
                       onClick={(e) => handleSearch(e)}
-                      p={1}>
+                      p={1}
+                    >
                       <SearchOutlinedIcon />
                     </IconButton>
                   </Box>
-                )
-              }
+                )}
             </Box>
 
             {currentUser ? (
-              <Box display='flex' gap={2} alignItems='center'>
+              <Box display="flex" gap={2} alignItems="center">
                 <IconButton onClick={handleMessageClick}>
                   <Badge badgeContent={numberOfMessage} color="error">
                     <MessageOutlinedIcon />
@@ -268,7 +287,7 @@ const TopBarFreelancer = () => {
                 </IconButton>
 
                 <Popover
-                  id='message-popover'
+                  id="message-popover"
                   open={Boolean(anchorElMessage)}
                   anchorEl={anchorElMessage}
                   onClose={handleMessageClose}
@@ -282,8 +301,12 @@ const TopBarFreelancer = () => {
                   }}
                 >
                   <Box p={2}>
-                    <Box display='flex' justifyContent='space-between' alignItems='center'>
-                      <Typography variant='h6'>Messages</Typography>
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Typography variant="h6">Messages</Typography>
                     </Box>
                     <ListUser
                       listUser={userConnection}
@@ -300,7 +323,7 @@ const TopBarFreelancer = () => {
                 </IconButton>
 
                 <Popover
-                  id='notifications-popover'
+                  id="notifications-popover"
                   open={Boolean(anchorEl)}
                   anchorEl={anchorEl}
                   onClose={handleNotificationClose}
@@ -314,9 +337,13 @@ const TopBarFreelancer = () => {
                   }}
                 >
                   <Box p={2}>
-                    <Box display='flex' justifyContent='space-between' alignItems='center'>
-                      <Typography variant='h6'>Notifications</Typography>
-                      <IconButton edge='end' onClick={handleTopMenuOpen}>
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Typography variant="h6">Notifications</Typography>
+                      <IconButton edge="end" onClick={handleTopMenuOpen}>
                         <MoreVertIcon />
                       </IconButton>
                       <Menu
@@ -332,10 +359,16 @@ const TopBarFreelancer = () => {
                           horizontal: 'right',
                         }}
                       >
-                        <MenuItem onClick={() => handleTopMenuOptionClick('markAllAsRead')}>
+                        <MenuItem
+                          onClick={() =>
+                            handleTopMenuOptionClick('markAllAsRead')
+                          }
+                        >
                           Mark All as Read
                         </MenuItem>
-                        <MenuItem onClick={() => handleTopMenuOptionClick('deleteAll')}>
+                        <MenuItem
+                          onClick={() => handleTopMenuOptionClick('deleteAll')}
+                        >
                           Delete All
                         </MenuItem>
                       </Menu>
@@ -343,26 +376,43 @@ const TopBarFreelancer = () => {
                     <List sx={{ width: '250px' }}>
                       {listNotification?.length === 0 ? (
                         <ListItem>
-                          <ListItemText secondary='No notifications' />
+                          <ListItemText secondary="No notifications" />
                         </ListItem>
                       ) : (
                         listNotification.map((item, index) => (
                           <ListItemButton
                             key={index}
-                            sx={{ backgroundColor: getNotificationColor(item?.isRead) }}
-                            onClick={() => handleCheck(item?.link, item?.notificationId, item?.isRead)}
+                            sx={{
+                              backgroundColor: getNotificationColor(
+                                item?.isRead
+                              ),
+                            }}
+                            onClick={() =>
+                              handleCheck(
+                                item?.link,
+                                item?.notificationId,
+                                item?.isRead
+                              )
+                            }
                           >
                             <ListItemText
                               primary={
                                 <Box>
-                                  <Typography>{item?.sendUserName} {item?.description}</Typography>
-                                  <Typography style={{ color: 'gray', fontSize: '0.8em' }}>
+                                  <Typography>
+                                    {item?.sendUserName} {item?.description}
+                                  </Typography>
+                                  <Typography
+                                    style={{ color: 'gray', fontSize: '0.8em' }}
+                                  >
                                     {new Date(item?.datetime).toLocaleString()}
                                   </Typography>
                                 </Box>
                               }
                             />
-                            <IconButton edge='end' onClick={(event) => handleMenuOpen(event, item)}>
+                            <IconButton
+                              edge="end"
+                              onClick={(event) => handleMenuOpen(event, item)}
+                            >
                               <MoreVertIcon />
                             </IconButton>
                           </ListItemButton>
@@ -399,7 +449,9 @@ const TopBarFreelancer = () => {
 
                 <LanguageSelector />
 
-                <Typography sx={{ fontWeight: 'bold', color: "black" }}>{profile?.name}</Typography>
+                <Typography sx={{ fontWeight: 'bold', color: 'black' }}>
+                  {profile?.name}
+                </Typography>
 
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -443,9 +495,16 @@ const TopBarFreelancer = () => {
                 </Menu>
               </Box>
             ) : (
-              <Box display='flex' gap={2}>
-                <Button variant="outlined" onClick={() => navigate('/login')}>Sign in</Button>
-                <Button variant="outlined" onClick={() => navigate('/register')}>Sign up</Button>
+              <Box display="flex" gap={2}>
+                <Button variant="outlined" onClick={() => navigate('/login')}>
+                  Sign in
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate('/register')}
+                >
+                  Sign up
+                </Button>
               </Box>
             )}
           </Toolbar>
@@ -454,6 +513,6 @@ const TopBarFreelancer = () => {
       <Outlet />
     </>
   );
-}
+};
 
 export default TopBarFreelancer;

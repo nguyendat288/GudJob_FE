@@ -212,3 +212,9 @@ code {
   width: 400px;
   margin: auto 0;
 }
+
+.slider {
+  margin: 0 20px;
+  overflow: 'hidden';
+  padding: 2rem 0;
+}
