@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Box, TextField, Typography, Button, Divider, LinearProgress } from '@mui/material';
+import {
+  Box,
+  TextField,
+  Typography,
+  Button,
+  Divider,
+  Skeleton,
+} from '@mui/material';
 import DateSelector from './component/DateSelector';
 import profileApi from '../../../services/profileApi';
 import { useNavigate } from 'react-router-dom';
@@ -15,17 +22,19 @@ const ExperienceEducation = () => {
     startYear: '',
     endMonth: '',
     endYear: '',
-    description: ''
+    description: '',
   });
   const [education, setEducation] = useState({
     universityCollege: '',
     degree: '',
     startYear: '',
     endYear: '',
-    country: ''
+    country: '',
   });
-  const [isExperienceButtonDisabled, setIsExperienceButtonDisabled] = useState(true);
-  const [isEducationButtonDisabled, setIsEducationButtonDisabled] = useState(true);
+  const [isExperienceButtonDisabled, setIsExperienceButtonDisabled] =
+    useState(true);
+  const [isEducationButtonDisabled, setIsEducationButtonDisabled] =
+    useState(true);
   const [editIndex, setEditIndex] = useState(null);
   const [editingEducationIndex, setEditingEducationIndex] = useState(null);
   const [isExperienceFormVisible, setIsExperienceFormVisible] = useState(false);
@@ -37,8 +46,8 @@ const ExperienceEducation = () => {
         let res = await profileApi.getUserProfile();
         setProfile(res);
       } catch (error) {
-        console.error("Error fetching profile data:", error);
-        toast.error("Failed to load profile data.");
+        console.error('Error fetching profile data:', error);
+        toast.error('Failed to load profile data.');
       }
     };
     getData();
@@ -53,12 +62,16 @@ const ExperienceEducation = () => {
   };
 
   useEffect(() => {
-    const isExperienceFilled = Object.values(experience).every((val) => val !== '');
+    const isExperienceFilled = Object.values(experience).every(
+      (val) => val !== ''
+    );
     setIsExperienceButtonDisabled(!isExperienceFilled);
   }, [experience]);
 
   useEffect(() => {
-    const isEducationFilled = Object.values(education).every((val) => val !== '');
+    const isEducationFilled = Object.values(education).every(
+      (val) => val !== ''
+    );
     setIsEducationButtonDisabled(!isEducationFilled);
   }, [education]);
 
@@ -70,31 +83,31 @@ const ExperienceEducation = () => {
       company: experience.company,
       start: {
         month: experience.startMonth,
-        year: experience.startYear
+        year: experience.startYear,
       },
       end: {
         month: experience.endMonth,
-        year: experience.endYear
+        year: experience.endYear,
       },
-      summary: experience.description
+      summary: experience.description,
     };
 
     let updatedExperiences;
     if (editIndex !== null) {
-      // Editing an existing experience
-      updatedExperiences = profile.experiences.map((exp, index) => 
+      updatedExperiences = profile.experiences.map((exp, index) =>
         index === editIndex ? newExperience : exp
       );
     } else {
-      // Adding a new experience
-      updatedExperiences = profile.experiences ? [...profile.experiences, newExperience] : [newExperience];
+      updatedExperiences = profile.experiences
+        ? [...profile.experiences, newExperience]
+        : [newExperience];
     }
 
     try {
-      await profileApi.updateExperience(updatedExperiences, navigate, "update");
+      await profileApi.updateExperience(updatedExperiences, navigate, 'update');
       setProfile((prevProfile) => ({
         ...prevProfile,
-        experiences: updatedExperiences
+        experiences: updatedExperiences,
       }));
       setExperience({
         company: '',
@@ -103,17 +116,20 @@ const ExperienceEducation = () => {
         startYear: '',
         endMonth: '',
         endYear: '',
-        description: ''
+        description: '',
       });
       setEditIndex(null);
       setIsExperienceFormVisible(false);
-      toast.success("Experience updated successfully!");
+      toast.success('Experience updated successfully!');
     } catch (error) {
-      console.error("Error response from server:", error.response);
+      console.error('Error response from server:', error.response);
       if (error.response && error.response.data) {
-        toast.error(error.response.data.message || "Something went wrong. Please try again.");
+        toast.error(
+          error.response.data.message ||
+            'Something went wrong. Please try again.'
+        );
       } else {
-        toast.error("Something went wrong. Please try again.");
+        toast.error('Something went wrong. Please try again.');
       }
     }
   };
@@ -126,48 +142,51 @@ const ExperienceEducation = () => {
       degree: education.degree,
       start: {
         month: null,
-        year: parseInt(education.startYear)
+        year: parseInt(education.startYear),
       },
       end: {
         month: null,
-        year: parseInt(education.endYear)
+        year: parseInt(education.endYear),
       },
-      country: education.country
+      country: education.country,
     };
 
     let updatedEducation;
     if (editingEducationIndex !== null) {
-      // Editing an existing education
-      updatedEducation = profile.educations.map((edu, index) => 
+      updatedEducation = profile.educations.map((edu, index) =>
         index === editingEducationIndex ? newEducation : edu
       );
     } else {
-      // Adding a new education
-      updatedEducation = profile.educations ? [...profile.educations, newEducation] : [newEducation];
+      updatedEducation = profile.educations
+        ? [...profile.educations, newEducation]
+        : [newEducation];
     }
 
     try {
-      await profileApi.updateEducation(updatedEducation, navigate, "update");
+      await profileApi.updateEducation(updatedEducation, navigate, 'update');
       setProfile((prevProfile) => ({
         ...prevProfile,
-        educations: updatedEducation
+        educations: updatedEducation,
       }));
       setEducation({
         universityCollege: '',
         degree: '',
         startYear: '',
         endYear: '',
-        country: ''
+        country: '',
       });
       setEditingEducationIndex(null);
       setIsEducationFormVisible(false);
-      toast.success("Education updated successfully!");
+      toast.success('Education updated successfully!');
     } catch (error) {
-      console.error("Error response from server:", error.response);
+      console.error('Error response from server:', error.response);
       if (error.response && error.response.data) {
-        toast.error(error.response.data.message || "Something went wrong. Please try again.");
+        toast.error(
+          error.response.data.message ||
+            'Something went wrong. Please try again.'
+        );
       } else {
-        toast.error("Something went wrong. Please try again.");
+        toast.error('Something went wrong. Please try again.');
       }
     }
   };
@@ -179,7 +198,7 @@ const ExperienceEducation = () => {
       degree: edu.degree,
       startYear: edu.start.year,
       endYear: edu.end.year,
-      country: edu.country 
+      country: edu.country,
     });
     setEditingEducationIndex(index);
     setIsEducationFormVisible(true);
@@ -191,48 +210,58 @@ const ExperienceEducation = () => {
       degree: '',
       startYear: '',
       endYear: '',
-      country: ''
+      country: '',
     });
     setEditingEducationIndex(null);
     setIsEducationFormVisible(true);
   };
 
   const handleDeleteExperience = async (index) => {
-    const updatedExperiences = profile.experiences.filter((_, expIndex) => expIndex !== index);
+    const updatedExperiences = profile.experiences.filter(
+      (_, expIndex) => expIndex !== index
+    );
 
     try {
-      await profileApi.updateExperience(updatedExperiences, navigate, "delete");
+      await profileApi.updateExperience(updatedExperiences, navigate, 'delete');
       setProfile((prevProfile) => ({
         ...prevProfile,
-        experiences: updatedExperiences
+        experiences: updatedExperiences,
       }));
-      toast.success("Experience deleted successfully!");
+      toast.success('Experience deleted successfully!');
     } catch (error) {
-      console.error("Error response from server:", error.response);
+      console.error('Error response from server:', error.response);
       if (error.response && error.response.data) {
-        toast.error(error.response.data.message || "Something went wrong. Please try again.");
+        toast.error(
+          error.response.data.message ||
+            'Something went wrong. Please try again.'
+        );
       } else {
-        toast.error("Something went wrong. Please try again.");
+        toast.error('Something went wrong. Please try again.');
       }
     }
   };
 
   const handleDeleteEducation = async (index) => {
-    const updatedEducations = profile.educations.filter((_, eduIndex) => eduIndex !== index);
+    const updatedEducations = profile.educations.filter(
+      (_, eduIndex) => eduIndex !== index
+    );
 
     try {
-      await profileApi.updateEducation(updatedEducations, navigate, "delete");
+      await profileApi.updateEducation(updatedEducations, navigate, 'delete');
       setProfile((prevProfile) => ({
         ...prevProfile,
-        educations: updatedEducations
+        educations: updatedEducations,
       }));
-      toast.success("Education deleted successfully!");
+      toast.success('Education deleted successfully!');
     } catch (error) {
-      console.error("Error response from server:", error.response);
+      console.error('Error response from server:', error.response);
       if (error.response && error.response.data) {
-        toast.error(error.response.data.message || "Something went wrong. Please try again.");
+        toast.error(
+          error.response.data.message ||
+            'Something went wrong. Please try again.'
+        );
       } else {
-        toast.error("Something went wrong. Please try again.");
+        toast.error('Something went wrong. Please try again.');
       }
     }
   };
@@ -246,7 +275,7 @@ const ExperienceEducation = () => {
       startYear: exp.start?.year,
       endMonth: exp.end?.month,
       endYear: exp.end?.year,
-      description: exp.summary
+      description: exp.summary,
     });
     setEditIndex(index);
     setIsExperienceFormVisible(true);
@@ -260,7 +289,7 @@ const ExperienceEducation = () => {
       startYear: '',
       endMonth: '',
       endYear: '',
-      description: ''
+      description: '',
     });
     setEditIndex(null);
     setIsExperienceFormVisible(true);
@@ -274,27 +303,132 @@ const ExperienceEducation = () => {
     setIsEducationFormVisible(false);
   };
 
+  const renderEducations = (educations) => {
+    if (!profile) {
+      return (
+        <Box mb={2} border="1px solid #ccc" borderRadius={5} p={2}>
+          <Skeleton
+            animation="wave"
+            height={10}
+            width="10%"
+            style={{ marginBottom: 6 }}
+          />
+          <Skeleton
+            animation="wave"
+            height={10}
+            width="20%"
+            style={{ marginBottom: 6 }}
+          />
+          <Skeleton
+            animation="wave"
+            height={10}
+            width="30%"
+            style={{ marginBottom: 6 }}
+          />
+          <Skeleton
+            sx={{ height: 190 }}
+            animation="wave"
+            variant="rectangular"
+          />
+        </Box>
+      );
+    } else if (educations?.length === 0 || !educations || educations === null) {
+      return <Typography>Hiện chưa có bất kì học vấn nào</Typography>;
+    } else {
+      return educations?.map((edu, index) => (
+        <Box key={index} mb={2} border="1px solid #ccc" borderRadius={5} p={2}>
+          <Typography variant="subtitle1">{edu.degree}</Typography>
+          <Typography variant="body2">{edu.universityCollege}</Typography>
+          <Typography variant="body2">{edu.country}</Typography>
+          <Typography variant="body2">{`${edu.start.year} - ${edu.end.year}`}</Typography>
+          <Button variant="outlined" onClick={() => handleEditEducation(index)}>
+            Sửa
+          </Button>
+          <Button
+            variant="outlined"
+            sx={{ marginLeft: 2 }}
+            color="error"
+            onClick={() => handleDeleteEducation(index)}
+          >
+            Xóa
+          </Button>
+        </Box>
+      ));
+    }
+  };
+
+  const renderExperiences = (experiences) => {
+    if (!profile) {
+      return (
+        <Box mb={2} border="1px solid #ccc" borderRadius={5} p={2}>
+          <Skeleton
+            animation="wave"
+            height={10}
+            width="10%"
+            style={{ marginBottom: 6 }}
+          />
+          <Skeleton
+            animation="wave"
+            height={10}
+            width="20%"
+            style={{ marginBottom: 6 }}
+          />
+          <Skeleton
+            animation="wave"
+            height={10}
+            width="30%"
+            style={{ marginBottom: 6 }}
+          />
+          <Skeleton
+            sx={{ height: 190 }}
+            animation="wave"
+            variant="rectangular"
+          />
+        </Box>
+      );
+    } else if (
+      experiences?.length === 0 ||
+      !experiences ||
+      experiences === null
+    ) {
+      return <Typography>Hiện chưa có bất kì học vấn nào</Typography>;
+    } else {
+      return experiences?.map((exp, index) => (
+        <Box key={index} mb={2} border="1px solid #ccc" borderRadius={5} p={2}>
+          <Typography variant="subtitle1">{exp.title}</Typography>
+          <Typography variant="body2">{exp.company}</Typography>
+          <Typography variant="body2">{`${exp.start.month} ${exp.start.year} - ${exp.end.month} ${exp.end.year}`}</Typography>
+          <Typography variant="body2">{exp.summary}</Typography>
+          <Button
+            variant="outlined"
+            onClick={() => handleEditExperience(index)}
+          >
+            Sửa
+          </Button>
+          <Button
+            variant="outlined"
+            sx={{ marginLeft: 2 }}
+            color="error"
+            onClick={() => handleDeleteExperience(index)}
+          >
+            Xóa
+          </Button>
+        </Box>
+      ));
+    }
+  };
+
   return (
-    <Box p={3} m={3} borderRadius={10} border="1px solid #ccc">
-      <Typography sx={{fontSize: "2em"}} gutterBottom>Kinh nghiệm và Học vấn</Typography>
+    <Box p={3} m={3} borderRadius={5} border="1px solid #ccc">
+      <Typography sx={{ fontSize: '2em' }} gutterBottom>
+        Kinh nghiệm và Học vấn
+      </Typography>
 
       <Box mb={2}>
-        <Typography sx={{fontSize: "1.5em"}} variant="h6">Kinh nghiệm</Typography>
-
-        {profile ? ((profile?.experiences !== null || profile?.experiences?.length === 0) ? (
-          profile?.experiences?.map((exp, index) => (
-            <Box key={index} mb={2} border="1px solid #ccc" borderRadius={5} p={2}>
-              <Typography variant="subtitle1">{exp.title}</Typography>
-              <Typography variant="body2">{exp.company}</Typography>
-              <Typography variant="body2">{`${exp.start.month} ${exp.start.year} - ${exp.end.month} ${exp.end.year}`}</Typography>
-              <Typography variant="body2">{exp.summary}</Typography>
-              <Button variant="outlined" onClick={() => handleEditExperience(index)}>Sửa</Button>
-              <Button variant="outlined" sx={{marginLeft: 2}} color="error" onClick={() => handleDeleteExperience(index)}>Xóa</Button>
-            </Box>
-          )
-        )) : <Typography>Hiện chưa có bất kì kinh nghiệm nào</Typography>) 
-        : <LinearProgress />}
-
+        <Typography sx={{ fontSize: '1.5em' }} variant="h6">
+          Kinh nghiệm
+        </Typography>
+        {renderExperiences(profile?.experiences)}
         <Button
           variant="contained"
           color="secondary"
@@ -312,7 +446,9 @@ const ExperienceEducation = () => {
               fullWidth
               margin="normal"
               value={experience.company}
-              onChange={(e) => handleExperienceChange('company', e.target.value)}
+              onChange={(e) =>
+                handleExperienceChange('company', e.target.value)
+              }
             />
             <DateSelector
               startMonth={experience.startMonth}
@@ -342,7 +478,9 @@ const ExperienceEducation = () => {
               rows={4}
               margin="normal"
               value={experience.description}
-              onChange={(e) => handleExperienceChange('description', e.target.value)}
+              onChange={(e) =>
+                handleExperienceChange('description', e.target.value)
+              }
             />
             <Button
               variant="contained"
@@ -350,16 +488,26 @@ const ExperienceEducation = () => {
               type="submit"
               disabled={isExperienceButtonDisabled}
               sx={{
-                backgroundColor: isExperienceButtonDisabled ? 'gray' : 'primary.main',
+                backgroundColor: isExperienceButtonDisabled
+                  ? 'gray'
+                  : 'primary.main',
                 '&:hover': {
-                  backgroundColor: isExperienceButtonDisabled ? 'gray' : 'primary.dark'
+                  backgroundColor: isExperienceButtonDisabled
+                    ? 'gray'
+                    : 'primary.dark',
                 },
-                mt: 2
+                mt: 2,
               }}
             >
               {editIndex !== null ? 'Cập nhật' : 'Thêm kinh nghiệm mới'}
             </Button>
-            <Button variant="outlined" sx={{mt: 2, marginLeft: 2}} onClick={handleCancelExperience}>Hủy thay đổi</Button>
+            <Button
+              variant="outlined"
+              sx={{ mt: 2, marginLeft: 2 }}
+              onClick={handleCancelExperience}
+            >
+              Hủy thay đổi
+            </Button>
           </Box>
         )}
       </Box>
@@ -367,21 +515,8 @@ const ExperienceEducation = () => {
       <Divider sx={{ my: 2 }} />
 
       <Box mb={2}>
-        <Typography sx={{fontSize: "1.5em"}}>Học vấn</Typography>
-
-        {profile ? ((profile?.educations !== null || profile?.educations?.length === 0) ? (
-          profile?.educations?.map((edu, index) => (
-            <Box key={index} mb={2} border="1px solid #ccc" borderRadius={5} p={2}>
-              <Typography variant="subtitle1">{edu.degree}</Typography>
-              <Typography variant="body2">{edu.universityCollege}</Typography>
-              <Typography variant="body2">{edu.country}</Typography>
-              <Typography variant="body2">{`${edu.start.year} - ${edu.end.year}`}</Typography>
-              <Button variant="outlined" onClick={() => handleEditEducation(index)}>Sửa</Button>
-              <Button variant="outlined" sx={{marginLeft: 2}} color="error" onClick={() => handleDeleteEducation(index)}>Xóa</Button>
-            </Box>
-          )
-        )) : <Typography>Hiện chưa có bất kì học vấn nào</Typography>) 
-        : <LinearProgress />}
+        <Typography sx={{ fontSize: '1.5em' }}>Học vấn</Typography>
+        {renderEducations(profile?.educations)}
 
         <Button
           variant="contained"
@@ -400,7 +535,9 @@ const ExperienceEducation = () => {
               fullWidth
               margin="normal"
               value={education.universityCollege}
-              onChange={(e) => handleEducationChange('universityCollege', e.target.value)}
+              onChange={(e) =>
+                handleEducationChange('universityCollege', e.target.value)
+              }
             />
             <TextField
               label="Quốc gia"
@@ -436,16 +573,26 @@ const ExperienceEducation = () => {
               type="submit"
               disabled={isEducationButtonDisabled}
               sx={{
-                backgroundColor: isEducationButtonDisabled ? 'gray' : 'primary.main',
+                backgroundColor: isEducationButtonDisabled
+                  ? 'gray'
+                  : 'primary.main',
                 '&:hover': {
-                  backgroundColor: isEducationButtonDisabled ? 'gray' : 'primary.dark'
+                  backgroundColor: isEducationButtonDisabled
+                    ? 'gray'
+                    : 'primary.dark',
                 },
-                mt: 2
+                mt: 2,
               }}
             >
               {editingEducationIndex !== null ? 'Cập nhật' : 'Thêm học vấn mới'}
             </Button>
-            <Button variant="outlined" sx={{mt: 2, marginLeft: 2}} onClick={handleCancelEducation}>Hủy thay đổi</Button>
+            <Button
+              variant="outlined"
+              sx={{ mt: 2, marginLeft: 2 }}
+              onClick={handleCancelEducation}
+            >
+              Hủy thay đổi
+            </Button>
           </Box>
         )}
       </Box>

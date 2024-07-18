@@ -6,8 +6,7 @@ import { toast } from 'react-toastify';
 
 function ProfileSetting() {
   const [profile, setProfile] = useState(null);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [description, setDescription] = useState('');
@@ -19,36 +18,36 @@ function ProfileSetting() {
       try {
         let res = await profileApi.getUserProfile();
         setProfile(res);
-        setFirstName(res.firstName || '');
-        setLastName(res.lastName || '');
+        setName(res.name || '');
         setEmail(res.email || '');
         setPhoneNumber(res.phoneNumber || '');
         setDescription(res.description || '');
       } catch (error) {
-        console.error("Error fetching profile data:", error);
-        toast.error("Failed to load profile data.");
+        console.error('Error fetching profile data:', error);
+        toast.error('Failed to load profile data.');
       }
     };
     getData();
   }, []);
 
-  const initialData = useMemo(() => ({
-    firstName: profile?.firstName || '',
-    lastName: profile?.lastName || '',
-    email: profile?.email || '',
-    phoneNumber: profile?.phoneNumber || '',
-    description: profile?.description || ''
-  }), [profile]);
+  const initialData = useMemo(
+    () => ({
+      name: profile?.name || '',
+      email: profile?.email || '',
+      phoneNumber: profile?.phoneNumber || '',
+      description: profile?.description || '',
+    }),
+    [profile]
+  );
 
   const checkIfChanged = useCallback(() => {
     return (
-      firstName !== initialData.firstName ||
-      lastName !== initialData.lastName ||
+      name !== initialData.name ||
       email !== initialData.email ||
       phoneNumber !== initialData.phoneNumber ||
       description !== initialData.description
     );
-  }, [firstName, lastName, email, initialData, phoneNumber, description]);
+  }, [name, email, initialData, phoneNumber, description]);
 
   useEffect(() => {
     setIsButtonDisabled(!checkIfChanged());
@@ -58,57 +57,64 @@ function ProfileSetting() {
     e.preventDefault();
 
     const data = {
-      name: `${firstName} ${lastName}`,
+      name: name,
       email: email,
-      phoneNumber: phoneNumber || "",
-      description: description || "",
-      taxCode: profile?.taxCode || "",
+      phoneNumber: phoneNumber || '',
+      description: description || '',
+      taxCode: profile?.taxCode || '',
       isCompany: profile?.isCompany || false,
-      skills: profile?.skills || []
+      skills: profile?.skills || [],
     };
-
 
     try {
       await profileApi.updateProfile(data, navigate);
-      toast.success("Profile updated successfully!");
+      toast.success('Profile updated successfully!');
     } catch (error) {
-      console.error("Error response from server:", error.response);
+      console.error('Error response from server:', error.response);
       if (error.response && error.response.data) {
-        toast.error(error.response.data.message || "Something went wrong. Please try again.");
+        toast.error(
+          error.response.data.message ||
+            'Something went wrong. Please try again.'
+        );
       } else {
-        toast.error("Something went wrong. Please try again.");
+        toast.error('Something went wrong. Please try again.');
       }
     }
   };
 
   return (
-    <Box p={3} m={3} borderRadius={5} border="1px solid #ccc" component="form" onSubmit={handleSave}>
-      <Typography sx={{fontSize: "2em"}} variant="h4" gutterBottom>Hồ sơ của bạn</Typography>
-      
+    <Box
+      p={3}
+      m={3}
+      borderRadius={5}
+      border="1px solid #ccc"
+      component="form"
+      onSubmit={handleSave}
+    >
+      <Typography sx={{ fontSize: '2em' }} variant="h4" gutterBottom>
+        Hồ sơ của bạn
+      </Typography>
+
       <Box mb={2}>
-        <Typography sx={{fontSize: "1.5em"}} variant="h6">Tên</Typography>
+        <Typography sx={{ fontSize: '1.5em' }} variant="h6">
+          Họ tên
+        </Typography>
         <TextField
-          label="Họ"
+          label="Họ Tên"
           variant="outlined"
           fullWidth
           margin="normal"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-        />
-        <TextField
-          label="Tên"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
       </Box>
 
       <Divider sx={{ my: 2 }} />
 
       <Box mb={2}>
-        <Typography sx={{fontSize: "1.5em"}} variant="h6">Email</Typography>
+        <Typography sx={{ fontSize: '1.5em' }} variant="h6">
+          Email
+        </Typography>
         <TextField
           label="Email"
           variant="outlined"
@@ -122,7 +128,9 @@ function ProfileSetting() {
       <Divider sx={{ my: 2 }} />
 
       <Box mb={2}>
-        <Typography sx={{fontSize: "1.5em"}} variant="h6">Cá nhân</Typography>
+        <Typography sx={{ fontSize: '1.5em' }} variant="h6">
+          Cá nhân
+        </Typography>
         <TextField
           label="Số điện thoại"
           variant="outlined"
@@ -149,8 +157,8 @@ function ProfileSetting() {
         sx={{
           backgroundColor: isButtonDisabled ? 'gray' : 'primary.main',
           '&:hover': {
-            backgroundColor: isButtonDisabled ? 'gray' : 'primary.dark'
-          }
+            backgroundColor: isButtonDisabled ? 'gray' : 'primary.dark',
+          },
         }}
       >
         Lưu thay đổi
