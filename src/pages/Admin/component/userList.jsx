@@ -170,7 +170,6 @@ const statusOperators = [
         return null;
       }
       return (value) => {
-        console.log('value', value);
         return String(value) === filterItem.value;
       };
     },

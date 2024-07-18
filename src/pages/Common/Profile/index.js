@@ -20,7 +20,7 @@ import {
   School as SchoolIcon,
   Description as DescriptionIcon,
 } from '@mui/icons-material';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import profileApi from '../../../services/profileApi';
 import AboutImage from '../../../assets/about.jpg';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
@@ -33,6 +33,8 @@ import ReportIcon from '@mui/icons-material/Report';
 import ReportModal from './component/ReportModal';
 import reportApi from '../../../services/reportApi';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import chatApi from '../../../services/chatApi';
 
 const labels = {
   1: 'Rất tệ',
@@ -48,13 +50,14 @@ function getLabelText(value) {
 
 function Profile() {
   const { userId } = useParams();
+  const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const [profile, setProfile] = useState();
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [newRating, setNewRating] = useState(0);
   const [newComment, setNewComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [hover, setHover] = useState(-1);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const getData = async () => {
       let res;
@@ -99,6 +102,11 @@ function Profile() {
     } finally {
       setSubmitting(false);
     }
+  };
+  const handleContact = async () => {
+    let res = await chatApi.CreateNewConversation(currentUser?.userId, userId);
+    console.log(res);
+    navigate(`/chat/${res}/${userId}`);
   };
 
   return (
@@ -155,14 +163,24 @@ function Profile() {
                 <GitHub />
               </IconButton>
               {!isOwnProfile && (
-                <Button
-                  variant="outlined"
-                  color="error"
-                  startIcon={<ReportIcon />}
-                  onClick={() => setIsReportModalOpen(true)}
-                >
-                  Report
-                </Button>
+                <>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    startIcon={<ReportIcon />}
+                    onClick={() => setIsReportModalOpen(true)}
+                  >
+                    Report
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    startIcon={<ReportIcon />}
+                    onClick={() => handleContact()}
+                  >
+                    Contact
+                  </Button>
+                </>
               )}
             </Box>
           </section>

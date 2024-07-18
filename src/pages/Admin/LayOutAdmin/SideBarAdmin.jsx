@@ -11,7 +11,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import CategoryIcon from '@mui/icons-material/Category';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
-
+import BookIcon from '@mui/icons-material/Book';
 function SideBarAdmin() {
   const location = useLocation();
   const {t} = useTranslation(['admin', 'common']);
@@ -42,6 +42,11 @@ function SideBarAdmin() {
       title: "Category Management",
       link: "/category-list",
       icon: <CategoryIcon />
+    },
+    {
+      title: "Blog List",
+      link: "/view-blog",
+      icon: <BookIcon />
     },
     {
       title: t("roles"),

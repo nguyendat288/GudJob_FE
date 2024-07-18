@@ -17,7 +17,9 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import profileApi from '../../../services/profileApi';
 import LanguageSelector from '../../../components/language-selector';
 import { UseChatState } from '../../../providers/ConnectContext';
+
 import { MoreVert as MoreVertIcon } from '@mui/icons-material';
+
 import notificationApi from '../../../services/notificationApi';
 import ListUser from '../../Common/Chat/ListUser';
 import chatApi from '../../../services/chatApi';
@@ -26,19 +28,7 @@ const TopBarFreelancer = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const [profile, setProfile] = useState();
-
-  useEffect(() => {
-    if (currentUser) {
-      const getData = async () => {
-        const res = await profileApi.getUserProfile();
-        setProfile(res);
-      };
-      getData();
-    }
-  }, [currentUser]);
-
-  const [search, setSearch] = useState('');
-
+  const [search, setSearch] = useState('')
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [topMenuAnchorEl, setTopMenuAnchorEl] = useState(null);
@@ -56,6 +46,17 @@ const TopBarFreelancer = () => {
     setNumberOfNotification,
     setChatSelect
   } = UseChatState();
+
+
+  useEffect(() => {
+    if (currentUser) {
+      const getData = async () => {
+        const res = await profileApi.getUserProfile();
+        setProfile(res);
+      };
+      getData();
+    }
+  }, [currentUser]);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -77,16 +78,21 @@ const TopBarFreelancer = () => {
   const navigate = useNavigate();
 
   const handleLogOut = async () => {
-    dispatch(logOutSuccess());
-    localStorage.clear();
-    await connection.stop();
-    navigate('/login');
-    toast.success('Logout successfully!');
-  };
-
+    try {
+      dispatch(logOutSuccess())
+      localStorage.clear();
+      if (connection != null) {
+        await connection.stop();
+      }
+      navigate('/login');
+      toast.success('Logout successfully!');
+    } catch (error) {
+    }
+  }
   const handleSearch = () => {
-    navigate(`/search/${search}`);
-  };
+    navigate(`/search/${search}`)
+  }
+
 
   const handleNotificationClick = (event) => {
     setNumberOfNotification(0);
@@ -124,7 +130,7 @@ const TopBarFreelancer = () => {
       await notificationApi.DeleteNotification(selectedNotification?.notificationId);
       removeNotificationStatus(selectedNotification?.notificationId);
     }
-    handleMenuClose();    
+    handleMenuClose();
   };
 
   const handleTopMenuOpen = (event) => {
@@ -143,7 +149,7 @@ const TopBarFreelancer = () => {
       await notificationApi.DeleteAllNotification(currentUser?.userId);
       removeNotificationStatusAll();
     }
-    
+
     handleTopMenuClose();
   };
 
@@ -200,10 +206,11 @@ const TopBarFreelancer = () => {
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
-        event.preventDefault();   
-        handleSearch();
+      event.preventDefault();
+      handleSearch()
     }
   };
+
 
   return (
     <>
@@ -229,18 +236,27 @@ const TopBarFreelancer = () => {
             </Typography>
 
             <Box display='flex' flex={1} maxWidth="600px" mx={2}>
-              <Box display='flex' flex={1} bgcolor='#EEEEEE' borderRadius='30px'>
-                <InputBase
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  onKeyDown={handleKeyPress}
-                  placeholder='Search project'
-                  sx={{ ml: 2, flex: 1 }}
-                />
-                <IconButton onClick={handleSearch} p={1}>
-                  <SearchOutlinedIcon />
-                </IconButton>
-              </Box>
+              {
+                currentUser?.role !== "Recruiter" && currentUser?.role !== "Admin" && (
+                  <Box
+                    display='flex'
+                    flex={1}
+                    borderRadius='30px'
+                    bgcolor='#EEEEEE'
+                  >
+                    <InputBase
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      onKeyDown={handleKeyPress}
+                      placeholder='Seach name project' sx={{ ml: 2, flex: 1 }} />
+                    <IconButton type='button'
+                      onClick={(e) => handleSearch(e)}
+                      p={1}>
+                      <SearchOutlinedIcon />
+                    </IconButton>
+                  </Box>
+                )
+              }
             </Box>
 
             {currentUser ? (
@@ -338,13 +354,12 @@ const TopBarFreelancer = () => {
                           >
                             <ListItemText
                               primary={
-                                <React.Fragment>
-                                  <span>{item?.description}</span>
-                                  <br />
-                                  <span style={{ color: 'gray', fontSize: '0.8em' }}>
+                                <Box>
+                                  <Typography>{item?.sendUserName} {item?.description}</Typography>
+                                  <Typography style={{ color: 'gray', fontSize: '0.8em' }}>
                                     {new Date(item?.datetime).toLocaleString()}
-                                  </span>
-                                </React.Fragment>
+                                  </Typography>
+                                </Box>
                               }
                             />
                             <IconButton edge='end' onClick={(event) => handleMenuOpen(event, item)}>

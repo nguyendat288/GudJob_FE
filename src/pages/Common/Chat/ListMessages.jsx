@@ -1,5 +1,6 @@
 import { Avatar, Box, Tooltip, Typography } from '@mui/material';
 import React, { useEffect, useRef } from 'react'
+import { formatDateTime } from '../../../utils/formatDate';
 
 const ListMessages = ({ user, messages, currentUser }) => {
     const height = window.innerHeight - 200;
@@ -20,8 +21,8 @@ const ListMessages = ({ user, messages, currentUser }) => {
                         <Box key={index} display='flex' alignItems='center'
                             justifyContent='flex-end'
                         >
-                            <Tooltip title={new Date(message?.sendDate).toLocaleString()}>
-                                <Box display='flex' alignItems='center' gap={2}>
+                            <Tooltip title={formatDateTime(new Date(message?.sendDate))}>
+                            <Box display='flex' alignItems='center' gap={2}>
                                     <Box bgcolor='#EEEEEE' borderRadius='10px' p={1}>
                                         <Typography>{message.messageText}</Typography>
                                     </Box>
@@ -35,7 +36,7 @@ const ListMessages = ({ user, messages, currentUser }) => {
                         <Box key={index} display='flex' alignItems='center'
                             justifyContent='flex-start'
                         >
-                            <Tooltip title={new Date(message?.sendDate).toLocaleString()}>
+                            <Tooltip title={formatDateTime(new Date(message?.sendDate))}>
                                 <Box display='flex' alignItems='center' gap={2}>
                                     <Avatar alt="Avatar" src={user?.avatar} />
                                     <Box bgcolor='#EEEEEE' borderRadius='10px' p={1}>

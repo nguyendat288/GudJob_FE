@@ -30,6 +30,7 @@ import ListReport from "../pages/Admin/List/ListReport";
 import TopBarFreelancer from "../pages/Freelancer/LayOut/TopBarFreelancer";
 import Chat from "../pages/Common/Chat/Chat";
 import ListProject from "../pages/Admin/List/ListProject";
+import ViewBlog from "../pages/Admin/Blog/ViewBlog";
 import CurrentProject from "../pages/Common/Profile/CurrentProject";
 import ListCategory from "../pages/Admin/List/ListCategory";
 
@@ -110,7 +111,7 @@ export default function Router() {
       element: <LayOutFreelancer />,
       children: [
         {
-          element: <RequireAuth allowedRoles={[ROLES.FREELANCER, ROLES.RECRUITER]} />,
+          element: <RequireAuth allowedRoles={[ROLES.FREELANCER,ROLES.RECRUITER,ROLES.ADMIN]} />,
           children: [
             {
               path: FREELANCER_PATH.PROFILE,
@@ -227,6 +228,8 @@ export default function Router() {
     },
     {
       path: RECRUITER_PATH.LAYOUT,
+      element: <TopBarFreelancer />,
+
       children: [
         {
           element: <RequireAuth allowedRoles={ROLES.RECRUITER} />,
@@ -307,6 +310,14 @@ export default function Router() {
                   <ListProject />
                 </Suspense>
               )
+            },         
+            {
+              path: ADMIN_PATH.VIEW_BLOG,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <ViewBlog />
+                </Suspense>
+              )
             },
             {
               path: ADMIN_PATH.CATEGORY_LIST,
@@ -319,7 +330,7 @@ export default function Router() {
           ]
         }
       ]
-    },
+    }
   ])
   return router
 

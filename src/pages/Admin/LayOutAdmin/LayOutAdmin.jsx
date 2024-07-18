@@ -2,7 +2,7 @@ import React from 'react';
 import { Box } from '@mui/material'
 import SideBarAdmin from './SideBarAdmin'
 import TopBarAdmin from './TopBarAdmin'
-import { Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom';
 
 const LayOutAdmin = () => {
     return (

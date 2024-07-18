@@ -20,7 +20,7 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId 
     return (
         <Box display='flex' mt={4}>
             <Box flex='4'>
-                <Paper sx={{ bgcolor: '#F8F8FF' }}>
+                <Paper sx={{ bgcolor: '#FFFFFF', boxShadow: 3, borderRadius: 2 }}>
                     <Box p={4} display='flex' justifyContent='space-between'>
                         <Box>
                             <Box display='flex' alignItems='center'>
@@ -37,6 +37,7 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId 
                                 >
                                     <Typography fontSize='10px'>{detail?.projectStatus?.statusName}</Typography>
                                 </Box>
+
                             </Box>
                             <Box
                                 className="mt-2 inline-block rounded-2xl bg-gray-300 p-2"
@@ -62,6 +63,7 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId 
                             {detail?.skill?.map((item, index) => (
                                 <Box
                                     key={index}
+                                    sx={{ '&:hover': { backgroundColor: '#f0f8ff' } }}
                                     className="mt-2 ml-2 inline-block rounded-3xl border border-sky-500 p-2"
                                 >
                                     <Typography fontSize='15px'>{item}</Typography>
@@ -69,14 +71,18 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId 
                             ))}
                         </Box>
                     </Box>
+
                     <Box display='flex' justifyContent='space-between' alignItems='center' p={4} pb={0}>
                         <Typography fontSize='12px'>Ngày tạo: {formatDate(detail?.createdDate)}</Typography>
                         <Box display='flex' alignItems='center'>
                             <Tooltip title="Report this project">
-                                <Box display='flex' alignItems='center' onClick={() => setIsReportModalOpen(true)} className="text-blue-600 cursor-pointer">
-                                    <FlagCircleIcon />
-                                    <Typography ml={1} fontSize='12px'>Report Project</Typography>
-                                </Box>
+                                {currentUser?.userId !== detail?.createdBy && (
+                                    <Box display='flex' alignItems='center' onClick={() => setIsReportModalOpen(true)} className="text-blue-600 cursor-pointer">
+                                        <FlagCircleIcon />
+                                        <Typography ml={1} fontSize='12px'>Report Project</Typography>
+                                    </Box>
+                                )}
+
                             </Tooltip>
                         </Box>
                     </Box>
@@ -94,11 +100,12 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId 
                                 <Button
                                     className="text-xs"
                                     variant='contained'
-                                    sx={{marginRight: 2}}
+                                    sx={{ marginRight: 2 }}
                                     onClick={() => navigate(`/update-project/${detail?.id}`)}
                                 >
                                     Update Project
                                 </Button>
+
                                 {detail?.statusId !== 2 && (
                                     <Button
                                         className="text-xs"
@@ -112,7 +119,7 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId 
                         )}
                     </Box>
                 </Paper>
-            </Box>
+            </Box >
             <Box flex='1' ml={4} display='flex' flexDirection='column' gap={2}>
                 <Paper sx={{ p: 2 }}>
                     <Typography variant='h6'>About Recruiter</Typography>
@@ -122,6 +129,7 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId 
                     <Typography variant='h6'>How to Write a Winning Bid</Typography>
                     <Typography>This section contains tips on writing a winning bid.</Typography>
                 </Paper>
+
                 <ReportModal
                     open={isReportModalOpen}
                     onClose={() => setIsReportModalOpen(false)}
@@ -130,7 +138,7 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId 
                     projectId={projectId}
                 />
             </Box>
-        </Box>
+        </Box >
     );
 };
 

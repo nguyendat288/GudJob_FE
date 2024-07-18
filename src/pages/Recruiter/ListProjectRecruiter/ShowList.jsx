@@ -23,10 +23,11 @@ const ShowList = ({ listProject }) => {
         <Box bgcolor="#F8F8FF" borderRadius="5px" p={3}>
             <Box display="flex" mb={2}>
                 <Typography mr={1}> Tổng số dự án : </Typography>
-                <TypographyTitle title={listProject?.items?.length} />
+                <TypographyTitle title={listProject?.totalItemsCount} />
             </Box>
             <Divider />
-            {listProject === undefined && <LinearProgress />}
+            {(listProject === undefined || listProject  == null ) && <LinearProgress />}
+
             {listProject?.items?.length === 0 && (
                 <Container maxWidth="md" style={{ marginTop: '20px' }}>
                     <Alert severity="info">Hiện tại chưa có bản ghi nào .</Alert>

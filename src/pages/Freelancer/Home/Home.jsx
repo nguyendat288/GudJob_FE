@@ -17,11 +17,13 @@ import TypographyHeader from '../../../components/Typography/TypographyHeader';
 import { useTranslation } from 'react-i18next';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import { useSelector } from 'react-redux';
 
 const Home = () => {
   const [listCategory, setListCategory] = useState([]);
   const navigate = useNavigate();
   const { t } = useTranslation('home');
+  const currentUser = useSelector((state) => state.auth.login?.currentUser);
 
   useEffect(() => {
     const getCategory = async () => {
@@ -30,6 +32,17 @@ const Home = () => {
     };
     getCategory();
   }, [listCategory]);
+
+  useEffect(() => {
+    if (currentUser != null) {
+      const role = currentUser?.role;
+      if (role === 'Freelancer') {
+        navigate('/home');
+      } else if (role === 'Recruiter') {
+        navigate('/recruiter');
+      }
+    }
+  }, []);
 
   const handleClick = (id) => {
     navigate(`/category/${id}`);
@@ -58,44 +71,42 @@ const Home = () => {
           <TypographyHeader title={t('popular_category')} />
           <Grid container spacing={3} mt={2}>
             {listCategory.length !== 0 &&
-              listCategory.map((item, index) => {
-                return (
-                  <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                    <Card
-                      onClick={(e) => handleClick(item?.id)}
-                      sx={{
-                        maxWidth: 345,
-                        textDecoration: 'none',
-                        cursor: 'pointer',
-                        borderRadius: 2,
+              listCategory.map((item, index) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                  <Card
+                    onClick={(e) => handleClick(item?.id)}
+                    sx={{
+                      maxWidth: 345,
+                      textDecoration: 'none',
+                      cursor: 'pointer',
+                      borderRadius: 2,
+                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                      transition: 'transform 0.3s, box-shadow 0.3s',
+                      '&:hover': {
+                        transform: 'scale(1.05)',
+                        boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+                      },
+                      '&:focus': {
+                        outline: 'none',
+                        boxShadow: '0 0 0 4px rgba(0, 123, 255, 0.5)',
+                      },
+                      '&:active': {
+                        transform: 'scale(0.95)',
                         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                        transition: 'transform 0.3s, box-shadow 0.3s',
-                        '&:hover': {
-                          transform: 'scale(1.05)',
-                          boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
-                        },
-                        '&:focus': {
-                          outline: 'none',
-                          boxShadow: '0 0 0 4px rgba(0, 123, 255, 0.5)',
-                        },
-                        '&:active': {
-                          transform: 'scale(0.95)',
-                          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                        },
-                      }}
-                    >
-                      <CardMedia
-                        component="img"
-                        height="140"
-                        image={item?.image}
-                      />
-                      <CardContent>
-                        <TypographyTitle title={item?.categoryName} />
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                );
-              })}
+                      },
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={item?.image}
+                    />
+                    <CardContent>
+                      <TypographyTitle title={item?.categoryName} />
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
           </Grid>
         </Box>
         <Divider />

@@ -13,6 +13,7 @@ const chatApi = {
     CreateNewConversation: async (user1, user2) => {
         try {
             const response = await axios.post(`${BASE_URL}/api/Chat/AddConversation/${user1}/${user2}`)
+           
             return response?.data;
         } catch (error) {
             throw error

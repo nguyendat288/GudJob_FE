@@ -87,6 +87,7 @@ const Detail = () => {
 
     const handleDelete = async (id) => {
         setLoading(true);
+
         try {
             await projectApi.DeleteProject(id, navigate);
             setLoading(false);
