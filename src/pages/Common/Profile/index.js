@@ -20,10 +20,9 @@ import {
   School as SchoolIcon,
   Description as DescriptionIcon,
 } from '@mui/icons-material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link as RouterLink } from 'react-router-dom';
 import profileApi from '../../../services/profileApi';
 import AboutImage from '../../../assets/about.jpg';
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import PaymentIcon from '@mui/icons-material/Payment';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import EmailIcon from '@mui/icons-material/Email';
@@ -35,6 +34,7 @@ import reportApi from '../../../services/reportApi';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import chatApi from '../../../services/chatApi';
+import UpdateSkillModal from './component/UpdateSkillModal';
 
 const labels = {
   1: 'Rất tệ',
@@ -53,6 +53,7 @@ function Profile() {
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const [profile, setProfile] = useState();
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [isSkillModalOpen, setIsSkillModalOpen] = useState(false);
   const [newRating, setNewRating] = useState(0);
   const [newComment, setNewComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -108,7 +109,7 @@ function Profile() {
     console.log(res);
     navigate(`/chat/${res}/${userId}`);
   };
-
+  console.log('profile', profile);
   return (
     <Container>
       <Grid container spacing={4}>
@@ -320,25 +321,6 @@ function Profile() {
                 <Grid container>
                   <Grid item xs={12} md={9}>
                     <Box className="flex items-center">
-                      <VerifiedUserIcon color="warning" />
-                      <Typography
-                        sx={{ fontSize: '1rem', marginLeft: '0.5rem' }}
-                      >
-                        Xác thực cá nhân
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  {isOwnProfile && (
-                    <Grid item xs={12} md={3}>
-                      <Link href="#" underline="hover">
-                        <Typography>Xác thực</Typography>
-                      </Link>
-                    </Grid>
-                  )}
-                </Grid>
-                <Grid container>
-                  <Grid item xs={12} md={9}>
-                    <Box className="flex items-center">
                       <PaymentIcon color="error" />
                       <Typography
                         sx={{ fontSize: '1rem', marginLeft: '0.5rem' }}
@@ -356,7 +338,7 @@ function Profile() {
                   )}
                 </Grid>
                 <Grid container>
-                  <Grid item xs={12} md={11}>
+                  <Grid item xs={12} md={9}>
                     <Box className="flex items-center">
                       <PhoneAndroidIcon color="error" />
                       <Typography
@@ -375,9 +357,11 @@ function Profile() {
                   )}
                 </Grid>
                 <Grid container>
-                  <Grid item xs={12} md={11}>
+                  <Grid item xs={12} md={profile?.emailConfirmed ? 11 : 9}>
                     <Box className="flex items-center">
-                      <EmailIcon color="success" />
+                      <EmailIcon
+                        color={profile?.emailConfirmed ? 'success' : 'error'}
+                      />
                       <Typography
                         sx={{ fontSize: '1rem', marginLeft: '0.5rem' }}
                       >
@@ -385,9 +369,17 @@ function Profile() {
                       </Typography>
                     </Box>
                   </Grid>
-                  <Grid item xs={12} md={1}>
-                    <CheckCircleIcon color="success" fontSize="medium" />
-                  </Grid>
+                  {isOwnProfile && !profile?.emailConfirmed ? (
+                    <Grid item xs={12} md={3}>
+                      <Link href="#" underline="hover">
+                        <Typography>Xác thực</Typography>
+                      </Link>
+                    </Grid>
+                  ) : (
+                    <Grid item xs={12} md={1}>
+                      <CheckCircleIcon color="success" fontSize="medium" />
+                    </Grid>
+                  )}
                 </Grid>
               </Box>
             </Paper>
@@ -416,6 +408,7 @@ function Profile() {
                           color: 'blue',
                         },
                       }}
+                      onClick={() => setIsSkillModalOpen(true)}
                     >
                       <EditIcon />
                     </IconButton>
@@ -423,10 +416,20 @@ function Profile() {
                 )}
               </Grid>
               <Box className="mt-4 space-y-2">
-                <Typography sx={{ fontSize: '1rem' }}>JavaScript</Typography>
-                <Typography sx={{ fontSize: '1rem' }}>HTML</Typography>
-                <Typography sx={{ fontSize: '1rem' }}>Shopify</Typography>
-                <Typography sx={{ fontSize: '1rem' }}>React.js</Typography>
+                {profile?.skills?.length ? (
+                  profile.skills.map((skill, index) => (
+                    <Box
+                      key={index}
+                      className="flex items-center justify-between"
+                    >
+                      <Typography sx={{ fontSize: '1rem' }}>{skill}</Typography>
+                    </Box>
+                  ))
+                ) : (
+                  <Typography sx={{ fontSize: '1rem' }}>
+                    You haven't added any skills yet.
+                  </Typography>
+                )}
               </Box>
             </Paper>
 
@@ -435,9 +438,27 @@ function Profile() {
                 Chứng chỉ
               </Typography>
               <Box className="mt-4">
-                <Typography sx={{ fontSize: '1rem' }}>
-                  You don't have any certifications yet.
-                </Typography>
+                {profile?.qualifications?.length ? (
+                  profile.qualifications.map((item, index) => (
+                    <Box
+                      key={index}
+                      className="flex items-center justify-between"
+                    >
+                      <Typography
+                        component={RouterLink}
+                        to={item.link}
+                        sx={{ fontSize: '1rem' }}
+                        color={'primary'}
+                      >
+                        {item.organization}
+                      </Typography>
+                    </Box>
+                  ))
+                ) : (
+                  <Typography sx={{ fontSize: '1rem' }}>
+                    You haven't added any skills yet.
+                  </Typography>
+                )}
               </Box>
             </Paper>
 
@@ -531,6 +552,12 @@ function Profile() {
         onClose={() => setIsReportModalOpen(false)}
         onReport={handleReport}
         type="user"
+      />
+      <UpdateSkillModal
+        openSkill={isSkillModalOpen}
+        onCloseSkill={() => setIsSkillModalOpen(false)}
+        profile={profile}
+        setProfile={setProfile}
       />
     </Container>
   );

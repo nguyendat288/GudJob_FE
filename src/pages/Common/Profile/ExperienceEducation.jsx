@@ -104,7 +104,7 @@ const ExperienceEducation = () => {
     }
 
     try {
-      await profileApi.updateExperience(updatedExperiences, navigate, 'update');
+      await profileApi.updateExperience(updatedExperiences, 'update');
       setProfile((prevProfile) => ({
         ...prevProfile,
         experiences: updatedExperiences,
@@ -163,7 +163,7 @@ const ExperienceEducation = () => {
     }
 
     try {
-      await profileApi.updateEducation(updatedEducation, navigate, 'update');
+      await profileApi.updateEducation(updatedEducation, 'update');
       setProfile((prevProfile) => ({
         ...prevProfile,
         educations: updatedEducation,
@@ -222,7 +222,7 @@ const ExperienceEducation = () => {
     );
 
     try {
-      await profileApi.updateExperience(updatedExperiences, navigate, 'delete');
+      await profileApi.updateExperience(updatedExperiences, 'delete');
       setProfile((prevProfile) => ({
         ...prevProfile,
         experiences: updatedExperiences,
@@ -247,7 +247,7 @@ const ExperienceEducation = () => {
     );
 
     try {
-      await profileApi.updateEducation(updatedEducations, navigate, 'delete');
+      await profileApi.updateEducation(updatedEducations, 'delete');
       setProfile((prevProfile) => ({
         ...prevProfile,
         educations: updatedEducations,

@@ -1,7 +1,14 @@
-import { Box, Button, FormControl, Modal, Select, TextField, MenuItem, Tooltip, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import {
+  Box,
+  Button,
+  Modal,
+  Select,
+  TextField,
+  MenuItem,
+  Tooltip,
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import Header from '../../Recruiter/LayOutRecruiter/Header';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
@@ -19,29 +26,28 @@ import LoadingComponent from '../../../components/LoadingComponent';
 
 const ViewBlog = () => {
   const userId = useSelector((state) => state.auth.login?.currentUser?.userId);
-  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState("")
-  const [categoryId, setCategoryId] = useState(1)
-  const [listCategory, setlistCategory] = useState([])
-  const [image, setImage] = useState("")
-  const [description, setDescription] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [title, setTitle] = useState('');
+  const [categoryId, setCategoryId] = useState(1);
+  const [listCategory, setlistCategory] = useState([]);
+  const [image, setImage] = useState('');
+  const [description, setDescription] = useState('');
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const getData = async () => {
       if (open) {
         let res = await categoryApi.GetAllCategory();
-        setlistCategory(res)
+        setlistCategory(res);
       }
-    }
-    getData()
-  }, [open])
+    };
+    getData();
+  }, [open]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleChangeCategory = (id) => {
-    setCategoryId(id)
-  }
+    setCategoryId(id);
+  };
 
   const handleUpload = (e) => {
     if (e) {
@@ -49,9 +55,9 @@ const ViewBlog = () => {
         setLoading(true);
         const imgRef = ref(imageDb, `file/${v4()}`);
         uploadBytes(imgRef, e)
-          .then(value => getDownloadURL(value.ref))
-          .then(url => setImage(url))
-          .catch(error => {
+          .then((value) => getDownloadURL(value.ref))
+          .then((url) => setImage(url))
+          .catch((error) => {
             console.error(error);
             toast.error('Upload failed');
           })
@@ -74,41 +80,50 @@ const ViewBlog = () => {
     setDescription(data);
   };
   const handleCreateBlog = async () => {
-    if (title.length < 10
-      || title.length > 100 ||
+    if (
+      title.length < 10 ||
+      title.length > 100 ||
       description.length < 10 ||
       description.length > 1000 ||
-      image == ''
+      image === ''
     ) {
-      toast.error("Dữ liệu nhập vào không hợp lệ !!!")
+      toast.error('Dữ liệu nhập vào không hợp lệ !!!');
       return;
     }
 
-    setLoading(true)
+    setLoading(true);
     try {
       let data = {
         createdBy: userId,
         title: title,
         description: description,
         categoryId: categoryId,
-        blogImage: image
-      }
+        blogImage: image,
+      };
       console.log(data);
     } catch (error) {
       console.log(error);
     }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   console.log(listCategory);
   return (
-    <Box >
-      <Box display='flex' alignItems='center' mb={3}>
-        <Header title='DANH SÁCH BÀI VIẾT' subtitle="Danh sách các bài viết trong trang web" />
-        <Box ml='auto'>
+    <Box>
+      <Box display="flex" alignItems="center" mb={3}>
+        <Header
+          title="DANH SÁCH BÀI VIẾT"
+          subtitle="Danh sách các bài viết trong trang web"
+        />
+        <Box ml="auto">
           <Tooltip title="Tạo bài viết" arrow>
             <Button
-              sx={{ bgcolor: '#28a745', color: '#fff', fontSize: '12px', '&:hover': { bgcolor: '#00CC00' } }}
+              sx={{
+                bgcolor: '#28a745',
+                color: '#fff',
+                fontSize: '12px',
+                '&:hover': { bgcolor: '#00CC00' },
+              }}
               onClick={() => handleOpen()}
               startIcon={<AddIcon />}
             >
@@ -118,20 +133,16 @@ const ViewBlog = () => {
         </Box>
       </Box>
 
-      <Modal
-        open={open}
-        onClose={handleClose}
-      >
+      <Modal open={open} onClose={handleClose}>
         <>
           {loading && <LoadingComponent loading={loading} />}
 
           <Box sx={style}>
-
             <TypographyHeader title="Tạo bài viết" />
 
             <TypographyTitle title="Tiêu đề " />
             <TextField
-              placeholder='Nhập tiêu đề ....'
+              placeholder="Nhập tiêu đề ...."
               fullWidth
               variant="outlined"
               onChange={(e) => setTitle(e.target.value)}
@@ -144,16 +155,16 @@ const ViewBlog = () => {
               value={categoryId}
               onChange={(e) => handleChangeCategory(e.target.value)}
             >
-              {listCategory?.length > 0 && listCategory.map((item, index) => (
-                <MenuItem key={index} value={item?.id}>{item?.categoryName}</MenuItem>
-              ))}
+              {listCategory?.length > 0 &&
+                listCategory.map((item, index) => (
+                  <MenuItem key={index} value={item?.id}>
+                    {item?.categoryName}
+                  </MenuItem>
+                ))}
             </Select>
 
             <TypographyTitle mt={1} title="Ảnh chủ đề " />
-            <Button
-              variant="contained"
-              component="label"
-            >
+            <Button variant="contained" component="label">
               Upload File
               <input
                 type="file"
@@ -162,31 +173,40 @@ const ViewBlog = () => {
               />
             </Button>
 
-            {image && <img src={image} alt="Uploaded" style={{ marginTop: '10px', maxHeight: '200px' }} />}
+            {image && (
+              <img
+                src={image}
+                alt="Uploaded"
+                style={{ marginTop: '10px', maxHeight: '200px' }}
+              />
+            )}
 
             <TypographyTitle mt={1} title="Mô tả " />
             <CKEditor
               editor={ClassicEditor}
               data={description}
               config={{
-                extraPlugins: [CustomUploadAdapterPlugin]
+                extraPlugins: [CustomUploadAdapterPlugin],
               }}
               onChange={handleDescriptionChange}
             />
 
-            <Button variant='contained'
+            <Button
+              variant="contained"
               disabled={loading}
-              onClick={(e) => handleCreateBlog(e)}> Tạo bài viết </Button>
-
+              onClick={(e) => handleCreateBlog(e)}
+            >
+              {' '}
+              Tạo bài viết{' '}
+            </Button>
           </Box>
         </>
       </Modal>
-
     </Box>
-  )
-}
+  );
+};
 
-export default ViewBlog
+export default ViewBlog;
 
 const style = {
   position: 'absolute',

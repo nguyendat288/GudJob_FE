@@ -43,7 +43,7 @@ function CurrentProject() {
 
   const handleTabChange = (newStatusId) => {
     setStatusId(newStatusId);
-    setPage(1); // Reset to first page when changing tabs
+    setPage(1);
   };
 
   return (
@@ -128,11 +128,13 @@ function CurrentProject() {
                     <Box sx={{ position: 'absolute', top: 8, right: 8 }}>
                       <Chip label={project.status} color="primary" />
                     </Box>
-                    <Box sx={{ position: 'absolute', bottom: 8, right: 8 }}>
-                      <Button variant="outlined" color="warning">
-                        Mark as done
-                      </Button>
-                    </Box>
+                    {project.statusId === 3 && (
+                      <Box sx={{ position: 'absolute', bottom: 8, right: 8 }}>
+                        <Button variant="outlined" color="warning">
+                          Mark as done
+                        </Button>
+                      </Box>
+                    )}
                   </CardContent>
                 </Card>
               </Grid>

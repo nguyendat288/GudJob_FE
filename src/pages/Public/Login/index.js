@@ -37,11 +37,7 @@ const Login = () => {
     onSuccess: async (tokenResponse) => {
       try {
         const accessToken = tokenResponse.access_token.toString();
-        const response = await authApi.loginWithGoogle(
-          accessToken,
-          dispatch,
-          navigate
-        );
+        await authApi.loginWithGoogle(accessToken, dispatch, navigate);
       } catch (error) {
         if (error.response.status === 415) {
         }

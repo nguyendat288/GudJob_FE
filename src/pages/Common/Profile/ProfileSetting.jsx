@@ -67,7 +67,7 @@ function ProfileSetting() {
     };
 
     try {
-      await profileApi.updateProfile(data, navigate);
+      await profileApi.updateProfile(data);
       toast.success('Profile updated successfully!');
     } catch (error) {
       console.error('Error response from server:', error.response);
@@ -121,6 +121,7 @@ function ProfileSetting() {
           fullWidth
           margin="normal"
           value={email}
+          disabled
           onChange={(e) => setEmail(e.target.value)}
         />
       </Box>
