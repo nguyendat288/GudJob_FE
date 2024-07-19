@@ -78,7 +78,6 @@ const Home = () => {
             responsive={responsive}
             swipeable={true}
             draggable={true}
-            showDots={true}
             infinite={true}
             partialVisible={false}
           >
