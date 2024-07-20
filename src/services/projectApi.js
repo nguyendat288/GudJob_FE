@@ -77,7 +77,6 @@ const projectApi = {
       const response = await axios.get(
         `${BASE_URL}/api/Projects/SearchAdmin?StatusId=1&IsDeleted=false&pageIndex=${index}&pageSize=${size}`
       );
-      console.log('response', response);
       return response?.data;
     } catch (error) {
       if (error.response.status === 500) {

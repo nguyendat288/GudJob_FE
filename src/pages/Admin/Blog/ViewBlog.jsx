@@ -107,7 +107,6 @@ const ViewBlog = () => {
     setLoading(false);
   };
 
-  console.log(listCategory);
   return (
     <Box>
       <Box display="flex" alignItems="center" mb={3}>

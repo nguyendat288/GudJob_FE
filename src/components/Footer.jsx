@@ -5,7 +5,7 @@ import Logo from '../assets/logo_02.png'; // Replace with your logo path or URL
 
 const Footer = () => {
   return (
-    <Box sx={{ bgcolor: '#595855', p: 6 }} component="footer">
+    <Box sx={{ bgcolor: '#595855', p: 6, mt: 10 }} component="footer">
       {' '}
       <Container maxWidth="lg">
         <Grid container spacing={4}>
