@@ -13,6 +13,8 @@ const Filter = () => {
   const [page, setPage] = useState(1)
   const [totalPage, setTotalPage] = useState(1)
 
+  const [search, setSearch] = useState('')
+
   const [listProject, setListProject] = useState(null)
   const [listCategory, setListCategory] = useState([])
   const [categoryId, setCategoryId] = useState(idCate)
@@ -20,20 +22,25 @@ const Filter = () => {
   const [listSkillSelected, setListSkillSelected] = useState([])
   const [duration, setDuration] = useState(0)
   const [minBudget, setMinBudget] = useState(0)
-  const [maxBudget, setMaxBudget] = useState(100)
+  const [maxBudget, setMaxBudget] = useState(0)
 
 
   useEffect(() => {
     const getData = async () => {
-      let data = {
-        pageIndex: page,
-        pageSize: 5,
-        categoryId: idCate,
-      };
-      let res = await projectApi.filterProject(data);
-      setListProject(res)
+      let params = {
+        Keyword: search === "" ? null : search,
+        PageIndex: page,
+        PageSize: 5,
+        CategoryId: categoryId === 0 ? null : categoryId,
+        MinBudget: minBudget === 0 ? null : minBudget,
+        MaxBudget: maxBudget === 0 ? null : maxBudget,
+        // duration: duration == 0 ? null : duration
+      }
+      const res = await projectApi.SearchHomePage(params,listSkillSelected);
+      setListProject(res);
       setTotalPage(Math.ceil(res?.totalItemsCount / 5));
-    }
+    };
+    
     getData()
   }, [idCate,page])
 
@@ -56,10 +63,10 @@ const Filter = () => {
   }, [categoryId]);
 
   const handleSelect = (item) => {
-    if (listSkillSelected.includes(item.id)) {
-      setListSkillSelected(listSkillSelected.filter(id => id !== item.id));
+    if (listSkillSelected.includes(item.skillName)) {
+      setListSkillSelected(listSkillSelected.filter(skillName => skillName !== item.skillName));
     } else {
-      setListSkillSelected([...listSkillSelected, item.id]);
+      setListSkillSelected([...listSkillSelected, item.skillName]);
     }
   };
 
@@ -69,17 +76,18 @@ const Filter = () => {
   };
 
   const handleFilter = async () => {
-    let data = {
-      pageIndex: 1,
-      pageSize: 20,
-      categoryId: categoryId,
-      skillIds: listSkillSelected,
-      minBudget: minBudget,
-      maxBudget: maxBudget,
-      duration: duration
-    };
-    let res = await projectApi.filterProject(data);
+    let params = {
+      Keyword: search === "" ? null : search,
+      PageIndex: 1,
+      PageSize: 5,
+      CategoryId: categoryId === 0 ? null : categoryId,
+      MinBudget: minBudget === 0 ? null : minBudget,
+      MaxBudget: maxBudget === 0 ? null : maxBudget,
+      // duration: duration == 0 ? null : duration
+    }
+    const res = await projectApi.SearchHomePage(params,listSkillSelected);
     setListProject(res)
+    setTotalPage(Math.ceil(res?.totalItemsCount / 5));
   }
   const handlePageChange = (event, value) => {
     setPage(value);
@@ -101,10 +109,10 @@ const Filter = () => {
       <Box flex='1' ml={3} mr={3}>
           <Box bgcolor='#F8F8FF' borderRadius='5px' p={3}>
             <Typography variant="h6" fontWeight='bold' display='flex' alignItems='center' gutterBottom>
-              <FilterListIcon /> Filters
+              <FilterListIcon /> Tìm kiếm 
             </Typography>
 
-            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Category</Typography>
+            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Chuyên Ngành</Typography>
             <Select
               fullWidth
               sx={{ bgcolor: '#FFFFFF', mb: 2 }}
@@ -120,13 +128,13 @@ const Filter = () => {
 
             {listSkill && listSkill?.length !== 0 && (
               <>
-                <Typography variant="subtitle1" fontWeight='bold' gutterBottom>List Skill</Typography>
+                <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Danh sách kỹ năng</Typography>
                 {listSkill.map((item) => (
                   <Box key={item.id} mb={1}>
                     <FormControlLabel
                       control={
                         <Checkbox
-                          checked={listSkillSelected.includes(item.id)}
+                          checked={listSkillSelected.includes(item.skillName)}
                           onChange={() => handleSelect(item)}
                           color="primary"
                         />
@@ -138,7 +146,7 @@ const Filter = () => {
               </>
             )}
 
-            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Duration</Typography>
+            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Thời gian</Typography>
 
             <OutlinedInput
               value={duration}
@@ -150,7 +158,7 @@ const Filter = () => {
                 'aria-label': 'ngày',
               }}
             />
-            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Budget Min</Typography>
+            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Ngân sách tối thiểu</Typography>
 
             <OutlinedInput
               value={minBudget}
@@ -162,7 +170,7 @@ const Filter = () => {
                 'aria-label': 'Min Budget',
               }}
             />
-            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Budget Max</Typography>
+            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Ngân sách tối đa</Typography>
             <OutlinedInput
               value={maxBudget}
               onChange={(e) => setMaxBudget(e.target.value)}
@@ -174,7 +182,7 @@ const Filter = () => {
               }}
             />
             <Button variant='contained' color='primary' onClick={() => handleFilter()}>
-              Filter
+              Tìm kiếm
             </Button>
           </Box>
         </Box>

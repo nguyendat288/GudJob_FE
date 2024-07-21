@@ -226,7 +226,7 @@ const ExperienceEducation = () => {
         ...prevProfile,
         educations: updatedEducations
       }));
-      toast.success("Education deleted successfully!");
+      toast.success("Đã xoá học vấn thành công!");
     } catch (error) {
       console.error("Error response from server:", error.response);
       if (error.response && error.response.data) {

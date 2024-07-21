@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Paper, Typography, Tooltip } from '@mui/material';
+import { Box, Button, Divider, Paper, Typography, Tooltip, Rating, FilledInput, InputAdornment, IconButton, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import ProjectDescription from '../../../components/ProjectDescription';
 import { ROLES } from '../../../constaints/role';
@@ -8,15 +8,17 @@ import FlagCircleIcon from '@mui/icons-material/FlagCircle';
 import ReportModal from '../Profile/component/ReportModal';
 import reportApi from '../../../services/reportApi';
 import { toast } from 'react-toastify';
-
-const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId }) => {
+import TypographyHeader from '../../../components/Typography/TypographyHeader';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+const ProjectDetail = ({ detail, navigate, setOpenDelete, currentUser, handleOpenUpdate, projectId, myBidding, handleOpen }) => {
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
     const handleReport = async (reportData) => {
         await reportApi.createReport(reportData);
         toast.error('Đã khiếu nại dự án');
     };
-
+    console.log(myBidding);
     return (
         <Box display='flex' mt={4}>
             <Box flex='4'>
@@ -79,7 +81,7 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId 
                                 {currentUser?.userId !== detail?.createdBy && (
                                     <Box display='flex' alignItems='center' onClick={() => setIsReportModalOpen(true)} className="text-blue-600 cursor-pointer">
                                         <FlagCircleIcon />
-                                        <Typography ml={1} fontSize='12px'>Report Project</Typography>
+                                        <Typography ml={1} fontSize='12px'>Tố cáo dự án</Typography>
                                     </Box>
                                 )}
 
@@ -88,37 +90,108 @@ const ProjectDetail = ({ detail, navigate, handleDelete, currentUser, projectId 
                     </Box>
                     <Box p={4} pb={0}>
                         <Box p={2} border='1px solid orange' borderRadius='4px' bgcolor='#FFF8E1'>
-                            <Typography fontWeight='bold' color='orange'>Beware of scams</Typography>
+                            <Typography fontWeight='bold' color='orange'>Cảnh giác với những trò lừa đảo</Typography>
                             <Typography fontSize='14px'>
-                                If you are being asked to pay a security deposit, or if you are being asked to chat on Telegram, WhatsApp, or another messaging platform, it is likely a scam. Report these projects or contact Support for assistance.
-                            </Typography>
+                                Nếu bạn được yêu cầu trả tiền đặt cọc hoặc nếu bạn được yêu cầu trò chuyện trên Telegram, WhatsApp hoặc nền tảng nhắn tin khác thì đó có thể là một trò lừa đảo. Báo cáo các dự án này hoặc liên hệ với bộ phận Hỗ trợ để được hỗ trợ.                            </Typography>
                         </Box>
                     </Box>
-                    <Box display='flex' justifyContent='flex-end' p={4}>
+                    <Box display='flex' justifyContent='flex-end' p={4} gap={2}>
                         {currentUser?.role === ROLES.RECRUITER && currentUser?.userId === detail?.createdBy && (
                             <>
                                 <Button
-                                    className="text-xs"
-                                    variant='contained'
-                                    sx={{ marginRight: 2 }}
-                                    onClick={() => navigate(`/update-project/${detail?.id}`)}
-                                >
-                                    Update Project
+                                variant='outlined'
+                                    onClick={() => navigate(`/update-project/${detail?.id}`)}>
+                                    <EditOutlinedIcon />
+                                    <Typography>Chỉnh sửa</Typography>
                                 </Button>
 
                                 {detail?.statusId !== 2 && (
                                     <Button
-                                        className="text-xs"
-                                        variant='contained'
-                                        onClick={(e) => handleDelete(detail?.id)}
-                                    >
-                                        Delete Project
+                                    variant='outlined'
+                                        color='error'
+                                        onClick={(e) => setOpenDelete(true)}>
+                                        <DeleteOutlineOutlinedIcon />
+                                        <Typography>Xoá</Typography>
+
                                     </Button>
                                 )}
                             </>
                         )}
+                        {myBidding == null && detail?.statusId == 2
+                            && currentUser?.role !== ROLES.RECRUITER && currentUser?.role !== ROLES.ADMIN && (
+                                <Button variant='outlined' onClick={handleOpen}>Đấu thầu</Button>
+                            )}
                     </Box>
+
                 </Paper>
+                {myBidding != null && detail?.statusId == 2 && (<>
+                    <Paper sx={{ bgcolor: '#F8F8FF', borderRadius: '5px', mt: 2, p: 5 }}>
+                        <Box display='flex' justifyContent='space-between'>
+                            <TypographyHeader title='Thông tin đấu thấu của bạn ' />
+                            <Tooltip title="Chỉnh sửa">
+                                <IconButton type='button'
+                                    sx={{
+                                        bgcolor: '#FFFF99',
+                                        border: '1px solid #444444',
+                                    }}
+                                    onClick={(e) => handleOpenUpdate(e)}
+                                    p={1}>
+                                    <EditOutlinedIcon />
+                                </IconButton>
+                            </Tooltip>
+
+                        </Box>
+
+                        <Box display='flex' mt={3} justifyContent='space-between'>
+                            <Box>
+                                <TypographyTitle title='Ngân sách bạn mong muốn ' />
+                                <FilledInput
+                                    sx={{
+                                        bgcolor: '#FFFFFF',
+                                        mt: 2
+                                    }}
+                                    value={myBidding?.budget}
+                                    type='number'
+                                    endAdornment={<InputAdornment position="end">VND</InputAdornment>}
+                                    inputProps={{
+                                        'aria-label': 'weight',
+                                        readOnly: true,
+                                    }}
+                                />
+                            </Box>
+                            <Box>
+                                <TypographyTitle title='Thời gian bạn có thể hoàn thành ' />
+                                <FilledInput
+                                    sx={{
+                                        bgcolor: '#FFFFFF',
+                                        mt: 2
+                                    }}
+                                    value={myBidding?.duration}
+                                    type='number'
+                                    endAdornment={<InputAdornment position="end">ngày</InputAdornment>}
+                                    inputProps={{
+                                        'aria-label': 'weight',
+                                        readOnly: true,
+                                    }}
+                                />
+                            </Box>
+                        </Box>
+                        <Box mt={3}>
+                            <TypographyTitle title='Bình luận' />
+                            <TextField
+                                fullWidth
+                                sx={{
+                                    bgcolor: '#FFFFFF',
+                                    mt: 2
+                                }}
+                                inputProps={{
+                                    readOnly: true,
+                                }}
+                                value={myBidding?.proposal}
+                            />
+                        </Box>
+                    </Paper>
+                </>)}
             </Box >
             <Box flex='1' ml={4} display='flex' flexDirection='column' gap={2}>
                 <Paper sx={{ p: 2 }}>

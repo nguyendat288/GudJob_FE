@@ -102,7 +102,10 @@ const TopBarFreelancer = () => {
     }
   }
   const handleSearch = () => {
+
     navigate(`/search/${search}`)
+    window.location.reload()
+
   }
 
 
@@ -259,8 +262,8 @@ const TopBarFreelancer = () => {
                       <InputBase
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        onKeyPress={handleKeyPress}
-                        placeholder='Seach name project' sx={{ ml: 2, flex: 1 }} />
+                        onKeyDown={handleKeyPress}
+                        placeholder='Nhập tên dự án ...' sx={{ ml: 2, flex: 1 }} />
                       <IconButton type='button'
                         onClick={(e) => handleSearch(e)}
                         p={1}>
@@ -296,7 +299,7 @@ const TopBarFreelancer = () => {
                 >
                   <Box p={2}>
                     <Box display='flex' justifyContent='space-between' alignItems='center'>
-                      <Typography variant='h6'>Messages</Typography>
+                      <Typography variant='h6'>Tin nhắn</Typography>
                     </Box>
                     <ListUser
                       listUser={userConnection}
@@ -328,7 +331,7 @@ const TopBarFreelancer = () => {
                 >
                   <Box p={2}>
                     <Box display='flex' justifyContent='space-between' alignItems='center'>
-                      <Typography variant='h6'>Notifications</Typography>
+                      <Typography variant='h6'>Thông báo</Typography>
                       <IconButton edge='end' onClick={handleTopMenuOpen}>
                         <MoreVertIcon />
                       </IconButton>
@@ -346,17 +349,17 @@ const TopBarFreelancer = () => {
                         }}
                       >
                         <MenuItem onClick={() => handleTopMenuOptionClick('markAllAsRead')}>
-                          Mark All as Read
+                          Đánh dấu đã đọc tất cả
                         </MenuItem>
                         <MenuItem onClick={() => handleTopMenuOptionClick('deleteAll')}>
-                          Delete All
+                          Xoá tất cả thông báo  
                         </MenuItem>
                       </Menu>
                     </Box>
                     <List sx={{ width: '250px' }}>
                       {listNotification?.length === 0 ? (
                         <ListItem>
-                          <ListItemText secondary='No notifications' />
+                          <ListItemText secondary='Không có thông báo' />
                         </ListItem>
                       ) : (
                         listNotification.map((item, index) => (
@@ -399,10 +402,10 @@ const TopBarFreelancer = () => {
                   }}
                 >
                   <MenuItem onClick={() => handleMenuOptionClick('markAsRead')}>
-                    Mark as Read
+                    Đánh dấu đã đọc
                   </MenuItem>
                   <MenuItem onClick={() => handleMenuOptionClick('delete')}>
-                    Delete
+                    Xoá thông báo
                   </MenuItem>
                 </Menu>
 

@@ -67,7 +67,6 @@ function ProfileSetting() {
       skills: profile?.skills || []
     };
 
-
     try {
       await profileApi.updateProfile(data, navigate);
       toast.success("Profile updated successfully!");

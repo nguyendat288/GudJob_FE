@@ -9,7 +9,7 @@ const DataGrids = ({ row, column }) => {
 
     return (
         <Box
-            height="75vh"
+            height="70vh"
             sx={{
                 "& .MuiDataGrid-root": {
                     border: "none",
@@ -46,7 +46,19 @@ const DataGrids = ({ row, column }) => {
                 }}
                 getRowId={getRowId}
                 pageSizeOptions={[5, 10]}
-            //  checkboxSelection
+
+                slotProps={{
+                    pagination: {
+                      labelRowsPerPage: "Số lượng bản ghi trên 1 trang",
+                      labelDisplayedRows: ({ from, to, count }) => {
+                        return `${from.toLocaleString('en')}-${to.toLocaleString('en')} trên ${count.toLocaleString('en')} bản ghi`
+                      }
+                    },
+                    toolbar: {
+                      printOptions: { disableToolbarButton: true },
+                      csvOptions: { disableToolbarButton: true },
+                    }
+                  }}
             />
         </Box>
     )

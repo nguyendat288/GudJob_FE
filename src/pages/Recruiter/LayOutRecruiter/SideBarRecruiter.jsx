@@ -93,7 +93,7 @@ const SideBarRecruiter = () => {
           <Box paddingLeft={isCollapsed ? undefined : '10%'}>
             <Divider />
             <Item
-              title='Home Recruiter'
+              title='Trang chủ'
               to='/recruiter'
               icon={<HouseOutlinedIcon />}
               selected={selected}
@@ -103,10 +103,17 @@ const SideBarRecruiter = () => {
             <Typography variant='h6' sx={{ m: '15px 0 5px 20px' }}>
               Project
             </Typography>
-            <SubMenu label='Project Management' icon={<QuizIcon />}>
+            <SubMenu label='Quản lý dự án' icon={<QuizIcon />}>
               <Item
-                title='List Project'
+                title='Danh sách dự án'
                 to='/list-project-recruiter'
+                icon={<QuizIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title='Tạo dự án'
+                to='/create-new-project'
                 icon={<QuizIcon />}
                 selected={selected}
                 setSelected={setSelected}

@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, FormControlLabel, InputAdornment, MenuItem, OutlinedInput, Pagination, Select,  Typography } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, InputAdornment, MenuItem, OutlinedInput, Pagination, Select, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import projectApi from '../../../services/projectApi';
@@ -6,30 +6,46 @@ import ShowList from '../../Recruiter/ListProjectRecruiter/ShowList';
 import categoryApi from '../../../services/categoryApi';
 import Header from '../../Recruiter/LayOutRecruiter/Header';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import LoadingComponent from '../../../components/LoadingComponent';
 
 const Search = () => {
   const { searchKey } = useParams()
   const [page, setPage] = useState(1)
   const [totalPage, setTotalPage] = useState(1)
   const [listProject, setListProject] = useState(null)
+
+  const [search, setSearch] = useState(searchKey || '')
   const [listCategory, setListCategory] = useState([])
   const [categoryId, setCategoryId] = useState(0)
   const [listSkill, setListSkill] = useState([])
   const [listSkillSelected, setListSkillSelected] = useState([])
   const [duration, setDuration] = useState(0)
   const [minBudget, setMinBudget] = useState(0)
-  const [maxBudget, setMaxBudget] = useState(100)
+  const [maxBudget, setMaxBudget] = useState(0)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const getData = async () => {
-      const res = await projectApi.SearchHomePage(searchKey || '', page, 5);
+      let params = {
+        Keyword: search === "" ? null : search,
+        PageIndex: page,
+        PageSize: 5,
+        CategoryId: categoryId === 0 ? null : categoryId,
+        MinBudget: minBudget === 0 ? null : minBudget,
+        MaxBudget: maxBudget === 0 ? null : maxBudget,
+        // duration: duration == 0 ? null : duration
+      }
+      setLoading(true)
+      const res = await projectApi.SearchHomePage(params,listSkillSelected);
+      console.log(res);
       setListProject(res);
       setTotalPage(Math.ceil(res?.totalItemsCount / 5));
+      setLoading(false)
+
     };
     getData();
-  }, [searchKey, page]);
-  
-
+  }, [searchKey,search,page]);
+console.log(listProject);
   useEffect(() => {
     const getData = async () => {
       let res = await categoryApi.GetAllCategory();
@@ -47,10 +63,10 @@ const Search = () => {
   }, [categoryId])
 
   const handleSelect = (item) => {
-    if (listSkillSelected.includes(item.id)) {
-      setListSkillSelected(listSkillSelected.filter(id => id !== item.id));
+    if (listSkillSelected.includes(item.skillName)) {
+      setListSkillSelected(listSkillSelected.filter(skillName => skillName !== item.skillName));
     } else {
-      setListSkillSelected([...listSkillSelected, item.id]);
+      setListSkillSelected([...listSkillSelected, item.skillName]);
     }
   };
 
@@ -60,19 +76,22 @@ const Search = () => {
   }
 
   const hanldeFilter = async () => {
-    let data = {
-      keyword: searchKey,
-      pageIndex: 1,
-      pageSize: 20,
-      categoryId: categoryId,
-      skillIds: listSkillSelected,
-      minBudget: minBudget,
-      maxBudget: maxBudget,
-      duration: duration
+    let params = {
+      Keyword: search === "" ? null : search,
+      PageIndex: 1,
+      PageSize: 5,
+      CategoryId: categoryId === 0 ? null : categoryId,
+      MinBudget: minBudget === 0 ? null : minBudget,
+      MaxBudget: maxBudget === 0 ? null : maxBudget,
+      // duration: duration == 0 ? null : duration
     }
-    let res = await projectApi.filterProject(data);
+    setLoading(true)
+    const res = await projectApi.SearchHomePage(params,listSkillSelected);
     setListProject(res)
+    setTotalPage(Math.ceil(res?.totalItemsCount / 5));
+    setLoading(false)
   }
+
   const handlePageChange = (event, value) => {
     setPage(value);
   };
@@ -80,6 +99,8 @@ const Search = () => {
   return (
     <>
       <Box m={2}>
+      {loading && <LoadingComponent loading={loading} />}
+
         {searchKey === undefined && (<>
           <Header title="DANH SÁCH DỰ ÁN" />
         </>)}
@@ -102,10 +123,10 @@ const Search = () => {
         <Box flex='1' ml={3} mr={3}>
           <Box bgcolor='#F8F8FF' borderRadius='5px' p={3}>
             <Typography variant="h6" fontWeight='bold' display='flex' alignItems='center' gutterBottom>
-              <FilterListIcon /> Filters
+              <FilterListIcon /> Tìm kiếm 
             </Typography>
 
-            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Category</Typography>
+            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Chuyên ngành</Typography>
             <Select
               fullWidth
               sx={{ bgcolor: '#FFFFFF', mb: 2 }}
@@ -121,13 +142,13 @@ const Search = () => {
 
             {listSkill && listSkill?.length !== 0 && (
               <>
-                <Typography variant="subtitle1" fontWeight='bold' gutterBottom>List Skill</Typography>
+                <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Danh sách kỹ năng</Typography>
                 {listSkill.map((item) => (
                   <Box key={item.id} mb={1}>
                     <FormControlLabel
                       control={
                         <Checkbox
-                          checked={listSkillSelected.includes(item.id)}
+                          checked={listSkillSelected.includes(item.skillName)}
                           onChange={() => handleSelect(item)}
                           color="primary"
                         />
@@ -139,7 +160,7 @@ const Search = () => {
               </>
             )}
 
-            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Duration</Typography>
+            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Thời gian</Typography>
 
             <OutlinedInput
               value={duration}
@@ -151,7 +172,7 @@ const Search = () => {
                 'aria-label': 'ngày',
               }}
             />
-            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Budget Min</Typography>
+            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Ngân sách tối thiểu </Typography>
 
             <OutlinedInput
               value={minBudget}
@@ -163,7 +184,7 @@ const Search = () => {
                 'aria-label': 'Min Budget',
               }}
             />
-            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Budget Max</Typography>
+            <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Ngân sách tối đa</Typography>
             <OutlinedInput
               value={maxBudget}
               onChange={(e) => setMaxBudget(e.target.value)}
@@ -175,7 +196,7 @@ const Search = () => {
               }}
             />
             <Button variant='contained' color='primary' onClick={() => hanldeFilter()}>
-              Filter
+              Tìm Kiếm
             </Button>
           </Box>
         </Box>

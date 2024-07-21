@@ -1,5 +1,6 @@
 import { Avatar, Box, ListItemButton, ListItemText, Typography } from '@mui/material';
 import React from 'react'
+import { truncateText } from '../../../utils/truncateText';
 
 const ListUser = ({ listUser, currentUser, hanldeSelectChat }) => {
 
@@ -30,12 +31,12 @@ const ListUser = ({ listUser, currentUser, hanldeSelectChat }) => {
                                 <br />
                                 {item?.senderId === currentUser?.userId && (
                                     <>
-                                        <span>Bạn : {item?.messageText}</span>
+                                        <span>Bạn : {truncateText(item?.messageText,12)}</span>
                                     </>
                                 )}
                                 {item?.senderId !== currentUser?.userId && (
                                     <>
-                                        <span> {item?.messageText}</span>
+                                        <span> {truncateText(item?.messageText,12)}</span>
                                     </>
                                 )}
                                 <br />
