@@ -1,0 +1,4 @@
+.ck-editor__editable {
+    min-height: 100px; /* Set your desired minimum height */
+    background-color: white;
+}

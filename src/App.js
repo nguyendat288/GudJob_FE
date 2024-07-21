@@ -16,6 +16,7 @@ function App() {
           <BrowserRouter>
             <Helmet>
               <title>Good Job</title>
+              {/* <link rel="icon" href="/path/to/logo.ico" /> */}
             </Helmet>
             <Router />
             <ToastContainer />

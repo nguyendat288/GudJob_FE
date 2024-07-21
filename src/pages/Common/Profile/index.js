@@ -29,6 +29,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import ReportIcon from '@mui/icons-material/Report';
+import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 import ReportModal from './component/ReportModal';
 import reportApi from '../../../services/reportApi';
 import { toast } from 'react-toastify';
@@ -52,6 +53,7 @@ function Profile() {
   const { userId } = useParams();
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const [profile, setProfile] = useState();
+  const [isOwnProfile, setIsOwnProfile] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [isSkillModalOpen, setIsSkillModalOpen] = useState(false);
   const [newRating, setNewRating] = useState(0);
@@ -63,8 +65,12 @@ function Profile() {
     const getData = async () => {
       let res;
       if (userId) {
+        if (parseInt(userId) === currentUser?.userId) {
+          setIsOwnProfile(true);
+        }
         res = await profileApi.getUserProfileById(userId);
       } else {
+        setIsOwnProfile(true);
         res = await profileApi.getUserProfile();
       }
       setProfile(res);
@@ -72,7 +78,8 @@ function Profile() {
     getData();
   }, [userId]);
 
-  const isOwnProfile = userId === undefined;
+  // const isOwnProfile = userId === undefined;
+
   const handleReport = async (reportData) => {
     await reportApi.createReport(reportData);
     toast.error('Đã khiếu nại người dùng');
@@ -109,7 +116,7 @@ function Profile() {
     console.log(res);
     navigate(`/chat/${res}/${userId}`);
   };
-  console.log('profile', profile);
+
   return (
     <Container>
       <Grid container spacing={4}>
@@ -175,11 +182,10 @@ function Profile() {
                   </Button>
                   <Button
                     variant="outlined"
-                    color="error"
-                    startIcon={<ReportIcon />}
+                    startIcon={<ChatOutlinedIcon />}
                     onClick={() => handleContact()}
                   >
-                    Contact
+                    Nhắn tin
                   </Button>
                 </>
               )}

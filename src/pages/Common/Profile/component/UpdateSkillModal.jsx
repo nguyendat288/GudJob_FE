@@ -116,7 +116,7 @@ const UpdateSkillModal = ({ openSkill, onCloseSkill, profile, setProfile }) => {
     }
     onCloseSkill();
   };
-  console.log('listSkill', listSkill);
+
   return (
     <Modal open={openSkill} onClose={onCloseSkill}>
       <Box

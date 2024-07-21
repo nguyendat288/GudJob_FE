@@ -5,6 +5,7 @@ import {
   PUBLIC_PATH,
   RECRUITER_PATH,
 } from '../constaints/path';
+import Register from '../pages/Public/Register';
 import Login from '../pages/Public/Login';
 import Profile from '../pages/Common/Profile';
 import Setting from '../pages/Common/Profile/Setting';
@@ -37,6 +38,10 @@ import ListProject from '../pages/Admin/List/ListProject';
 import ViewBlog from '../pages/Admin/Blog/ViewBlog';
 import CurrentProject from '../pages/Common/Profile/CurrentProject';
 import ListCategory from '../pages/Admin/List/ListCategory';
+import CreateBlog from '../pages/Admin/Blog/CreateBlog';
+import UpdateBlog from '../pages/Admin/Blog/UpdateBlog';
+import BlogDetail from '../pages/Admin/Blog/Publish/BlogDetail';
+import HomeBlog from '../pages/Admin/Blog/Publish/HomeBlog';
 import ListSkill from '../pages/Admin/List/ListSkill';
 
 export default function Router() {
@@ -48,6 +53,18 @@ export default function Router() {
     {
       path: PUBLIC_PATH.RESET,
       element: <ResetPasswordPage />,
+    },
+    {
+      path: PUBLIC_PATH.REGISTER,
+      element: <Register />,
+    },
+    {
+      path: PUBLIC_PATH.BLOG,
+      element: <HomeBlog />,
+    },
+    {
+      path: PUBLIC_PATH.BLOG_DETAIL,
+      element: <BlogDetail />,
     },
     {
       path: PUBLIC_PATH.LAYOUT,
@@ -233,23 +250,11 @@ export default function Router() {
                 </Suspense>
               ),
             },
-          ],
-        },
-      ],
-    },
-    {
-      path: RECRUITER_PATH.LAYOUT,
-      element: <TopBarFreelancer />,
-
-      children: [
-        {
-          element: <RequireAuth allowedRoles={ROLES.RECRUITER} />,
-          children: [
             {
-              path: RECRUITER_PATH.DETAIL_PROJECT,
+              path: RECRUITER_PATH.CREATE_NEW_PROJECT,
               element: (
                 <Suspense fallback={<>Loading...</>}>
-                  <Detail />
+                  <CreateProject />
                 </Suspense>
               ),
             },
@@ -258,24 +263,6 @@ export default function Router() {
               element: (
                 <Suspense fallback={<>Loading...</>}>
                   <UpdateProject />
-                </Suspense>
-              ),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      path: RECRUITER_PATH.LAYOUT,
-      children: [
-        {
-          element: <RequireAuth allowedRoles={ROLES.RECRUITER} />,
-          children: [
-            {
-              path: RECRUITER_PATH.CREATE_NEW_PROJECT,
-              element: (
-                <Suspense fallback={<>Loading...</>}>
-                  <CreateProject />
                 </Suspense>
               ),
             },
@@ -343,6 +330,22 @@ export default function Router() {
               element: (
                 <Suspense fallback={<>Loading...</>}>
                   <ListSkill />
+                </Suspense>
+              ),
+            },
+            {
+              path: ADMIN_PATH.CREATE_BLOG,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <CreateBlog />
+                </Suspense>
+              ),
+            },
+            {
+              path: ADMIN_PATH.UPDATE_BLOG,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <UpdateBlog />
                 </Suspense>
               ),
             },

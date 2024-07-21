@@ -12,7 +12,7 @@ const ListProject = () => {
   useEffect(() => {
     const getData = async () => {
       let pageSize = 5;
-      let res = await projectApi.GetAllProject(pageIndex, pageSize);
+      let res = await projectApi.GetAllProjectPending(pageIndex, pageSize);
       setTotalPages(Math.ceil(res.totalItemsCount / pageSize));
       setListProject(res);
     };

@@ -1,114 +1,153 @@
 import {
   Box,
   Button,
+  IconButton,
   Modal,
-  Select,
-  TextField,
-  MenuItem,
+  Switch,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import AddIcon from '@mui/icons-material/Add';
 import Header from '../../Recruiter/LayOutRecruiter/Header';
-import TypographyTitle from '../../../components/Typography/TypographyTitle';
-import TypographyHeader from '../../../components/Typography/TypographyHeader';
-import { v4 } from 'uuid';
-import { imageDb } from '../../../firebase/firebaseConfig';
-import { toast } from 'react-toastify';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import customUploadAdapter from '../../../firebase/customUploadAdapter';
-import 'ckeditor5/ckeditor5.css';
-import categoryApi from '../../../services/categoryApi';
 import LoadingComponent from '../../../components/LoadingComponent';
-
+import blogApi from '../../../services/blogApi';
+import DataGrids from './DataGrids';
+import { formatDateTime } from '../../../utils/formatDate';
+import { useNavigate } from 'react-router-dom';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import TypographyTitle from '../../../components/Typography/TypographyTitle';
 const ViewBlog = () => {
-  const userId = useSelector((state) => state.auth.login?.currentUser?.userId);
-  const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState('');
-  const [categoryId, setCategoryId] = useState(1);
-  const [listCategory, setlistCategory] = useState([]);
-  const [image, setImage] = useState('');
-  const [description, setDescription] = useState('');
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [listBlog, setListBlog] = useState([]);
+  const [deleteItemId, setDeleteItemId] = useState(null);
+
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+    setDeleteItemId(null);
+  };
+
   useEffect(() => {
+    setLoading(true);
     const getData = async () => {
-      if (open) {
-        let res = await categoryApi.GetAllCategory();
-        setlistCategory(res);
-      }
+      let res = await blogApi.GetAllBlog(1, 10);
+      setListBlog(res?.items);
     };
     getData();
-  }, [open]);
+    setLoading(false);
+  }, []);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const handleChangeCategory = (id) => {
-    setCategoryId(id);
+  const columns = [
+    {
+      field: 'author',
+      headerName: 'Tác giả',
+      width: 150,
+    },
+    {
+      field: 'categoryName',
+      headerName: 'Chủ đề ',
+      width: 200,
+    },
+    {
+      field: 'title',
+      headerName: 'Tiêu đề',
+      width: 250,
+    },
+    {
+      field: 'createDate',
+      headerName: 'Ngày tạo',
+      width: 250,
+      renderCell: (params) => (
+        <>
+          <Box mt={2}>
+            <Typography> {formatDateTime(params?.row?.createDate)} </Typography>
+          </Box>
+        </>
+      ),
+    },
+    {
+      field: '',
+      headerName: 'Hành động',
+      width: 150,
+      renderCell: (params) => (
+        <Box display={'flex'}>
+          <IconButton onClick={(e) => handleEdit(params?.row?.blogId)}>
+            <Typography color="blue">
+              <EditOutlinedIcon />
+            </Typography>
+          </IconButton>
+          <IconButton onClick={(e) => handleDelete(params?.row?.blogId)}>
+            <Typography color="red">
+              <DeleteOutlineOutlinedIcon />
+            </Typography>
+          </IconButton>
+        </Box>
+      ),
+    },
+    {
+      field: 'a',
+      headerName: 'Công khai',
+      width: 150,
+      renderCell: (params) => (
+        <Box display={'flex'}>
+          <Switch
+            checked={params?.row?.isPublished}
+            value={params?.row?.isPublished}
+            onChange={(e) => handleUpdatePublish(params?.row?.blogId)}
+          />
+        </Box>
+      ),
+    },
+  ];
+  const handleEdit = (id) => {
+    navigate(`/update-blog/${id}`);
   };
 
-  const handleUpload = (e) => {
-    if (e) {
-      if (e.name.endsWith('.jpg') || e.name.endsWith('.png')) {
-        setLoading(true);
-        const imgRef = ref(imageDb, `file/${v4()}`);
-        uploadBytes(imgRef, e)
-          .then((value) => getDownloadURL(value.ref))
-          .then((url) => setImage(url))
-          .catch((error) => {
-            console.error(error);
-            toast.error('Upload failed');
-          })
-          .finally(() => setLoading(false));
-      } else {
-        toast.error('File is not an image');
-      }
-    } else {
-      toast.error('No file selected');
-    }
+  const handleUpdatePublish = async (id) => {
+    await blogApi.UpdatePublish(id);
+    updateItem(id);
   };
 
-  function CustomUploadAdapterPlugin(editor) {
-    editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-      return customUploadAdapter(loader);
-    };
-  }
-  const handleDescriptionChange = (event, editor) => {
-    const data = editor.getData();
-    setDescription(data);
+  const updateItem = (blogId) => {
+    setListBlog((prev) =>
+      prev.map((item) =>
+        item.blogId === blogId
+          ? { ...item, isPublished: !item.isPublished }
+          : item
+      )
+    );
   };
-  const handleCreateBlog = async () => {
-    if (
-      title.length < 10 ||
-      title.length > 100 ||
-      description.length < 10 ||
-      description.length > 1000 ||
-      image === ''
-    ) {
-      toast.error('Dữ liệu nhập vào không hợp lệ !!!');
+
+  const handleDelete = (id) => {
+    setDeleteItemId(id);
+    setOpen(true);
+  };
+
+  const handleCreate = () => {
+    navigate('/create-blog');
+  };
+
+  const handleConfirm = async () => {
+    if (deleteItemId == null) {
       return;
     }
+    await blogApi.DeleteBlog(deleteItemId);
+    removeItem(deleteItemId);
+    setDeleteItemId(null);
+    setOpen(false);
+  };
 
-    setLoading(true);
-    try {
-      let data = {
-        createdBy: userId,
-        title: title,
-        description: description,
-        categoryId: categoryId,
-        blogImage: image,
-      };
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-    setLoading(false);
+  const removeItem = (blogId) => {
+    setListBlog((prev) => prev.filter((item) => item.blogId !== blogId));
   };
 
   return (
-    <Box>
+    <Box className="p-4" sx={{ width: '100%', overflow: 'auto' }}>
+      {loading && <LoadingComponent loading={loading} />}
       <Box display="flex" alignItems="center" mb={3}>
         <Header
           title="DANH SÁCH BÀI VIẾT"
@@ -123,7 +162,7 @@ const ViewBlog = () => {
                 fontSize: '12px',
                 '&:hover': { bgcolor: '#00CC00' },
               }}
-              onClick={() => handleOpen()}
+              onClick={() => handleCreate()}
               startIcon={<AddIcon />}
             >
               Tạo bài viết
@@ -131,75 +170,34 @@ const ViewBlog = () => {
           </Tooltip>
         </Box>
       </Box>
+      <Box>
+        <DataGrids row={listBlog} column={columns} />
+      </Box>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="delete-modal-title"
+        aria-describedby="delete-modal-description"
+      >
+        <Box sx={style}>
+          <DeleteOutlineOutlinedIcon color="error" sx={{ fontSize: 64 }} />
+          <TypographyTitle title="Xác nhận" />
 
-      <Modal open={open} onClose={handleClose}>
-        <>
-          {loading && <LoadingComponent loading={loading} />}
-
-          <Box sx={style}>
-            <TypographyHeader title="Tạo bài viết" />
-
-            <TypographyTitle title="Tiêu đề " />
-            <TextField
-              placeholder="Nhập tiêu đề ...."
-              fullWidth
-              variant="outlined"
-              onChange={(e) => setTitle(e.target.value)}
-            />
-
-            <TypographyTitle title="Chủ đề của bài viết " />
-            <Select
-              fullWidth
-              sx={{ bgcolor: '#FFFFFF', mb: 2 }}
-              value={categoryId}
-              onChange={(e) => handleChangeCategory(e.target.value)}
-            >
-              {listCategory?.length > 0 &&
-                listCategory.map((item, index) => (
-                  <MenuItem key={index} value={item?.id}>
-                    {item?.categoryName}
-                  </MenuItem>
-                ))}
-            </Select>
-
-            <TypographyTitle mt={1} title="Ảnh chủ đề " />
-            <Button variant="contained" component="label">
-              Upload File
-              <input
-                type="file"
-                hidden
-                onChange={(e) => handleUpload(e.target.files[0])}
-              />
-            </Button>
-
-            {image && (
-              <img
-                src={image}
-                alt="Uploaded"
-                style={{ marginTop: '10px', maxHeight: '200px' }}
-              />
-            )}
-
-            <TypographyTitle mt={1} title="Mô tả " />
-            <CKEditor
-              editor={ClassicEditor}
-              data={description}
-              config={{
-                extraPlugins: [CustomUploadAdapterPlugin],
-              }}
-              onChange={handleDescriptionChange}
-            />
-
-            <Button
-              variant="contained"
-              disabled={loading}
-              onClick={(e) => handleCreateBlog(e)}
-            >
-              {' '}
-              Tạo bài viết{' '}
-            </Button>
-          </Box>
-        </>
+          <Typography sx={{ mt: 2, mb: 4 }}>
+            Bạn có chắc chắn muốn xoá bài viết ?
+          </Typography>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={(e) => handleConfirm()}
+            sx={{ mr: 2 }}
+          >
+            Chắc chắn
+          </Button>
+          <Button variant="outlined" onClick={handleClose}>
+            Không
+          </Button>
+        </Box>
       </Modal>
     </Box>
   );
@@ -209,14 +207,13 @@ export default ViewBlog;
 
 const style = {
   position: 'absolute',
+  width: 400,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 600,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  overflow: 'auto',
-  maxHeight: 500,
-  p: 4,
+  borderRadius: '8px',
+  textAlign: 'center',
 };

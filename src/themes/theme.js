@@ -7,6 +7,9 @@ export const theme = createTheme({
       fontSize: 16,
       fontWeight: '500',
     },
+    button: {
+      textTransform: 'none',
+    },
   },
   palette: {
     bgColorPrimary: {

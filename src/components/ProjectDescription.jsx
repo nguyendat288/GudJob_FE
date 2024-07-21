@@ -64,9 +64,8 @@ const ProjectDescription = ({ description }) => {
             return (
               <Box component="img" src={domNode.attribs.src} alt={domNode.attribs.alt} sx={{ maxWidth: '100%', height: 'auto', marginBottom: 2 }} />
             );
-          // Add more cases for other tags as needed
           default:
-            return undefined; // Use default parsing for other tags
+            return undefined; 
         }
 
       }

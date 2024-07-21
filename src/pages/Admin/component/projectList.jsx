@@ -38,7 +38,7 @@ const ProjectList = ({ listProject, setReload }) => {
       console.log(error);
     }
   };
-
+  console.log('listProject', listProject);
   return (
     <Box className="p-4" sx={{ width: '100%', overflow: 'auto' }}>
       <Box

@@ -1,5 +1,5 @@
-import { Autocomplete, Box, Button, FilledInput, InputAdornment, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
-import React, { useEffect,  useState } from 'react'
+import { Autocomplete, Box, Button, Divider, FilledInput, InputAdornment, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import Header from '../LayOutRecruiter/Header'
 import categoryApi from '../../../services/categoryApi';
 import { toast } from 'react-toastify';
@@ -9,27 +9,45 @@ import { useNavigate } from 'react-router-dom';
 import 'ckeditor5/ckeditor5.css';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
-import customUploadAdapter from '../../../firebase/customUploadAdapter';
+import TypographyHeader from '../../../components/Typography/TypographyHeader';
+import TypographyTitle from '../../../components/Typography/TypographyTitle';
+import LoadingComponent from '../../../components/LoadingComponent';
 
 const CreateProject = () => {
     const [name, setName] = useState('')
+    const [errorName, setErrorName] = useState(false)
+    const [helperTextName, setHelperTextName] = useState('')
+
     const [description, setDescription] = useState('')
+    const [helperTextDescription, setHelperTextDescription] = useState('')
+
     const [listCategory, setListCategory] = useState([])
+
     const [category, setCategory] = useState('')
+    const [errorCategory, setErrorCategory] = useState(false)   
+    const [helperTextCategory, setHelperTextCategory] = useState('')
+
     const [budgetMin, setBudgetMin] = useState(0)
+    const [errorBudgetMin, setErrorBudgetMin] = useState(false)
+    const [helperTextBudgetMin, setHelperTextBudgetMin] = useState('')
+
     const [budgetMax, setBudgetMax] = useState(0)
+    const [errorBudgetMax, setErrorBudgetMax] = useState(false)
+    const [helperTextBudgetMax, setHelperTextBudgetMax] = useState('')
+
     const [duration, setDuration] = useState('')
+    const [errorDuration, setErrorDuration] = useState(false)
+    const [helperTextDuration, setHelperTextDuration] = useState('')
+
     const [listSkill, setListSkill] = useState([]);
     const [listSkillSelected, setListSkillSelected] = useState([])
+    const [errorListSkillSelected, setErrorListSkillSelected] = useState(false)
+    const [helperTextListSkillSelected, setHelperTextListSkillSelected] = useState('')
+
+    const [loading, setLoading] = useState(false)
     const currentUser = useSelector((state) => state.auth.login?.currentUser)
     const navigate = useNavigate();
 
-    function CustomUploadAdapterPlugin(editor) {
-        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-            return customUploadAdapter(loader);
-        };
-    }
 
     useEffect(() => {
         const getCategory = async () => {
@@ -56,69 +74,111 @@ const CreateProject = () => {
     };
 
     const handleSubmit = async () => {
-        let data = {
-            title: name,
-            description: description,
-            minBudget: budgetMin,
-            maxBudget: budgetMax,
-            categoryId: category,
-            duration: duration,
-            createdBy: currentUser?.userId,
-            skill: listSkillSelected
-        }
-        console.log(data);
-        if (name === '' || description === '' || category === null || budgetMin === 0 || budgetMax <= budgetMin || duration === '' || listSkillSelected.length === 0) {
-            toast.error("not empty")
+        let hasError = false
+        if (name.length <= 10 || name.length >= 100) {
+            setErrorName(true)
+            setHelperTextName("* Tiêu đề từ 10 - 100 ký tự .")
+            hasError = true
         } else {
-            await projectApi.AddProject(data, navigate);
+            setErrorName(false)
+            setHelperTextName("")
         }
+
+        if (description.length <= 50 || description.length >= 2000) {
+            setHelperTextDescription("* Mô tả từ 50 - 2000 ký tự .")
+            hasError = true
+        } else {
+            setHelperTextDescription("")
+        }
+
+        if (category === "") {
+            setErrorCategory(true)
+            setHelperTextCategory("* Hãy chọn chuyên ngành cho dự án .")
+            hasError = true
+        } else {
+            setErrorCategory(false)
+            setHelperTextCategory("")
+        }
+
+        if (budgetMin <= 0 || budgetMin === '') {
+            setErrorBudgetMin(true)
+            setHelperTextBudgetMin("* Không được để trống .")
+            hasError = true
+
+        } else {
+            setErrorBudgetMin(false)
+            setHelperTextBudgetMin("")
+        }
+
+        if (budgetMax <= 0 || budgetMax === '' || budgetMax <= budgetMin) {
+            setErrorBudgetMax(true)
+            setHelperTextBudgetMax("* Phải lớn hơn ngân sách tối thiểu .")
+            hasError = true
+        } else {
+            setErrorBudgetMax(false)
+            setHelperTextBudgetMax("")
+        }
+
+        if (listSkillSelected.length === 0 || listSkillSelected === null || listSkillSelected.length > 5) {
+            setErrorListSkillSelected(true)
+            setHelperTextListSkillSelected("* Chọn tối đa 5 kỹ thuật .")
+            hasError = true
+        } else {
+            setErrorListSkillSelected(false)
+            setHelperTextListSkillSelected("")
+        }
+
+        if (duration <= 0 || duration === '') {
+            setErrorDuration(true)
+            setHelperTextDuration("* Không được để trống .")
+            hasError = true
+
+        } else {
+            setErrorDuration(false)
+            setHelperTextDuration("")
+        }
+
+        if (hasError === true) {
+            return
+        }
+
+        try {
+            setLoading(true)
+            let data = {
+                title: name,
+                description: description,
+                minBudget: budgetMin,
+                maxBudget: budgetMax,
+                categoryId: category,
+                duration: duration,
+                createdBy: currentUser?.userId,
+                skill: listSkillSelected
+            }
+            await projectApi.AddProject(data, navigate);
+            setLoading(false)
+        }catch(err){
+            toast.error("Tạo dự án thất bại . ")
+        }
+      
     }
 
-    // const handleUpload = (e) => {
-    //     if (e !== '') {
-    //         if (e?.name.endsWith('.jpg') || e?.name.endsWith('.png')) {
-    //             const imgRef = ref(imageDb, `file/${v4()}`)
-    //             uploadBytes(imgRef, e).then(value => {
-    //                 getDownloadURL(value.ref).then(url => {
-    //                     setImage(url)
-    //                 })
-    //             })
-    //         } else {
-    //             toast.error('not image')
-    //         }
-    //     } else {
-    //         toast.error('not  dsddsad image')
-    //     }
-    // }
-    // console.log(image);
-
     return (
-        <Box m={5}>
-            <Header title='Create New Project' subtitle='You can create new project' />
-            <Paper sx={{ bgcolor: '#F8F8FF' }}>
-                <Box m={5} p={5}>
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            textDecoration: 'none',
-                        }}
-                        className='bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text'
-                    >
-                        GoodJob
-                    </Typography>
-                    <Typography variant="h6"
-                    > Tell us what you need done. </Typography>
+        <Box sx={style}>
+            {loading && <LoadingComponent loading={loading} />}
 
+            <Paper sx={{ bgcolor: '#F8F8FF' }}>
+                <Box m={3} p={5}>
+                    <Box textAlign='center' mb={3}>
+                        <TypographyHeader title="Tạo dự án " />
+                    </Box>
+                    <Divider />
                     <Box mt={2}>
-                        <Typography mt={3} fontSize='20px' fontWeight='bold'> Project Name </Typography>
+                        <TypographyTitle title="Tên dự án" marginT={3} />
                         <Box mt={2}>
                             <TextField fullWidth
                                 value={name}
+                                error={errorName}
+                                helperText={helperTextName}
                                 sx={{
                                     bgcolor: '#FFFFFF'
                                 }}
@@ -127,46 +187,26 @@ const CreateProject = () => {
                         </Box>
                     </Box>
                     <Box mt={2}>
-                        <Typography mt={3} fontSize='20px' fontWeight='bold'> Project Description </Typography>
+                        <TypographyTitle title="Mô tả dự án" />
                         <Box mt={2}>
 
-                            {/* <input type="file" onChange={(e) => handleUpload(e.target.files[0])} /> */}
                             <CKEditor
                                 editor={ClassicEditor}
                                 data={description}
-                                config={{
-                                    extraPlugins: [CustomUploadAdapterPlugin]
-                                }}
                                 onChange={handleDescriptionChange}
                             />
-
-                            {/* <CKEditor
-                                editor={ClassicEditor}
-                                data={description}
-                                onChange={handleDescriptionChange}
-                            /> */}
-
-                            {/* <div className="main-container">
-                                <div className="editor-container editor-container_classic-editor" ref={editorContainerRef}>
-                                    <div className="editor-container__editor">
-                                        <div ref={editorRef}>{isLayoutReady && <CKEditor 
-                                        data={description}
-                                        onChange={handleDescriptionChange}
-                                        editor={ClassicEditor} config={editorConfig} />}</div>
-                                    </div>
-                                </div>
-                            </div> */}
-
+                            <Typography color='red'>{helperTextDescription}</Typography>
                         </Box>
                     </Box>
                     <Box mt={2}>
-                        <Typography mt={3} fontSize='20px' fontWeight='bold'> What category are required? </Typography>
+                        <TypographyTitle title='Dự án của bạn thuộc ngành nào ? ' />
                         <Box mt={2}>
                             <Select
                                 fullWidth
                                 sx={{
                                     bgcolor: '#FFFFFF'
                                 }}
+                                error={errorCategory}
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
                             >
@@ -174,15 +214,16 @@ const CreateProject = () => {
                                     <MenuItem key={index} value={item?.id}>{item?.categoryName}</MenuItem>
                                 ))}
                             </Select>
+                            <Typography color='red'>{helperTextCategory}</Typography>
+
                         </Box>
                     </Box>
 
-                    <Box mt={2}>
-                        <Typography mt={3} fontSize='20px' fontWeight='bold'> What skills are required? </Typography>
-                        <Typography mt={3} fontSize='15px'> Enter up to 5 skills that best describe your project. </Typography>
-                        <Typography mt={2} fontSize='15px'> Freelancers will use these skills to find projects they are most interested and experienced in. </Typography>
+                    <Box mt={3}>
+                        <TypographyTitle title="Dự án của bạn yêu cầu những kỹ năng gì ?" />
+                        <Typography mt={2} fontSize='15px'> Nhập tối đa 5 kỹ năng mô tả đúng nhất dự án của bạn. </Typography>
+                        <Typography mt={2} fontSize='15px'> Những người làm nghề tự do sẽ sử dụng những kỹ năng này để tìm ra những dự án mà họ quan tâm và có kinh nghiệm nhất. </Typography>
                         <Box mt={2}>
-
                             <Autocomplete
                                 sx={{
                                     bgcolor: '#FFFFFF'
@@ -191,11 +232,12 @@ const CreateProject = () => {
                                 options={listSkill}
                                 getOptionLabel={(option) => option?.skillName}
                                 filterSelectedOptions
-                                // value={listSkillSelected}
                                 onChange={(event, value) => setListSkillSelected(value.map((item) => item?.skillName))}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
+                                        error={errorListSkillSelected}
+                                        helperText={helperTextListSkillSelected}
                                         placeholder="Skill"
                                     />
                                 )}
@@ -204,11 +246,12 @@ const CreateProject = () => {
                     </Box>
 
                     <Box mt={2}>
-                        <Typography mt={3} fontSize='20px' fontWeight='bold'> Budget Of Project  </Typography>
-                        <Typography mt={3} fontSize='15px'> Enter the budget you can afford for this project. </Typography>
+                        <TypographyTitle title="Ngân sách bạn có thể cung cấp trong dự án này ?" />
+                        <Typography mt={3} fontSize='15px'>Nhập ngân sách bạn có thể đủ khả năng cho dự án này. </Typography>
                         <Box mt={2} display='flex'>
                             <Box>
-                                <Typography> Budget Min</Typography>
+                                <TypographyTitle title="Ngân sách tối thiểu " />
+
                                 <FilledInput
                                     sx={{
                                         bgcolor: '#FFFFFF'
@@ -216,56 +259,74 @@ const CreateProject = () => {
                                     value={budgetMin}
                                     type='number'
                                     id="filled-adornment-weight"
-                                    endAdornment={<InputAdornment position="end">$</InputAdornment>}
+                                    error={errorBudgetMin}
+                                    endAdornment={<InputAdornment position="end">VND</InputAdornment>}
                                     aria-describedby="filled-weight-helper-text"
                                     inputProps={{
                                         'aria-label': 'weight',
                                     }}
                                     onChange={(e) => setBudgetMin(e.target.value)}
                                 />
+                                <Typography color='red'>{helperTextBudgetMin}</Typography>
+
                             </Box>
                             <Box ml={3}>
-                                <Typography> Budget Max</Typography>
-                                <FilledInput
+                            <TypographyTitle title="Ngân sách tối đa " />
+                            <FilledInput
                                     sx={{
                                         bgcolor: '#FFFFFF'
                                     }}
                                     type='number'
                                     value={budgetMax}
+                                    error={errorBudgetMax}
                                     id="filled-adornment-weight"
-                                    endAdornment={<InputAdornment position="end">$</InputAdornment>}
+                                    endAdornment={<InputAdornment position="end">VND</InputAdornment>}
                                     aria-describedby="filled-weight-helper-text"
                                     inputProps={{
                                         'aria-label': 'weight',
                                     }}
                                     onChange={(e) => setBudgetMax(e.target.value)}
                                 />
+                                <Typography color='red'>{helperTextBudgetMax}</Typography>
+
                             </Box>
                         </Box>
                     </Box>
                     <Box mt={2}>
-                        <Typography mt={3} fontSize='20px' fontWeight='bold'> Duration   </Typography>
-                        <Typography mt={3} fontSize='15px'> The time you want the freelancer to complete the project  </Typography>
+                        <Typography mt={3} fontSize='20px' fontWeight='bold'> Thời gian mong muốn có thể hoàn thành dự án ?   </Typography>
+                        <Typography mt={3} fontSize='15px'>Thời gian bạn muốn freelancer hoàn thành dự án . </Typography>
                         <Box mt={2} >
-                            <TextField
-                                value={duration}
-                                type='number'
+                            <FilledInput
                                 sx={{
                                     bgcolor: '#FFFFFF'
                                 }}
+                                type='number'
+                                value={duration}
+                                id="filled-adornment-weight"
+                                error={errorDuration}
+                                endAdornment={<InputAdornment position="end">ngày</InputAdornment>}
+                                aria-describedby="filled-weight-helper-text"
+                                inputProps={{
+                                    'aria-label': 'weight',
+                                }}
                                 onChange={(e) => setDuration(e.target.value)}
                             />
+                            <Typography color='red'>{helperTextDuration}</Typography>
+
                         </Box>
                     </Box>
-                    <Box mt={3}>
-                        <Button variant='contained' onClick={(e) => handleSubmit()}> Create </Button>
+                    <Box mt={3} display='flex' justifyContent='flex-end'>
+                        <Button variant='contained' onClick={(e) => handleSubmit()}> Tạo dự án </Button>
                     </Box>
                 </Box>
-
-
             </Paper >
         </Box >
     )
 }
 
 export default CreateProject
+const style = {
+    p: 4,
+    overflow: 'auto',
+    maxHeight: window.innerHeight - 80,
+};

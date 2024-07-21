@@ -10,15 +10,12 @@ const projectApi = {
         `${BASE_URL}/api/Projects/AddProject`,
         data
       );
-      toast.success('create success');
+      toast.success('Tạo dự án thành công');
       navigate('/recruiter');
       return response;
     } catch (error) {
-      if (error.response.status === 500) {
-        toast.error('Something was wrong');
-      }
-      if (error.response.status === 501) {
-        toast.error('Username or Phone or Email exist');
+      if (error.response.status === 400) {
+        toast.error('Thông tin điền không hợp lệ');
       }
     }
   },
@@ -28,8 +25,8 @@ const projectApi = {
         `${BASE_URL}/api/Projects/UpdateProject`,
         data
       );
-      toast.success('update success');
-      navigate('/recruiter');
+      toast.success('Chỉnh sửa thành công');
+      navigate('/detail/' + data?.id);
       return response;
     } catch (error) {
       if (error.response.status === 400) {
@@ -45,7 +42,7 @@ const projectApi = {
       await axiosClient.delete(
         `${BASE_URL}/api/Projects/DeleteProject?projectId=${projectId}`
       );
-      toast.success('delete success');
+      toast.success('Xoá dự án thành công');
       navigate('/recruiter');
     } catch (error) {
       console.log('error', error);
@@ -57,27 +54,34 @@ const projectApi = {
       }
     }
   },
-  GetProjectDetailsById: async (id) => {
+  GetProjectDetailsById: async (id, navigate) => {
     try {
-      const response = await axios.get(
+      const response = await axiosClient.get(
         `${BASE_URL}/api/Projects/GetProjectDetailsById?id=${id}`
       );
-      return response?.data;
+      return response;
     } catch (error) {
-      if (error.response.status === 500) {
-        toast.error('Some thing was wrong ');
-      }
-      if (error.response.status === 501) {
-        toast.error('Some thing was wrong');
-      }
+      navigate('/*');
     }
   },
   GetAllProject: async (index, size) => {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/api/Projects/SearchAdmin?StatusId=1&IsDeleted=false&pageIndex=${index}&pageSize=${size}`
+      const response = await axiosClient.get(
+        `${BASE_URL}/api/Projects/GetAll?pageIndex=${index}&pageSize=${size}`
       );
-      return response?.data;
+      return response;
+    } catch (error) {
+      if (error.response.status === 500) {
+        toast.error('Something wrong ');
+      }
+    }
+  },
+  GetAllProjectPending: async (index, size) => {
+    try {
+      const response = await axiosClient.get(
+        `${BASE_URL}/api/Projects/Gets?statusId=1&pageIndex=${index}&pageSize=${size}`
+      );
+      return response;
     } catch (error) {
       if (error.response.status === 500) {
         toast.error('Something wrong ');
@@ -96,24 +100,25 @@ const projectApi = {
       }
     }
   },
-  SearchHomePage: async (Keyword, index, size) => {
+  SearchHomePage: async (params, listSkillSelected) => {
+    console.log(params);
     try {
-      const response = await axios.get(
-        `${BASE_URL}/api/Projects/SearchHomePage?Keyword=${Keyword}&PageIndex=${index}&PageSize=${size}`
-      );
-      return response?.data;
-    } catch (error) {
-      if (error.response.status === 500) {
-        toast.error('Something wrong ');
+      const searchParams = new URLSearchParams();
+      for (const key in params) {
+        if (params[key] !== null && params[key] !== undefined) {
+          searchParams.append(key, params[key]);
+        }
       }
-    }
-  },
-  filterProject: async (data) => {
-    try {
-      const response = await axios.post(
-        `${BASE_URL}/api/Projects/Filter`,
-        data
+      if (listSkillSelected.length > 0) {
+        listSkillSelected.forEach((value) =>
+          searchParams.append('Skill', value)
+        );
+      }
+      const response = await axios.get(
+        `${BASE_URL}/api/Projects/SearchHomePage`,
+        { params: searchParams }
       );
+
       return response?.data;
     } catch (error) {
       if (error.response.status === 500) {

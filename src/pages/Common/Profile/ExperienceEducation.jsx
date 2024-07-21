@@ -9,11 +9,9 @@ import {
 } from '@mui/material';
 import DateSelector from './component/DateSelector';
 import profileApi from '../../../services/profileApi';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const ExperienceEducation = () => {
-  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [experience, setExperience] = useState({
     company: '',
@@ -252,7 +250,7 @@ const ExperienceEducation = () => {
         ...prevProfile,
         educations: updatedEducations,
       }));
-      toast.success('Education deleted successfully!');
+      toast.success('Đã xoá học vấn thành công!');
     } catch (error) {
       console.error('Error response from server:', error.response);
       if (error.response && error.response.data) {

@@ -3,6 +3,8 @@ export const PUBLIC_PATH = {
   LOGIN: '/login',
   HOME: '/home',
   REGISTER: '/register',
+  BLOG: '/blog',
+  BLOG_DETAIL: '/blog-detail/:blogId',
   SEARCH_PROJECT: '/search/:searchKey',
   LIST_PROJECT: '/search',
   SEARCH_CATEGORY_PROJECT: '/category/:idCate',
@@ -25,7 +27,6 @@ export const FREELANCER_PATH = {
 
 export const RECRUITER_PATH = {
   LAYOUT: '/',
-  DETAIL_PROJECT: '/details/:projectId',
   HOME_RECRUITER: '/recruiter',
   LIST_PROJECT_RECRUITER: '/list-project-recruiter',
   CREATE_NEW_PROJECT: '/create-new-project',
@@ -39,6 +40,7 @@ export const ADMIN_PATH = {
   REPORT_LIST: 'report-list',
   PROJECT_LIST: 'project-list',
   CREATE_BLOG: 'create-blog',
+  UPDATE_BLOG: 'update-blog/:blogId',
   VIEW_BLOG: 'view-blog',
   CATEGORY_LIST: 'category-list',
   ROLES: '/roles',

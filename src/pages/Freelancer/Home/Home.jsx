@@ -29,7 +29,6 @@ const Home = () => {
     const getCategory = async () => {
       try {
         const res = await categoryApi.GetAllCategory();
-        console.log(res); // Log the response
         setListCategory(res);
       } catch (error) {
         console.error('Error fetching categories:', error);

@@ -17,7 +17,7 @@ const SendMessage = ({ handleSendMessage, message, setMessage }) => {
                 placeholder='Nhập tin nhắn....'
                 value={message}
                 size='small'
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyPress}
                 onChange={(e) => setMessage(e.target.value)}
             />
             <Button variant='contained'

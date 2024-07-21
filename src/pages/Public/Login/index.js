@@ -29,6 +29,8 @@ const Login = () => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [errorText, setErrorText] = useState('');
+  const [errorPassword, setErrorPassword] = useState(false);
   const isLoading = useSelector((state) => state.auth.login?.isFetching);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -59,11 +61,27 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (userName === '' || password === '') {
+      setErrorText('Vui lòng nhập đủ thông tin .');
+      setErrorPassword(true);
+      return;
+    }
     let data = {
       email: userName,
       password: password,
     };
-    await authApi.loginUser(data, dispatch, navigate);
+    try {
+      await authApi.loginUser(data, dispatch, navigate);
+    } catch (error) {
+      console.log(error);
+      setErrorText('Sai thông tin đăng nhập .');
+      setErrorPassword(true);
+    }
+  };
+
+  const handleRegister = (e) => {
+    navigate('/register');
   };
 
   return (
@@ -84,7 +102,7 @@ const Login = () => {
                 name="email"
                 type="email"
                 size="small"
-                required
+                error={errorPassword}
                 onChange={(e) => setUserName(e.target.value)}
                 sx={{
                   '& .MuiOutlinedInput-root': {
@@ -98,9 +116,6 @@ const Login = () => {
                   },
                   '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
                     borderColor: 'white',
-                  },
-                  '& .MuiInputLabel-root': {
-                    color: 'white',
                   },
                   '& .MuiFormLabel-root.Mui-focused': {
                     color: 'white',
@@ -122,15 +137,11 @@ const Login = () => {
                   '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
                     borderColor: 'white',
                   },
-                  '& .MuiInputLabel-root': {
-                    color: 'white',
-                  },
                   '& .MuiFormLabel-root.Mui-focused': {
                     color: 'white',
                   },
                   mt: 3,
                 }}
-                required
                 fullWidth
                 name="password"
                 size="small"
@@ -138,6 +149,8 @@ const Login = () => {
                 type={showPassword ? 'text' : 'password'}
                 id="password"
                 onChange={(e) => setPassword(e.target.value)}
+                error={errorPassword}
+                helperText={errorText}
                 InputProps={{
                   endAdornment: (
                     <IconButton
