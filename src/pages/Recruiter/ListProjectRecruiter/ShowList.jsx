@@ -12,11 +12,7 @@ const ShowList = ({ listProject }) => {
     const navigate = useNavigate();
 
     const handleDetail = (id) => {
-        if (currentUser?.role === ROLES.RECRUITER) {
-            navigate(`/details/${id}`);
-        } else {
             navigate(`/detail/${id}`);
-        }
     };
     
     return (

@@ -17,14 +17,16 @@ const authApi = {
             } else if (response.data.role === ROLES.RECRUITER) {
                 navigate('/recruiter')
             } else if (response.data.role === ROLES.FREELANCER) {
-                navigate('/home')
+                var url = localStorage.getItem('currentUrl');
+                if (url) {
+                    window.location.href = url;
+                }else{
+                    navigate('/home')
+                }
             }
-            return response?.data?.id;
         } catch (error) {
-            if (error.response.status === 400) {
-                toast.error('Password wrong, please try again!')
-                dispatch(loginFailed())
-            }
+            dispatch(loginFailed())
+            throw error
         }
     },
     register: async (data, navigate) => {
@@ -33,11 +35,8 @@ const authApi = {
             navigate("/login")
             return response
         } catch (error) {
-            if (error.response.status === 500) {
-                toast.error("Phone or Email not match format ")
-            }
-            if (error.response.status === 501) {
-                toast.error("Username or Phone or Email exist")
+            if (error.response.status === 400) {
+                toast.error(error.response.message)
             }
             if (error.response.status === 409) {
                 toast.error(error.response.message)
@@ -47,15 +46,15 @@ const authApi = {
     },
     sendCode: async (email) => {
         try {
-          const response = await axios.post(`${BASE_URL}/api/Identity/ResetPassword?email=${encodeURIComponent(email)}`);
-          return response;
+            const response = await axios.post(`${BASE_URL}/api/Identity/ResetPassword?email=${encodeURIComponent(email)}`);
+            return response;
         } catch (error) {
-          if (error.response.status === 404) {
-            toast.error('User not found');
-          } else {
-            toast.error('Failed to reset password');
-          }
-          throw error;
+            if (error.response.status === 404) {
+                toast.error('User not found');
+            } else {
+                toast.error('Failed to reset password');
+            }
+            throw error;
         }
     },
     resetPassword: async (email, code) => {
@@ -64,9 +63,9 @@ const authApi = {
             return secureToken.data.secureToken;
         } catch (error) {
             toast.error('Verify code is expried or not correct');
-          throw error;
+            throw error;
         }
-      },
+    },
     resetNewPassword: async (email, newPassword, newPasswordConfirm, secureToken, navigate) => {
         try {
             await axios.post(`${BASE_URL}/api/Identity/ResetNewPassword`, { email, newPassword, newPasswordConfirm, secureToken });
@@ -74,13 +73,13 @@ const authApi = {
             navigate("/login");
         } catch (error) {
             toast.error('Change password failed');
-          throw error;
+            throw error;
         }
     },
     loginWithGoogle: async (accessToken, dispatch, navigate) => {
         try {
             const response = await axios.post(
-                `${BASE_URL}/api/Identity/External`, 
+                `${BASE_URL}/api/Identity/External`,
                 accessToken,
                 {
                     headers: {
@@ -88,11 +87,11 @@ const authApi = {
                     },
                 }
             );
-    
+
             dispatch(loginSuccess(response.data));
             localStorage.setItem('token', response.data.accessToken);
             toast.success('Login successfully');
-    
+
             if (response.data.role === ROLES.ADMIN) {
                 navigate('/admin');
             } else if (response.data.role === ROLES.RECRUITER) {
@@ -100,7 +99,7 @@ const authApi = {
             } else if (response.data.role === ROLES.FREELANCER) {
                 navigate('/home');
             }
-    
+
             return response;
         } catch (error) {
             if (error.response && error.response.status === 415) {
@@ -111,7 +110,7 @@ const authApi = {
             throw error;
         }
     }
-    
+
 }
 
 export default authApi

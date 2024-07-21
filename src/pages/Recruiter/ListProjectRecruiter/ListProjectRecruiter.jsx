@@ -20,7 +20,7 @@ const ListProjectRecruiter = () => {
     }, [currentUser])
 
     return (
-        <Box m={3}>
+        <Box sx={style}>
             <Box display='flex' alignItems='center' mb={3}>
                 <Header title='DANH SÁCH DỰ ÁN' subtitle="Danh sách các dự án của bạn" />
                 <Box ml='auto'>
@@ -46,3 +46,8 @@ const ListProjectRecruiter = () => {
 }
 
 export default ListProjectRecruiter
+const style = {
+    p: 4,
+    overflow: 'auto',
+    maxHeight: window.innerHeight - 80,
+};

@@ -38,7 +38,7 @@ function Profile() {
     const [newComment, setNewComment] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [hover, setHover] = useState(-1);
-const navigate = useNavigate()
+    const navigate = useNavigate()
     useEffect(() => {
         const getData = async () => {
             let res;
@@ -82,17 +82,16 @@ const navigate = useNavigate()
         }
     };
     const handleContact = async () => {
-       let res = await chatApi.CreateNewConversation(currentUser?.userId, userId)
-       console.log(res)
+        let res = await chatApi.CreateNewConversation(currentUser?.userId, userId)
         navigate(`/chat/${res}/${userId}`)
     }
 
     return (
         <Container>
-            <Grid container spacing={4}>
+            <Grid container spacing={4}  mt={3}>
                 {/* Left Section */}
                 <Grid item xs={12} md={8}>
-                    <section id="profile" className="flex flex-col items-center py-12 bg-gray-100 rounded-t-none rounded-lg shadow-md">
+                    <section id="profile" className="flex flex-col items-center py-12 bg-gray-100 rounded-lg shadow-md">
                         <Avatar alt="Avatar" src={profile?.avatar} sx={{ height: 80, width: 80 }} className="shadow-lg" />
                         <Typography sx={{ fontSize: '1.25rem' }} className="mt-4">Hello, I'm</Typography>
                         <Typography sx={{ fontSize: '3rem', fontWeight: 'bold' }} className="font-bold">{profile?.name}</Typography>
@@ -219,7 +218,7 @@ const navigate = useNavigate()
                                     )}
                                 </Grid>
                                 <Grid container>
-                                    <Grid item xs={12} md={11}>
+                                    <Grid item xs={12} md={9}>
                                         <Box className="flex items-center">
                                             <PhoneAndroidIcon color='error' />
                                             <Typography sx={{ fontSize: '1rem', marginLeft: '0.5rem' }}>Xác thực số điện thoại</Typography>
@@ -234,14 +233,16 @@ const navigate = useNavigate()
                                     )}
                                 </Grid>
                                 <Grid container>
-                                    <Grid item xs={12} md={11}>
+                                    <Grid item xs={12} md={9}>
                                         <Box className="flex items-center">
                                             <EmailIcon color='success' />
                                             <Typography sx={{ fontSize: '1rem', marginLeft: '0.5rem' }}>Xác thực Email</Typography>
                                         </Box>
                                     </Grid>
-                                    <Grid item xs={12} md={1}>
-                                        <CheckCircleIcon color='success' fontSize='medium' />
+                                    <Grid item xs={12} md={3}>
+                                        <Box className="flex items-center justify-center">
+                                            <CheckCircleIcon color='success' fontSize='medium' />
+                                        </Box>
                                     </Grid>
                                 </Grid>
                             </Box>

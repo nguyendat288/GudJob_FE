@@ -31,19 +31,15 @@ function ChangePassword() {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-        toast.error("New password and confirm password do not match");
+        toast.error("Mật khẩu mới và mật khẩu cũ không khớp !!!");
         return;
     }
 
     try {
         await profileApi.changePassword(currentPassword, newPassword, confirmPassword);
-        toast.success("Password changed successfully!");
+        toast.success("Thay đổi mật khẩu thành công!");
     } catch (error) {
-        if (error.response && error.response.data) {
-            toast.error(error.response.data.message || "Something wrong occurred. Please try again.");
-        } else {
-            toast.error("Something wrong occurred. Please try again.");
-        }
+      toast.error("Something wrong occurred. Please try again.");
     }
 };
 

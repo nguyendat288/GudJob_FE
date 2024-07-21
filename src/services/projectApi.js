@@ -7,23 +7,20 @@ const projectApi = {
     AddProject: async (data, navigate) => {
         try {
             const response = await axiosClient.post(`${BASE_URL}/api/Projects/AddProject`, data)
-            toast.success('create success')
+            toast.success('Tạo dự án thành công')
             navigate("/recruiter")
             return response
         } catch (error) {
-            if (error.response.status === 500) {
-                toast.error("Something was wrong")
-            }
-            if (error.response.status === 501) {
-                toast.error("Username or Phone or Email exist")
+            if (error.response.status === 400) {
+                toast.error("Thông tin điền không hợp lệ")
             }
         }
     },
     UpdateProject: async (data, navigate) => {
         try {
             const response = await axiosClient.put(`${BASE_URL}/api/Projects/UpdateProject`, data)
-            toast.success('update success')
-            navigate("/recruiter")
+            toast.success('Chỉnh sửa thành công')
+            navigate("/detail/" + data?.id)
             return response
         } catch (error) {
             if (error.response.status === 400) {
@@ -36,8 +33,8 @@ const projectApi = {
     },
     DeleteProject: async (projectId, navigate) => {
         try {
-             await axiosClient.delete(`${BASE_URL}/api/Projects/DeleteProject?projectId=${projectId}`)
-            toast.success('delete success')
+            await axiosClient.delete(`${BASE_URL}/api/Projects/DeleteProject?projectId=${projectId}`)
+            toast.success('Xoá dự án thành công')
             navigate("/recruiter");
         } catch (error) {
             console.log("error", error);
@@ -49,20 +46,15 @@ const projectApi = {
             }
         }
     },
-    GetProjectDetailsById: async (id) => {
+    GetProjectDetailsById: async (id,navigate) => {
         try {
-            const response = await axios.get(`${BASE_URL}/api/Projects/GetProjectDetailsById?id=${id}`)
-            return response?.data;
+            const response = await axiosClient.get(`${BASE_URL}/api/Projects/GetProjectDetailsById?id=${id}`)
+            return response;
         } catch (error) {
-            if (error.response.status === 500) {
-                toast.error("Some thing was wrong ")
-            }
-            if (error.response.status === 501) {
-                toast.error("Some thing was wrong")
-            }
+            navigate("/*")
         }
     },
-    GetAllProject: async (index,size) => {
+    GetAllProject: async (index, size) => {
         try {
             const response = await axios.get(`${BASE_URL}/api/Projects/GetAll?pageIndex=${index}&pageSize=${size}`)
             return response?.data;
@@ -72,7 +64,7 @@ const projectApi = {
             }
         }
     },
-    GetAllProjectByUserId: async (id, index,size) => {
+    GetAllProjectByUserId: async (id, index, size) => {
         try {
             const response = await axiosClient.get(`${BASE_URL}/api/Projects/GetProjectsByUserId?UserId=${id}&PageIndex=${index}&PageSize=${size}`)
             return response;
@@ -82,29 +74,20 @@ const projectApi = {
             }
         }
     },
-    SearchProjectByName: async (Keyword, index,size) => {
+    SearchHomePage: async (params,listSkillSelected) => {
+        console.log(params);
         try {
-            const response = await axios.get(`${BASE_URL}/api/Projects/SearchHomePage?Keyword=${Keyword}&PageIndex=${index}&PageSize=${size}`)
-            return response?.data;
-        } catch (error) {
-            if (error.response.status === 500) {
-                toast.error("Something wrong ")
+            const searchParams = new URLSearchParams();
+              for (const key in params) {
+                if (params[key] !== null && params[key] !== undefined) {
+                    searchParams.append(key, params[key]);
+                }
             }
-        }
-    },
-    SearchHomePage: async (Keyword, index,size) => {
-        try {
-            const response = await axios.get(`${BASE_URL}/api/Projects/SearchHomePage?Keyword=${Keyword}&PageIndex=${index}&PageSize=${size}`)
-            return response?.data;
-        } catch (error) {
-            if (error.response.status === 500) {
-                toast.error("Something wrong ")
+            if (listSkillSelected.length > 0) {
+                listSkillSelected.forEach(value => searchParams.append('Skill', value));
             }
-        }
-    },
-    filterProject: async (data) => {
-        try {
-            const response = await axios.post(`${BASE_URL}/api/Projects/Filter`,data)
+            const response = await axios.get(`${BASE_URL}/api/Projects/SearchHomePage`,{params : searchParams})
+            
             return response?.data;
         } catch (error) {
             if (error.response.status === 500) {
