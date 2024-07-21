@@ -31,12 +31,14 @@ const ListProject = () => {
   return (
     <div>
       <ProjectList listProject={listProject} setReload={setReload} />
-      <Box mt={2} mb={2} display="flex" justifyContent="center">
+      <Box p={2} display="flex" justifyContent="center">
         <Pagination
           count={totalPages}
           page={pageIndex}
           onChange={handlePageChange}
           color="primary"
+          showFirstButton
+          showLastButton
         />
       </Box>
     </div>

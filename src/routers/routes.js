@@ -37,6 +37,7 @@ import ListProject from '../pages/Admin/List/ListProject';
 import ViewBlog from '../pages/Admin/Blog/ViewBlog';
 import CurrentProject from '../pages/Common/Profile/CurrentProject';
 import ListCategory from '../pages/Admin/List/ListCategory';
+import ListSkill from '../pages/Admin/List/ListSkill';
 
 export default function Router() {
   let router = useRoutes([
@@ -334,6 +335,14 @@ export default function Router() {
               element: (
                 <Suspense fallback={<>Loading...</>}>
                   <ListCategory />
+                </Suspense>
+              ),
+            },
+            {
+              path: ADMIN_PATH.SKILL_LIST,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <ListSkill />
                 </Suspense>
               ),
             },
