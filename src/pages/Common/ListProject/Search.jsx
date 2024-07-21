@@ -14,7 +14,6 @@ const Search = () => {
   const [totalPage, setTotalPage] = useState(1)
   const [listProject, setListProject] = useState(null)
 
-  const [search, setSearch] = useState(searchKey || '')
   const [listCategory, setListCategory] = useState([])
   const [categoryId, setCategoryId] = useState(0)
   const [listSkill, setListSkill] = useState([])
@@ -27,14 +26,11 @@ const Search = () => {
   useEffect(() => {
     const getData = async () => {
       let params = {
-        Keyword: search === "" ? null : search,
+        Keyword: searchKey === "" ? null : searchKey,
         PageIndex: page,
         PageSize: 5,
-        CategoryId: categoryId === 0 ? null : categoryId,
-        MinBudget: minBudget === 0 ? null : minBudget,
-        MaxBudget: maxBudget === 0 ? null : maxBudget,
-        Duration: duration == 0 ? null : duration
       }
+      console.log(params);
       setLoading(true)
       const res = await projectApi.SearchHomePage(params,listSkillSelected);
       setListProject(res);
@@ -43,7 +39,8 @@ const Search = () => {
 
     };
     getData();
-  }, [searchKey,search,page]);
+  }, [searchKey,page]);
+  
   useEffect(() => {
     const getData = async () => {
       let res = await categoryApi.GetAllCategory();
@@ -75,13 +72,13 @@ const Search = () => {
 
   const hanldeFilter = async () => {
     let params = {
-      Keyword: search === "" ? null : search,
+      Keyword: searchKey === "" ? null : searchKey,
       PageIndex: 1,
       PageSize: 5,
       CategoryId: categoryId === 0 ? null : categoryId,
       MinBudget: minBudget === 0 ? null : minBudget,
       MaxBudget: maxBudget === 0 ? null : maxBudget,
-      Duration: duration == 0 ? null : duration
+      Duration: duration === 0 ? null : duration
     }
     setLoading(true)
     const res = await projectApi.SearchHomePage(params,listSkillSelected);
@@ -121,7 +118,7 @@ const Search = () => {
         <Box flex='1' ml={3} mr={3}>
           <Box bgcolor='#F8F8FF' borderRadius='5px' p={3}>
             <Typography variant="h6" fontWeight='bold' display='flex' alignItems='center' gutterBottom>
-              <FilterListIcon /> Tìm kiếm 
+              <FilterListIcon /> Bộ lọc
             </Typography>
 
             <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Chuyên ngành</Typography>
@@ -194,7 +191,7 @@ const Search = () => {
               }}
             />
             <Button variant='contained' color='primary' onClick={() => hanldeFilter()}>
-              Tìm Kiếm
+              Lọc
             </Button>
           </Box>
         </Box>

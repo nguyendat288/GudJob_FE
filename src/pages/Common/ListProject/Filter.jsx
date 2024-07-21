@@ -12,9 +12,6 @@ const Filter = () => {
 
   const [page, setPage] = useState(1)
   const [totalPage, setTotalPage] = useState(1)
-
-  const [search, setSearch] = useState('')
-
   const [listProject, setListProject] = useState(null)
   const [listCategory, setListCategory] = useState([])
   const [categoryId, setCategoryId] = useState(idCate)
@@ -28,13 +25,9 @@ const Filter = () => {
   useEffect(() => {
     const getData = async () => {
       let params = {
-        Keyword: search === "" ? null : search,
         PageIndex: page,
         PageSize: 5,
         CategoryId: categoryId === 0 ? null : categoryId,
-        MinBudget: minBudget === 0 ? null : minBudget,
-        MaxBudget: maxBudget === 0 ? null : maxBudget,
-        Duration: duration == 0 ? null : duration
       }
       const res = await projectApi.SearchHomePage(params,listSkillSelected);
       setListProject(res);
@@ -77,13 +70,12 @@ const Filter = () => {
 
   const handleFilter = async () => {
     let params = {
-      Keyword: search === "" ? null : search,
       PageIndex: 1,
       PageSize: 5,
       CategoryId: categoryId === 0 ? null : categoryId,
       MinBudget: minBudget === 0 ? null : minBudget,
       MaxBudget: maxBudget === 0 ? null : maxBudget,
-      Duration: duration == 0 ? null : duration
+      Duration: duration === 0 ? null : duration
     }
     const res = await projectApi.SearchHomePage(params,listSkillSelected);
     setListProject(res)
@@ -109,7 +101,7 @@ const Filter = () => {
       <Box flex='1' ml={3} mr={3}>
           <Box bgcolor='#F8F8FF' borderRadius='5px' p={3}>
             <Typography variant="h6" fontWeight='bold' display='flex' alignItems='center' gutterBottom>
-              <FilterListIcon /> Tìm kiếm 
+              <FilterListIcon /> Bộ lọc
             </Typography>
 
             <Typography variant="subtitle1" fontWeight='bold' gutterBottom>Chuyên Ngành</Typography>
@@ -182,7 +174,7 @@ const Filter = () => {
               }}
             />
             <Button variant='contained' color='primary' onClick={() => handleFilter()}>
-              Tìm kiếm
+              Lọc
             </Button>
           </Box>
         </Box>

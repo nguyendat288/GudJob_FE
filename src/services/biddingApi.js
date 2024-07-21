@@ -21,7 +21,7 @@ const biddingApi = {
     },
     UpdateBidding: async (data) => {
         try {
-            const response = await axiosClient.put(`${BASE_URL}/api/Bid/UpdateBidding`, data)
+             await axiosClient.put(`${BASE_URL}/api/Bid/UpdateBidding`, data)
             toast.success('Chỉnh sửa thành công')
         } catch (error) {
             console.log(error);

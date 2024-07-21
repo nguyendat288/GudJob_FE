@@ -18,7 +18,7 @@ import profileApi from '../../../services/profileApi';
 import LanguageSelector from '../../../components/language-selector';
 import { UseChatState } from '../../../providers/ConnectContext';
 
-import {  MoreVert as MoreVertIcon } from '@mui/icons-material';
+import { MoreVert as MoreVertIcon } from '@mui/icons-material';
 
 import notificationApi from '../../../services/notificationApi';
 import ListUser from '../../Common/Chat/ListUser';
@@ -47,18 +47,6 @@ const TopBarFreelancer = () => {
     setChatSelect
   } = UseChatState();
 
-  
-  useEffect(() => {
-    if (currentUser) {
-      const getData = async () => {
-        const res = await profileApi.getUserProfile();
-        setProfile(res);
-      };
-      getData();
-    }
-  }, [currentUser]);
-
-
 
   useEffect(() => {
     if (currentUser) {
@@ -69,7 +57,7 @@ const TopBarFreelancer = () => {
       getData();
     }
   }, [currentUser]);
-  
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -90,22 +78,19 @@ const TopBarFreelancer = () => {
   const navigate = useNavigate();
 
   const handleLogOut = async () => {
-    try{
+    try {
       dispatch(logOutSuccess())
       localStorage.clear();
-      if(connection != null){
+      if (connection != null) {
         await connection.stop();
       }
       navigate('/login');
       toast.success('Logout successfully!');
-    }catch(error){
+    } catch (error) {
     }
   }
   const handleSearch = () => {
-
     navigate(`/search/${search}`)
-    window.location.reload()
-
   }
 
 
@@ -250,31 +235,29 @@ const TopBarFreelancer = () => {
               GoodJob
             </Typography>
 
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, borderRadius: '30px' }}>
+            <Box display='flex' flex={1} maxWidth="600px" mx={2}>
               {
                 currentUser?.role !== "Recruiter" && currentUser?.role !== "Admin" && (
-                  <>
-                    <Box display='flex'
-                      borderRadius='3px'
-                      bgcolor='#EEEEEE'
-                      sx={{ width: '50%' }}
-                    >
-                      <InputBase
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        onKeyDown={handleKeyPress}
-                        placeholder='Nhập tên dự án ...' sx={{ ml: 2, flex: 1 }} />
-                      <IconButton type='button'
-                        onClick={(e) => handleSearch(e)}
-                        p={1}>
-                        <SearchOutlinedIcon />
-                      </IconButton>
-                    </Box>
-                  </>
+                  <Box
+                    display='flex'
+                    flex={1}
+                    borderRadius='30px'
+                    bgcolor='#EEEEEE'
+                  >
+                    <InputBase
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      onKeyDown={handleKeyPress}
+                      placeholder='Nhập tên dự án , kỹ năng , danh mục ....' sx={{ ml: 2, flex: 1 }} />
+                    <IconButton type='button'
+                      onClick={(e) => handleSearch(e)}
+                      p={1}>
+                      <SearchOutlinedIcon />
+                    </IconButton>
+                  </Box>
                 )
               }
             </Box>
-
             {currentUser ? (
               <Box display='flex' gap={2} alignItems='center'>
                 <IconButton onClick={handleMessageClick}>

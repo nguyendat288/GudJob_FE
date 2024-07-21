@@ -75,6 +75,7 @@ const projectApi = {
         }
     },
     SearchHomePage: async (params,listSkillSelected) => {
+        console.log(params);
         try {
             const searchParams = new URLSearchParams();
               for (const key in params) {
@@ -86,6 +87,7 @@ const projectApi = {
                 listSkillSelected.forEach(value => searchParams.append('Skill', value));
             }
             const response = await axios.get(`${BASE_URL}/api/Projects/SearchHomePage`,{params : searchParams})
+            
             return response?.data;
         } catch (error) {
             if (error.response.status === 500) {

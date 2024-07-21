@@ -78,7 +78,8 @@ const ListBidding = ({ listBidding, currentUser, createdBy, handlePageChange, ha
                                             <Box sx={{ display: 'flex', gap: 2 }}>
                                                 <Tooltip title="Đánh giá trung bình">
                                                     <Box display='flex' alignItems='center'>
-                                                        <Rating name="half-rating" 
+                                                        <Rating 
+                                                         disabled
                                                         value={item?.appUser2?.avgRate}
                                                         defaultValue={item?.appUser2?.avgRate} precision={0.1} />
                                                         <Typography ml={1}>{item?.appUser2?.avgRate}  </Typography>
