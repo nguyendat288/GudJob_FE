@@ -3,8 +3,6 @@ import {
   Box,
   Divider,
   Grid,
-  IconButton,
-  InputBase,
   Modal,
   Paper,
   Typography,
@@ -18,8 +16,9 @@ import {
   Chip,
   Stack,
   Button,
+  Autocomplete,
+  TextField,
 } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
@@ -27,6 +26,7 @@ import categoryApi from '../../../../services/categoryApi';
 import profileApi from '../../../../services/profileApi';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import skillApi from '../../../../services/skillAPI';
 
 const UpdateSkillModal = ({ openSkill, onCloseSkill, profile, setProfile }) => {
   const navigate = useNavigate();
@@ -34,6 +34,7 @@ const UpdateSkillModal = ({ openSkill, onCloseSkill, profile, setProfile }) => {
   const [category, setCategory] = useState([]);
   const [selected, setSelected] = useState([]);
   const [listSkill, setListSkill] = useState([]);
+  const [defaultListSkill, setDefaultListSkill] = useState([]);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -41,6 +42,8 @@ const UpdateSkillModal = ({ openSkill, onCloseSkill, profile, setProfile }) => {
     const fetchCategory = async () => {
       try {
         const res = await categoryApi.GetAllCategory();
+        const resSkillList = await skillApi.GetAllSkill();
+        setDefaultListSkill(resSkillList);
         setCategory(res);
       } catch (error) {
         console.error(error);
@@ -113,7 +116,7 @@ const UpdateSkillModal = ({ openSkill, onCloseSkill, profile, setProfile }) => {
     }
     onCloseSkill();
   };
-
+  console.log('listSkill', listSkill);
   return (
     <Modal open={openSkill} onClose={onCloseSkill}>
       <Box
@@ -141,12 +144,9 @@ const UpdateSkillModal = ({ openSkill, onCloseSkill, profile, setProfile }) => {
             alignItems: 'center',
             mt: 4,
             mb: 3,
-            border: '1px solid',
-            borderColor: 'divider',
-            borderRadius: '16px',
           }}
         >
-          <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+          {/* <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
             <SearchIcon />
           </IconButton>
           <InputBase
@@ -155,6 +155,30 @@ const UpdateSkillModal = ({ openSkill, onCloseSkill, profile, setProfile }) => {
             onChange={(e) => setSearch(e.target.value)}
             sx={{ ml: 1, flex: 1 }}
             placeholder="Search for skills"
+          /> */}
+          <Autocomplete
+            fullWidth
+            disabled={selected.length >= 5}
+            options={defaultListSkill.filter((skill) =>
+              skill.skillName.toLowerCase().includes(search.toLowerCase())
+            )}
+            getOptionLabel={(option) => option.skillName}
+            renderInput={(params) => (
+              <TextField {...params} label="Search Skills" variant="outlined" />
+            )}
+            onChange={(event, newValue) => {
+              if (
+                newValue &&
+                !selected.includes(newValue.skillName) &&
+                selected.length < 5
+              ) {
+                setSelected((prevSelected) => [
+                  ...prevSelected,
+                  newValue.skillName,
+                ]);
+              }
+              setSearch('');
+            }}
           />
         </Box>
         <Divider className="before:bg-slate-500 after:bg-slate-500">

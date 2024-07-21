@@ -17,7 +17,7 @@ const Footer = () => {
           <Grid item xs={12} sm={6} md={3}>
             <Typography
               className="font-bold"
-              color={'white'}
+              color={'#fad702'}
               variant="h6"
               gutterBottom
             >
@@ -63,7 +63,7 @@ const Footer = () => {
           <Grid item xs={12} sm={6} md={3}>
             <Typography
               className="font-bold"
-              color={'white'}
+              color={'#fad702'}
               variant="h6"
               gutterBottom
             >
@@ -97,7 +97,7 @@ const Footer = () => {
           <Grid item xs={12} sm={6} md={3}>
             <Typography
               className="font-bold"
-              color={'white'}
+              color={'#fad702'}
               variant="h6"
               gutterBottom
             >
