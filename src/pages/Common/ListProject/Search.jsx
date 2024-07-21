@@ -33,11 +33,10 @@ const Search = () => {
         CategoryId: categoryId === 0 ? null : categoryId,
         MinBudget: minBudget === 0 ? null : minBudget,
         MaxBudget: maxBudget === 0 ? null : maxBudget,
-        // duration: duration == 0 ? null : duration
+        Duration: duration == 0 ? null : duration
       }
       setLoading(true)
       const res = await projectApi.SearchHomePage(params,listSkillSelected);
-      console.log(res);
       setListProject(res);
       setTotalPage(Math.ceil(res?.totalItemsCount / 5));
       setLoading(false)
@@ -45,7 +44,6 @@ const Search = () => {
     };
     getData();
   }, [searchKey,search,page]);
-console.log(listProject);
   useEffect(() => {
     const getData = async () => {
       let res = await categoryApi.GetAllCategory();
@@ -83,7 +81,7 @@ console.log(listProject);
       CategoryId: categoryId === 0 ? null : categoryId,
       MinBudget: minBudget === 0 ? null : minBudget,
       MaxBudget: maxBudget === 0 ? null : maxBudget,
-      // duration: duration == 0 ? null : duration
+      Duration: duration == 0 ? null : duration
     }
     setLoading(true)
     const res = await projectApi.SearchHomePage(params,listSkillSelected);

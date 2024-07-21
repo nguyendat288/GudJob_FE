@@ -48,7 +48,6 @@ const biddingApi = {
     GetBidByProjectLoggedUser: async (projectId) => {
         try {
             const response = await axiosClient.get(`${BASE_URL}/api/Bid/GetBidByProjectLoggedUser?projectId=${projectId}`)
-            console.log(response);
             return response?.data;
         } catch (error) {
             throw error

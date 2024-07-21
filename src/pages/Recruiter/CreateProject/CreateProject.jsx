@@ -75,7 +75,6 @@ const CreateProject = () => {
 
     const handleSubmit = async () => {
         let hasError = false
-        console.log(description.length);
         if (name.length <= 10 || name.length >= 100) {
             setErrorName(true)
             setHelperTextName("* Tiêu đề từ 10 - 100 ký tự .")

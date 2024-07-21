@@ -18,7 +18,6 @@ const ProjectDetail = ({ detail, navigate, setOpenDelete, currentUser, handleOpe
         await reportApi.createReport(reportData);
         toast.error('Đã khiếu nại dự án');
     };
-    console.log(myBidding);
     return (
         <Box display='flex' mt={4}>
             <Box flex='4'>

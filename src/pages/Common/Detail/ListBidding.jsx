@@ -1,4 +1,4 @@
-import { Alert, Avatar, Box, Button, Container, Pagination, Paper, Tooltip, Typography } from '@mui/material'
+import { Alert, Avatar, Box, Button, Container, Pagination, Paper, Rating, Tooltip, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import StarIcon from '@mui/icons-material/Star';
 import { ROLES } from '../../../constaints/role';
@@ -27,7 +27,7 @@ const ListBidding = ({ listBidding, currentUser, createdBy, handlePageChange, ha
     const handleNameClick = (userId) => {
         navigate(`/profile/${userId}`)
     }
-    const rederSkill = (listSkill) => {
+    const renderSkill = (listSkill) => {
         return (
             <Tooltip title="Kỹ năng ">
                 <Box display='flex' gap={2}>
@@ -77,8 +77,10 @@ const ListBidding = ({ listBidding, currentUser, createdBy, handlePageChange, ha
 
                                             <Box sx={{ display: 'flex', gap: 2 }}>
                                                 <Tooltip title="Đánh giá trung bình">
-                                                    <Box display='flex' alignItems='center' justifyContent='center'>
-                                                        <Typography color='#FFFF33' mb={1}> <StarIcon /></Typography>
+                                                    <Box display='flex' alignItems='center'>
+                                                        <Rating name="half-rating" 
+                                                        value={item?.appUser2?.avgRate}
+                                                        defaultValue={item?.appUser2?.avgRate} precision={0.1} />
                                                         <Typography ml={1}>{item?.appUser2?.avgRate}  </Typography>
                                                     </Box>
                                                 </Tooltip>
@@ -91,7 +93,7 @@ const ListBidding = ({ listBidding, currentUser, createdBy, handlePageChange, ha
                                                     </>)}
                                                 </Tooltip>
                                             </Box>
-                                            {rederSkill(item?.appUser2?.skill)}
+                                            {renderSkill(item?.appUser2?.skill)}
 
                                         </Box>
                                     </Box>

@@ -255,26 +255,6 @@ export default function Router() {
       ]
     },
     {
-      path: RECRUITER_PATH.LAYOUT,
-      element: <TopBarFreelancer />,
-
-      children: [
-        {
-          element: <RequireAuth allowedRoles={ROLES.RECRUITER} />,
-          children: [
-            {
-              path: PUBLIC_PATH.DETAIL_PROJECT,
-              element: (
-                <Suspense fallback={<>Loading...</>}>
-                  <Detail />
-                </Suspense>
-              )
-            },
-          ]
-        }
-      ]
-    },
-    {
       path: ADMIN_PATH.LAYOUT,
       element: <LayOutAdmin />,
       children: [

@@ -215,7 +215,6 @@ const Detail = () => {
             duration: durationUpdate,
             budget: budgetUpdate
         }
-        console.log(data);
         try {
             await biddingApi.UpdateBidding(data);
             setMyBidding(pre => ({

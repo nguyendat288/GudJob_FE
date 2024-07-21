@@ -34,7 +34,7 @@ const Filter = () => {
         CategoryId: categoryId === 0 ? null : categoryId,
         MinBudget: minBudget === 0 ? null : minBudget,
         MaxBudget: maxBudget === 0 ? null : maxBudget,
-        // duration: duration == 0 ? null : duration
+        Duration: duration == 0 ? null : duration
       }
       const res = await projectApi.SearchHomePage(params,listSkillSelected);
       setListProject(res);
@@ -83,7 +83,7 @@ const Filter = () => {
       CategoryId: categoryId === 0 ? null : categoryId,
       MinBudget: minBudget === 0 ? null : minBudget,
       MaxBudget: maxBudget === 0 ? null : maxBudget,
-      // duration: duration == 0 ? null : duration
+      Duration: duration == 0 ? null : duration
     }
     const res = await projectApi.SearchHomePage(params,listSkillSelected);
     setListProject(res)
