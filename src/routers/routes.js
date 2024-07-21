@@ -1,64 +1,70 @@
-import { useRoutes } from "react-router-dom";
-import { ADMIN_PATH, FREELANCER_PATH, PUBLIC_PATH, RECRUITER_PATH } from "../constaints/path";
-import Register from "../pages/Public/Register";
-import Login from "../pages/Public/Login";
-import Profile from "../pages/Common/Profile";
-import Setting from "../pages/Common/Profile/Setting";
-import ChangePassword from "../pages/Common/Profile/ChangePassword";
-import ExperienceEducation from "../pages/Common/Profile/ExperienceEducation";
-import ProfileSetting from "../pages/Common/Profile/ProfileSetting";
-import ResetPasswordPage from "../pages/Public/ResetPassword";
-import NotFoundPage from "../components/NotFoundPage";
-import UnAuthorized from "../components/UnAuthorized";
-import { ROLES } from "../constaints/role";
-import RequireAuth from "../components/RequireAuth";
-import { Suspense } from "react";
-import HomeRecruiter from "../pages/Recruiter/Home/HomeRecruiter";
-import LayOutRecruiter from "../pages/Recruiter/LayOutRecruiter/LayOutRecruiter";
-import Home from "../pages/Freelancer/Home/Home";
-import LayOutFreelancer from "../pages/Freelancer/LayOut/LayOutFreelancer";
-import ListProjectRecruiter from "../pages/Recruiter/ListProjectRecruiter/ListProjectRecruiter";
-import CreateProject from "../pages/Recruiter/CreateProject/CreateProject";
-import Detail from "../pages/Common/Detail/Detail";
-import UpdateProject from "../pages/Recruiter/UpdateProject/UpdateProject";
-import Search from "../pages/Common/ListProject/Search";
-import Filter from "../pages/Common/ListProject/Filter";
-import HomeAdmin from "../pages/Admin/HomeAdmin/HomeAdmin";
-import LayOutAdmin from "../pages/Admin/LayOutAdmin/LayOutAdmin";
-import ListUsers from "../pages/Admin/List/ListUsers";
-import ListReport from "../pages/Admin/List/ListReport";
-import TopBarFreelancer from "../pages/Freelancer/LayOut/TopBarFreelancer";
-import Chat from "../pages/Common/Chat/Chat";
-import ListProject from "../pages/Admin/List/ListProject";
-import ViewBlog from "../pages/Admin/Blog/ViewBlog";
-import CurrentProject from "../pages/Common/Profile/CurrentProject";
-import ListCategory from "../pages/Admin/List/ListCategory";
-import CreateBlog from "../pages/Admin/Blog/CreateBlog";
-import UpdateBlog from "../pages/Admin/Blog/UpdateBlog";
-import BlogDetail from "../pages/Admin/Blog/Publish/BlogDetail";
-import HomeBlog from "../pages/Admin/Blog/Publish/HomeBlog";
+import { useRoutes } from 'react-router-dom';
+import {
+  ADMIN_PATH,
+  FREELANCER_PATH,
+  PUBLIC_PATH,
+  RECRUITER_PATH,
+} from '../constaints/path';
+import Register from '../pages/Public/Register';
+import Login from '../pages/Public/Login';
+import Profile from '../pages/Common/Profile';
+import Setting from '../pages/Common/Profile/Setting';
+import ChangePassword from '../pages/Common/Profile/ChangePassword';
+import ExperienceEducation from '../pages/Common/Profile/ExperienceEducation';
+import ProfileSetting from '../pages/Common/Profile/ProfileSetting';
+import ResetPasswordPage from '../pages/Public/ResetPassword';
+import NotFoundPage from '../components/NotFoundPage';
+import UnAuthorized from '../components/UnAuthorized';
+import { ROLES } from '../constaints/role';
+import RequireAuth from '../components/RequireAuth';
+import { Suspense } from 'react';
+import HomeRecruiter from '../pages/Recruiter/Home/HomeRecruiter';
+import LayOutRecruiter from '../pages/Recruiter/LayOutRecruiter/LayOutRecruiter';
+import Home from '../pages/Freelancer/Home/Home';
+import LayOutFreelancer from '../pages/Freelancer/LayOut/LayOutFreelancer';
+import ListProjectRecruiter from '../pages/Recruiter/ListProjectRecruiter/ListProjectRecruiter';
+import CreateProject from '../pages/Recruiter/CreateProject/CreateProject';
+import Detail from '../pages/Common/Detail/Detail';
+import UpdateProject from '../pages/Recruiter/UpdateProject/UpdateProject';
+import Search from '../pages/Common/ListProject/Search';
+import Filter from '../pages/Common/ListProject/Filter';
+import HomeAdmin from '../pages/Admin/HomeAdmin/HomeAdmin';
+import LayOutAdmin from '../pages/Admin/LayOutAdmin/LayOutAdmin';
+import ListUsers from '../pages/Admin/List/ListUsers';
+import ListReport from '../pages/Admin/List/ListReport';
+import TopBarFreelancer from '../pages/Freelancer/LayOut/TopBarFreelancer';
+import Chat from '../pages/Common/Chat/Chat';
+import ListProject from '../pages/Admin/List/ListProject';
+import ViewBlog from '../pages/Admin/Blog/ViewBlog';
+import CurrentProject from '../pages/Common/Profile/CurrentProject';
+import ListCategory from '../pages/Admin/List/ListCategory';
+import CreateBlog from '../pages/Admin/Blog/CreateBlog';
+import UpdateBlog from '../pages/Admin/Blog/UpdateBlog';
+import BlogDetail from '../pages/Admin/Blog/Publish/BlogDetail';
+import HomeBlog from '../pages/Admin/Blog/Publish/HomeBlog';
+import ListSkill from '../pages/Admin/List/ListSkill';
 
 export default function Router() {
   let router = useRoutes([
     {
       path: PUBLIC_PATH.LOGIN,
-      element: <Login />
+      element: <Login />,
     },
     {
       path: PUBLIC_PATH.RESET,
-      element: <ResetPasswordPage />
+      element: <ResetPasswordPage />,
     },
     {
       path: PUBLIC_PATH.REGISTER,
-      element: <Register />
+      element: <Register />,
     },
     {
       path: PUBLIC_PATH.BLOG,
-      element: <HomeBlog />
+      element: <HomeBlog />,
     },
     {
       path: PUBLIC_PATH.BLOG_DETAIL,
-      element: <BlogDetail />
+      element: <BlogDetail />,
     },
     {
       path: PUBLIC_PATH.LAYOUT,
@@ -72,7 +78,7 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <Home />
                 </Suspense>
-              )
+              ),
             },
             {
               path: PUBLIC_PATH.SEARCH_PROJECT,
@@ -80,7 +86,7 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <Search />
                 </Suspense>
-              )
+              ),
             },
             {
               path: PUBLIC_PATH.LIST_PROJECT,
@@ -88,7 +94,7 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <Search />
                 </Suspense>
-              )
+              ),
             },
             {
               path: PUBLIC_PATH.SEARCH_CATEGORY_PROJECT,
@@ -96,7 +102,7 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <Filter />
                 </Suspense>
-              )
+              ),
             },
             {
               path: PUBLIC_PATH.DETAIL,
@@ -104,26 +110,30 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <Detail />
                 </Suspense>
-              )
+              ),
             },
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     },
     {
       path: '/unauthorized',
-      element: <UnAuthorized />
+      element: <UnAuthorized />,
     },
     {
       path: PUBLIC_PATH.NOT_FOUND,
-      element: <NotFoundPage />
+      element: <NotFoundPage />,
     },
     {
       path: FREELANCER_PATH.LAYOUT,
       element: <LayOutFreelancer />,
       children: [
         {
-          element: <RequireAuth allowedRoles={[ROLES.FREELANCER, ROLES.RECRUITER, ROLES.ADMIN]} />,
+          element: (
+            <RequireAuth
+              allowedRoles={[ROLES.FREELANCER, ROLES.RECRUITER, ROLES.ADMIN]}
+            />
+          ),
           children: [
             {
               path: FREELANCER_PATH.PROFILE,
@@ -131,7 +141,7 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <Profile />
                 </Suspense>
-              )
+              ),
             },
             {
               path: PUBLIC_PATH.USER_PROFILE,
@@ -139,18 +149,22 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <Profile />
                 </Suspense>
-              )
-            }
-          ]
-        }
-      ]
+              ),
+            },
+          ],
+        },
+      ],
     },
     {
       path: FREELANCER_PATH.LAYOUT,
       element: <TopBarFreelancer />,
       children: [
         {
-          element: <RequireAuth allowedRoles={[ROLES.FREELANCER, ROLES.RECRUITER, ROLES.ADMIN]} />,
+          element: (
+            <RequireAuth
+              allowedRoles={[ROLES.FREELANCER, ROLES.RECRUITER, ROLES.ADMIN]}
+            />
+          ),
           children: [
             {
               path: FREELANCER_PATH.CHAT,
@@ -158,18 +172,20 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <Chat />
                 </Suspense>
-              )
-            }
-          ]
-        }
-      ]
+              ),
+            },
+          ],
+        },
+      ],
     },
     {
       path: FREELANCER_PATH.LAYOUT,
       element: <Setting />,
       children: [
         {
-          element: <RequireAuth allowedRoles={[ROLES.FREELANCER, ROLES.RECRUITER]} />,
+          element: (
+            <RequireAuth allowedRoles={[ROLES.FREELANCER, ROLES.RECRUITER]} />
+          ),
           children: [
             {
               path: FREELANCER_PATH.PROFILE_SETTING,
@@ -178,7 +194,7 @@ export default function Router() {
                   <TopBarFreelancer />
                   <ProfileSetting />
                 </Suspense>
-              )
+              ),
             },
             {
               path: FREELANCER_PATH.CHANGE_PASSWORD,
@@ -187,7 +203,7 @@ export default function Router() {
                   <TopBarFreelancer />
                   <ChangePassword />
                 </Suspense>
-              )
+              ),
             },
             {
               path: FREELANCER_PATH.EXPERIENCE_EDUCATION,
@@ -196,7 +212,7 @@ export default function Router() {
                   <TopBarFreelancer />
                   <ExperienceEducation />
                 </Suspense>
-              )
+              ),
             },
             {
               path: FREELANCER_PATH.CURRENT_PROJECT,
@@ -205,11 +221,11 @@ export default function Router() {
                   <TopBarFreelancer />
                   <CurrentProject />
                 </Suspense>
-              )
+              ),
             },
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     },
     {
       path: RECRUITER_PATH.LAYOUT,
@@ -224,7 +240,7 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <HomeRecruiter />
                 </Suspense>
-              )
+              ),
             },
             {
               path: RECRUITER_PATH.LIST_PROJECT_RECRUITER,
@@ -232,7 +248,7 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <ListProjectRecruiter />
                 </Suspense>
-              )
+              ),
             },
             {
               path: RECRUITER_PATH.CREATE_NEW_PROJECT,
@@ -240,7 +256,7 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <CreateProject />
                 </Suspense>
-              )
+              ),
             },
             {
               path: RECRUITER_PATH.UPDATE_PROJECT,
@@ -248,11 +264,11 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <UpdateProject />
                 </Suspense>
-              )
+              ),
             },
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     },
     {
       path: ADMIN_PATH.LAYOUT,
@@ -267,7 +283,7 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <HomeAdmin />
                 </Suspense>
-              )
+              ),
             },
             {
               path: ADMIN_PATH.LIST_USERS,
@@ -275,7 +291,7 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <ListUsers />
                 </Suspense>
-              )
+              ),
             },
             {
               path: ADMIN_PATH.REPORT_LIST,
@@ -283,7 +299,7 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <ListReport />
                 </Suspense>
-              )
+              ),
             },
             {
               path: ADMIN_PATH.PROJECT_LIST,
@@ -291,7 +307,7 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <ListProject />
                 </Suspense>
-              )
+              ),
             },
             {
               path: ADMIN_PATH.VIEW_BLOG,
@@ -299,7 +315,7 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <ViewBlog />
                 </Suspense>
-              )
+              ),
             },
             {
               path: ADMIN_PATH.CATEGORY_LIST,
@@ -307,7 +323,15 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <ListCategory />
                 </Suspense>
-              )
+              ),
+            },
+            {
+              path: ADMIN_PATH.SKILL_LIST,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <ListSkill />
+                </Suspense>
+              ),
             },
             {
               path: ADMIN_PATH.CREATE_BLOG,
@@ -315,7 +339,7 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <CreateBlog />
                 </Suspense>
-              )
+              ),
             },
             {
               path: ADMIN_PATH.UPDATE_BLOG,
@@ -323,31 +347,12 @@ export default function Router() {
                 <Suspense fallback={<>Loading...</>}>
                   <UpdateBlog />
                 </Suspense>
-              )
+              ),
             },
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     },
-    // {
-    //   path: ADMIN_PATH.LAYOUT,
-    //   children: [
-    //     {
-    //       element: <RequireAuth allowedRoles={ROLES.ADMIN} />,
-    //       children: [
-    //         {
-    //           path: ADMIN_PATH.CREATE_BLOG,
-    //           element: (
-    //             <Suspense fallback={<>Loading...</>}>
-    //               <CreateBlog />
-    //             </Suspense>
-    //           )
-    //         },
-    //       ]
-    //     }
-    //   ]
-    // }
-  ])
-  return router
-
+  ]);
+  return router;
 }

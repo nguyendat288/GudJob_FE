@@ -36,7 +36,7 @@ code {
   padding: 0 1.7rem;
   overflow: hidden;
   color: aliceblue;
-  background-color: #2F4050;
+  background-color: #2f4050;
 }
 
 .sidebar-list {
@@ -63,7 +63,7 @@ code {
 
 .sidebar-list .row a {
   text-decoration: none;
-  color: inherit; 
+  color: inherit;
   justify-self: center;
 }
 
@@ -168,7 +168,6 @@ code {
   height: 2rem;
 }
 
-
 /* ABOUT SECTION */
 
 #about {
@@ -214,3 +213,8 @@ code {
   margin: auto 0;
 }
 
+.slider {
+  margin: 0 20px;
+  overflow: 'hidden';
+  padding: 2rem 0;
+}
