@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Typography, Box } from '@mui/material';
+import { Grid, Typography, Box, Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Pie, Line } from 'react-chartjs-2';
 import {
@@ -124,6 +124,21 @@ const HomeAdmin = () => {
     ],
   };
 
+  const [downloadUrl, setDownloadUrl] = useState(null);
+
+  const handleDownload = async () => {
+    try {
+      const response = await Statistic.ExportStatistic();
+      console.log('response', response);
+      const url = window.URL.createObjectURL(
+        new Blob([response], { type: response.type })
+      );
+      setDownloadUrl(url);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <Typography
@@ -132,6 +147,12 @@ const HomeAdmin = () => {
       >
         {t('dashboard')}
       </Typography>
+      <Button onClick={handleDownload}>Export</Button>
+      {downloadUrl && (
+        <Button href={downloadUrl} style={{ marginLeft: '10px' }}>
+          Click here to download
+        </Button>
+      )}
       <Grid container spacing={4}>
         {/* Section for Pie Charts */}
         <Grid item xs={12} md={6}>
