@@ -442,7 +442,7 @@ const TopBarFreelancer = () => {
                   </MenuItem>
                 </Menu>
 
-                <IconButton>
+                <IconButton onClick={() => navigate('/favorite-list')}>
                   <FavoriteBorderOutlinedIcon />
                 </IconButton>
 

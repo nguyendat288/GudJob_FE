@@ -23,6 +23,7 @@ export const FREELANCER_PATH = {
   CURRENT_PROJECT: 'current-project',
   SETTING: '/setting',
   CHAT: '/chat/:conversationId/:userId',
+  FAVORITE_LIST: '/favorite-list',
 };
 
 export const RECRUITER_PATH = {
