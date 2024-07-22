@@ -2,7 +2,6 @@ import React from 'react';
 import { Box, Typography, Divider } from '@mui/material';
 import TopBar from './TopBar';
 import ProjectDescription from '../../../../components/ProjectDescription';
-import { useParams } from 'react-router-dom';
 import Footer from '../../../../components/Footer';
 import { formatDateTime } from '../../../../utils/formatDate';
 

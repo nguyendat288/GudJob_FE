@@ -49,7 +49,7 @@ const Search = () => {
       setLoading(false);
     };
     getData();
-  }, [searchKey, page]);
+  }, [searchKey, page, listSkillSelected]);
 
   useEffect(() => {
     const getData = async () => {

@@ -14,7 +14,6 @@ import {
 import React, { useEffect, useState } from 'react';
 import categoryApi from '../../../services/categoryApi';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
 import projectApi from '../../../services/projectApi';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'ckeditor5/ckeditor5.css';

@@ -8,7 +8,6 @@ import {
   Alert,
 } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import ProjectDescription from '../../../components/ProjectDescription';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
