@@ -11,7 +11,6 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
-import StarIcon from '@mui/icons-material/Star';
 import { ROLES } from '../../../constaints/role';
 import reportApi from '../../../services/reportApi';
 import { toast } from 'react-toastify';

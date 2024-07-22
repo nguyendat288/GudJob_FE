@@ -18,7 +18,6 @@ import categoryApi from '../../../services/categoryApi';
 import Header from '../../Recruiter/LayOutRecruiter/Header';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import LoadingComponent from '../../../components/LoadingComponent';
-import { formatCurrency } from '../../../utils/formatCurrency';
 
 const Search = () => {
   const { searchKey } = useParams();

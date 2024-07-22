@@ -9,14 +9,12 @@ import {
 } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import { useSelector } from 'react-redux';
-import { ROLES } from '../../../constaints/role';
 import { useNavigate } from 'react-router-dom';
 import ProjectDescription from '../../../components/ProjectDescription';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
 import { formatCurrency } from '../../../utils/formatCurrency';
 
 const ShowList = ({ listProject }) => {
-  const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const navigate = useNavigate();
 
   const handleDetail = (id) => {
