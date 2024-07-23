@@ -15,6 +15,7 @@ import TypographyHeader from '../../../components/Typography/TypographyHeader';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { useSelector } from 'react-redux';
 import categoryApi from '../../../services/categoryApi';
 import 'ckeditor5/ckeditor5.css';
 import '../../../assets/css/MyEditor.css';
@@ -44,6 +45,13 @@ const UpdateBlog = () => {
   const [errorDescription, setErrorDescription] = useState(false);
   const [helperTextDescription, setHelperTextDescription] = useState('');
   const [isPublish, setIsPublish] = useState(false);
+  const [isHomePage, setIsHomePage] = useState(false);
+  const [isHot, setIsHot] = useState(false);
+
+  const [shortDescription, setShortDescription] = useState('');
+  const [errorshortDescription, setErrorshortDescription] = useState(false);
+  const [helperTextshortDescription, setHelperTextshortDescription] =
+    useState('');
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -57,14 +65,17 @@ const UpdateBlog = () => {
         setTitle(res?.title);
         setCategoryId(res?.categoryId);
         setDescription(res?.description);
+        setShortDescription(res?.shortDesction);
         setImage(res?.blogImage);
         setBlog(res);
         setIsPublish(res?.isPublished);
+        setIsHomePage(res?.isHomePage);
+        setIsHot(res?.isHot);
         setLoading(false);
       };
       getData();
     }
-  }, [value, blogId]);
+  }, [value]);
 
   useEffect(() => {
     if (value === 1) {
@@ -147,7 +158,14 @@ const UpdateBlog = () => {
       setErrorImage(false);
       setHelperTextImage('');
     }
-
+    if (shortDescription === '' || shortDescription.length >= 200) {
+      setErrorshortDescription(true);
+      setHelperTextshortDescription('* Mô tả ngắn từ 0 - 200 ký tự .');
+      hasError = true;
+    } else {
+      setErrorshortDescription(false);
+      setHelperTextshortDescription('');
+    }
     if (hasError) {
       return;
     }
@@ -158,9 +176,12 @@ const UpdateBlog = () => {
         id: blogId,
         title: title,
         description: description,
+        shortDescription: shortDescription,
         categoryId: categoryId,
         blogImage: image,
         isPublished: isPublish,
+        isHomePage: isHomePage,
+        isHot: isHot,
       };
       await blogApi.UpdateBlog(data);
       setLoading(false);
@@ -203,7 +224,27 @@ const UpdateBlog = () => {
                 {helperTextTitle}
               </Box>
             )}
+            <TypographyTitle title="Mô tả ngắn " marginT={3} />
+            <TextField
+              multiline
+              maxRows={4}
+              sx={{
+                bgcolor: 'white',
+                mt: 2,
+              }}
+              error={errorshortDescription}
+              placeholder="Nhập mô tả ngắn...."
+              fullWidth
+              value={shortDescription}
+              variant="outlined"
+              onChange={(e) => setShortDescription(e.target.value)}
+            />
 
+            {helperTextshortDescription && (
+              <Box color="error.main" mt={1}>
+                {helperTextshortDescription}
+              </Box>
+            )}
             <TypographyTitle title="Chủ đề của bài viết " marginT={3} />
             <Select
               fullWidth
@@ -270,18 +311,49 @@ const UpdateBlog = () => {
                 {helperTextDescription}
               </Box>
             )}
-            <Box
-              display="flex"
-              mt={3}
-              justifyItems="center"
-              alignItems="center"
-            >
-              <TypographyTitle title="Công khai " />
-              <Switch
-                checked={isPublish}
-                value={isPublish}
-                onChange={(e) => setIsPublish(e.target.checked)}
-              />
+
+            <Box display="flex" justifyContent="space-between">
+              <Box
+                display="flex"
+                mt={3}
+                justifyItems="center"
+                alignItems="center"
+              >
+                <TypographyTitle title="Công khai " />
+                <Switch
+                  checked={isPublish}
+                  value={isPublish}
+                  onChange={(e) => setIsPublish(e.target.checked)}
+                />
+              </Box>
+
+              <Box
+                display="flex"
+                mt={3}
+                justifyItems="center"
+                alignItems="center"
+              >
+                <TypographyTitle title="Trang chủ " />
+                <Switch
+                  checked={isHomePage}
+                  value={isHomePage}
+                  onChange={(e) => setIsHomePage(e.target.checked)}
+                />
+              </Box>
+
+              <Box
+                display="flex"
+                mt={3}
+                justifyItems="center"
+                alignItems="center"
+              >
+                <TypographyTitle title="Nổi bật " />
+                <Switch
+                  value={isHot}
+                  checked={isHot}
+                  onChange={(e) => setIsHot(e.target.checked)}
+                />
+              </Box>
             </Box>
 
             <Box display="flex" justifyContent="flex-end" mt={3}>

@@ -110,7 +110,7 @@ const projectApi = {
       }
       if (listSkillSelected.length > 0) {
         listSkillSelected.forEach((value) =>
-          searchParams.append('Skill', value)
+          searchParams.append('Skills', value)
         );
       }
       const response = await axios.get(
@@ -119,6 +119,19 @@ const projectApi = {
       );
 
       return response?.data;
+    } catch (error) {
+      if (error.response.status === 500) {
+        toast.error('Something wrong ');
+      }
+    }
+  },
+  SearchRecruiter: async (params) => {
+    try {
+      const response = await axiosClient.get(
+        `${BASE_URL}/api/Projects/SearchRecruiter`,
+        { params }
+      );
+      return response;
     } catch (error) {
       if (error.response.status === 500) {
         toast.error('Something wrong ');

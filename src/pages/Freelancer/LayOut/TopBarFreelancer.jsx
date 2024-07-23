@@ -250,7 +250,8 @@ const TopBarFreelancer = () => {
             >
               GoodJob
             </Typography>
-
+            {/* <Button variant="outlined">Tin tức </Button>
+            <Button variant="outlined">Dự án </Button> */}
             <Box display="flex" flex={1} maxWidth="600px" mx={2}>
               {currentUser?.role !== 'Recruiter' &&
                 currentUser?.role !== 'Admin' && (

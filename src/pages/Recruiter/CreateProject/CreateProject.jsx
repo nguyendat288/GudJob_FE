@@ -46,7 +46,8 @@ const CreateProject = () => {
   const [errorBudgetMax, setErrorBudgetMax] = useState(false);
   const [helperTextBudgetMax, setHelperTextBudgetMax] = useState('');
 
-  const [duration, setDuration] = useState('');
+  const [duration, setDuration] = useState(0);
+
   const [errorDuration, setErrorDuration] = useState(false);
   const [helperTextDuration, setHelperTextDuration] = useState('');
 
@@ -189,6 +190,7 @@ const CreateProject = () => {
             <Box mt={2}>
               <TextField
                 fullWidth
+                placeholder="Nhập tên dự án ..."
                 value={name}
                 error={errorName}
                 helperText={helperTextName}

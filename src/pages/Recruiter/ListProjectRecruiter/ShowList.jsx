@@ -9,7 +9,7 @@ import {
   IconButton,
   Snackbar,
 } from '@mui/material';
-import StarIcon from '@mui/icons-material/Star';
+
 import { useNavigate } from 'react-router-dom';
 import ProjectDescription from '../../../components/ProjectDescription';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
@@ -23,6 +23,7 @@ const ShowList = ({ listProject }) => {
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const [favoriteProjects, setFavoriteProjects] = useState([]);
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -129,17 +130,17 @@ const ShowList = ({ listProject }) => {
       {listProject?.items?.length !== 0 &&
         listProject?.items?.map((project, index) => (
           <Box key={index} mt={1} className="project-item">
-            <Box
-              mb={3}
-              sx={{
-                textDecoration: 'none',
-                color: 'inherit',
-                cursor: 'pointer',
-                '&:hover': { backgroundColor: '#f0f0f0' },
-              }}
-              onClick={() => handleDetail(project?.id)}
-            >
-              <Box display="flex">
+            <Box mb={3}>
+              <Box
+                display="flex"
+                sx={{
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  cursor: 'pointer',
+                  '&:hover': { backgroundColor: '#f0f0f0' },
+                }}
+                onClick={() => handleDetail(project?.id)}
+              >
                 <Box>
                   <Box display="flex" alignItems="center">
                     <TypographyTitle title={project?.title} color="#3366FF" />
@@ -180,33 +181,33 @@ const ShowList = ({ listProject }) => {
                 <Box m={2}>
                   <ProjectDescription description={project?.description} />
                 </Box>
-                <Typography fontWeight="bold" fontSize="14px">
-                  Kỹ năng yêu cầu
-                </Typography>
+                {project?.skill?.length > 0 && (
+                  <Typography fontWeight="bold" fontSize="14px">
+                    Kỹ năng yêu cầu
+                  </Typography>
+                )}
+
                 <Box display="flex" flexWrap="wrap">
-                  {project?.skill?.map((item, index) => (
-                    <Box
-                      key={index}
-                      sx={{
-                        mt: 1,
-                        borderRadius: '10px',
-                        padding: '5px',
-                        display: 'inline-block',
-                        ml: 2,
-                        border: '1px solid blue',
-                      }}
-                    >
-                      <Typography fontSize="15px"> {item} </Typography>
-                    </Box>
-                  ))}
+                  {project?.skill?.length > 0 &&
+                    project?.skill?.map((item, index) => (
+                      <Box
+                        key={index}
+                        sx={{
+                          mt: 1,
+                          borderRadius: '10px',
+                          padding: '5px',
+                          display: 'inline-block',
+                          ml: 2,
+                          border: '1px solid blue',
+                        }}
+                      >
+                        <Typography fontSize="15px"> {item} </Typography>
+                      </Box>
+                    ))}
                 </Box>
               </Box>
-              <Box mt={1} display="flex">
-                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                  <StarIcon sx={{ color: '#FFD700', fontSize: '20px' }} />
-                  <Typography>5.0</Typography>
-                </Box>
-                <Box ml="auto" className="flex items-center">
+              <Box mt={1} display="flex" flexDirection="flex-end">
+                <Box className="flex items-center">
                   <Typography className="mr-2">{project?.timeAgo}</Typography>
                 </Box>
                 <IconButton
