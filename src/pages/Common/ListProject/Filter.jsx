@@ -45,7 +45,7 @@ const Filter = () => {
     };
 
     getData();
-  }, [idCate, page, categoryId, listSkillSelected]);
+  }, [idCate, page, categoryId]);
 
   useEffect(() => {
     const getData = async () => {

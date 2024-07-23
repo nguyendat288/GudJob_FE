@@ -40,8 +40,11 @@ const Search = () => {
         Keyword: searchKey === '' ? null : searchKey,
         PageIndex: page,
         PageSize: 5,
+        CategoryId: categoryId === 0 ? null : categoryId,
+        MinBudget: minBudget === 0 ? null : minBudget,
+        MaxBudget: maxBudget === 0 ? null : maxBudget,
+        Duration: duration === 0 ? null : duration,
       };
-      console.log(params);
       setLoading(true);
       const res = await projectApi.SearchHomePage(params, listSkillSelected);
       setListProject(res);
@@ -49,7 +52,7 @@ const Search = () => {
       setLoading(false);
     };
     getData();
-  }, [searchKey, page, listSkillSelected]);
+  }, [searchKey, page]);
 
   useEffect(() => {
     const getData = async () => {
@@ -99,10 +102,6 @@ const Search = () => {
     setLoading(false);
   };
 
-  const handlePageChange = (event, value) => {
-    setPage(value);
-  };
-
   return (
     <>
       <Box m={2}>
@@ -134,8 +133,8 @@ const Search = () => {
           >
             <Pagination
               count={totalPage}
-              defaultPage={page}
-              onChange={handlePageChange}
+              page={page}
+              onChange={(event, value) => setPage(value)}
               color="primary"
             />
           </Box>

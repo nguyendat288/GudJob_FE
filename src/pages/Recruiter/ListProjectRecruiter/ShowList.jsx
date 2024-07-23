@@ -24,7 +24,6 @@ const ShowList = ({ listProject }) => {
   const [favoriteProjects, setFavoriteProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
