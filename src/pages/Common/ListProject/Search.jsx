@@ -18,7 +18,6 @@ import categoryApi from '../../../services/categoryApi';
 import Header from '../../Recruiter/LayOutRecruiter/Header';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import LoadingComponent from '../../../components/LoadingComponent';
-import { formatCurrency } from '../../../utils/formatCurrency';
 
 const Search = () => {
   const { searchKey } = useParams();
@@ -41,8 +40,11 @@ const Search = () => {
         Keyword: searchKey === '' ? null : searchKey,
         PageIndex: page,
         PageSize: 5,
+        CategoryId: categoryId === 0 ? null : categoryId,
+        MinBudget: minBudget === 0 ? null : minBudget,
+        MaxBudget: maxBudget === 0 ? null : maxBudget,
+        Duration: duration === 0 ? null : duration,
       };
-      console.log(params);
       setLoading(true);
       const res = await projectApi.SearchHomePage(params, listSkillSelected);
       setListProject(res);
@@ -95,13 +97,10 @@ const Search = () => {
     };
     setLoading(true);
     const res = await projectApi.SearchHomePage(params, listSkillSelected);
+    setPage(1);
     setListProject(res);
     setTotalPage(Math.ceil(res?.totalItemsCount / 5));
     setLoading(false);
-  };
-
-  const handlePageChange = (event, value) => {
-    setPage(value);
   };
 
   return (
@@ -135,8 +134,8 @@ const Search = () => {
           >
             <Pagination
               count={totalPage}
-              defaultPage={page}
-              onChange={handlePageChange}
+              page={page}
+              onChange={(event, value) => setPage(value)}
               color="primary"
             />
           </Box>
@@ -159,10 +158,10 @@ const Search = () => {
             <Select
               fullWidth
               sx={{ bgcolor: '#FFFFFF', mb: 2 }}
-              value={categoryId}
+              value={categoryId ? categoryId : 0}
               onChange={(e) => handleChangeCategory(e.target.value)}
             >
-              <MenuItem value="">Tất cả</MenuItem>
+              <MenuItem value={0}>Tất cả</MenuItem>
 
               {listCategory?.length !== 0 &&
                 listCategory.map((item, index) => (

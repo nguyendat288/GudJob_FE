@@ -76,7 +76,7 @@ function Profile() {
       setProfile(res);
     };
     getData();
-  }, [userId]);
+  }, [userId, currentUser.userId]);
 
   // const isOwnProfile = userId === undefined;
 

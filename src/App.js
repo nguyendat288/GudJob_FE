@@ -1,11 +1,12 @@
-import { BrowserRouter } from "react-router-dom";
-import Router from "./routers/routes";
-import { ToastContainer } from "react-toastify";
+import { BrowserRouter } from 'react-router-dom';
+import Router from './routers/routes';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { ThemeProvider } from '@mui/material'
-import { theme } from './themes/theme'
-import { Helmet } from "react-helmet";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ThemeProvider } from '@mui/material';
+import { theme } from './themes/theme';
+import { Helmet } from 'react-helmet';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import ScrollToTop from './components/ScrollToTop';
 const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 function App() {
@@ -16,10 +17,10 @@ function App() {
           <BrowserRouter>
             <Helmet>
               <title>Good Job</title>
-              {/* <link rel="icon" href="/path/to/logo.ico" /> */}
             </Helmet>
             <Router />
             <ToastContainer />
+            <ScrollToTop />
           </BrowserRouter>
         </GoogleOAuthProvider>
       </ThemeProvider>

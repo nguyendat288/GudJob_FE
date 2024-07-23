@@ -80,10 +80,6 @@ const Login = () => {
     }
   };
 
-  const handleRegister = (e) => {
-    navigate('/register');
-  };
-
   return (
     <div className="login-wrapper">
       {showLogin ? (
