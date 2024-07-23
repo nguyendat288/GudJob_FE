@@ -38,6 +38,9 @@ const Filter = () => {
         PageIndex: page,
         PageSize: 5,
         CategoryId: categoryId === 0 ? null : categoryId,
+        MinBudget: minBudget === 0 ? null : minBudget,
+        MaxBudget: maxBudget === 0 ? null : maxBudget,
+        Duration: duration === 0 ? null : duration,
       };
       const res = await projectApi.SearchHomePage(params, listSkillSelected);
       setListProject(res);
@@ -45,7 +48,7 @@ const Filter = () => {
     };
 
     getData();
-  }, [idCate, page, categoryId]);
+  }, [idCate, page]);
 
   useEffect(() => {
     const getData = async () => {
