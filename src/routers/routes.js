@@ -43,6 +43,7 @@ import UpdateBlog from '../pages/Admin/Blog/UpdateBlog';
 import BlogDetail from '../pages/Admin/Blog/Publish/BlogDetail';
 import HomeBlog from '../pages/Admin/Blog/Publish/HomeBlog';
 import ListSkill from '../pages/Admin/List/ListSkill';
+import FavoriteProjectsPage from '../pages/Common/FavoriteList/FavoriteProjectsPage';
 
 export default function Router() {
   let router = useRoutes([
@@ -148,6 +149,14 @@ export default function Router() {
               element: (
                 <Suspense fallback={<>Loading...</>}>
                   <Profile />
+                </Suspense>
+              ),
+            },
+            {
+              path: FREELANCER_PATH.FAVORITE_LIST,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <FavoriteProjectsPage />
                 </Suspense>
               ),
             },

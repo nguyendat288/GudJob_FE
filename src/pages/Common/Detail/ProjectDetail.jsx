@@ -5,7 +5,6 @@ import {
   Paper,
   Typography,
   Tooltip,
-  Rating,
   FilledInput,
   InputAdornment,
   IconButton,
@@ -177,7 +176,7 @@ const ProjectDetail = ({
                 </>
               )}
             {myBidding == null &&
-              detail?.statusId == 2 &&
+              detail?.statusId === 2 &&
               currentUser?.role !== ROLES.RECRUITER &&
               currentUser?.role !== ROLES.ADMIN && (
                 <Button variant="outlined" onClick={handleOpen}>
@@ -186,7 +185,7 @@ const ProjectDetail = ({
               )}
           </Box>
         </Paper>
-        {myBidding != null && detail?.statusId == 2 && (
+        {myBidding != null && detail?.statusId === 2 && (
           <>
             <Paper
               sx={{ bgcolor: '#F8F8FF', borderRadius: '5px', mt: 2, p: 5 }}

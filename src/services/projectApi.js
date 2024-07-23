@@ -101,7 +101,6 @@ const projectApi = {
     }
   },
   SearchHomePage: async (params, listSkillSelected) => {
-    console.log(params);
     try {
       const searchParams = new URLSearchParams();
       for (const key in params) {
@@ -149,6 +148,46 @@ const projectApi = {
       if (error.response.status === 500) {
         toast.error('Something wrong ');
       }
+      throw error;
+    }
+  },
+  GetFavoriteProjects: async (userId, pageIndex = 1, pageSize = 5) => {
+    try {
+      const response = await axiosClient.get(
+        `${BASE_URL}/api/Projects/Favorite`,
+        {
+          params: { UserId: userId, PageIndex: pageIndex, PageSize: pageSize },
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error('Failed to fetch favorite projects:', error);
+      throw error;
+    }
+  },
+  AddFavorite: async (data) => {
+    try {
+      const response = await axiosClient.post(
+        `${BASE_URL}/api/Projects/AddFavorite`,
+        data
+      );
+      return response;
+    } catch (error) {
+      if (error.response.status === 500) {
+        toast.error('Something wrong ');
+      }
+      throw error;
+    }
+  },
+  DeleteFavorite: async (data) => {
+    try {
+      const response = await axiosClient.delete(
+        `${BASE_URL}/api/Projects/DeleteFavorite`,
+        { data }
+      );
+      return response;
+    } catch (error) {
+      console.error('Failed to delete favorite project:', error);
       throw error;
     }
   },

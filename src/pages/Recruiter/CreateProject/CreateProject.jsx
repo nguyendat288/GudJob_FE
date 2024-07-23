@@ -47,6 +47,7 @@ const CreateProject = () => {
   const [helperTextBudgetMax, setHelperTextBudgetMax] = useState('');
 
   const [duration, setDuration] = useState(0);
+
   const [errorDuration, setErrorDuration] = useState(false);
   const [helperTextDuration, setHelperTextDuration] = useState('');
 
