@@ -94,6 +94,7 @@ const Filter = () => {
     };
     const res = await projectApi.SearchHomePage(params, listSkillSelected);
     setListProject(res);
+    setPage(1);
     setTotalPage(Math.ceil(res?.totalItemsCount / 5));
   };
   const handlePageChange = (event, value) => {
@@ -131,7 +132,7 @@ const Filter = () => {
           <Select
             fullWidth
             sx={{ bgcolor: '#FFFFFF', mb: 2 }}
-            value={categoryId}
+            value={categoryId ? categoryId : 0}
             onChange={(e) => handleChangeCategory(e.target.value)}
           >
             <MenuItem value={0}>Tất cả</MenuItem>

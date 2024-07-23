@@ -97,6 +97,7 @@ const Search = () => {
     };
     setLoading(true);
     const res = await projectApi.SearchHomePage(params, listSkillSelected);
+    setPage(1);
     setListProject(res);
     setTotalPage(Math.ceil(res?.totalItemsCount / 5));
     setLoading(false);
@@ -157,10 +158,10 @@ const Search = () => {
             <Select
               fullWidth
               sx={{ bgcolor: '#FFFFFF', mb: 2 }}
-              value={categoryId}
+              value={categoryId ? categoryId : 0}
               onChange={(e) => handleChangeCategory(e.target.value)}
             >
-              <MenuItem value="">Tất cả</MenuItem>
+              <MenuItem value={0}>Tất cả</MenuItem>
 
               {listCategory?.length !== 0 &&
                 listCategory.map((item, index) => (
