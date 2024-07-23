@@ -129,7 +129,6 @@ const HomeAdmin = () => {
   const handleDownload = async () => {
     try {
       const response = await Statistic.ExportStatistic();
-      console.log('response', response);
       const url = window.URL.createObjectURL(
         new Blob([response], { type: response.type })
       );

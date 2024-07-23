@@ -38,7 +38,6 @@ const FavoriteProjectsPage = () => {
   }, [currentUser, page, loading]);
 
   const handleRemoveFavorite = async (projectId) => {
-    console.log('projectId', projectId);
     try {
       const response = await projectApi.DeleteFavorite({
         userId: currentUser?.userId,
