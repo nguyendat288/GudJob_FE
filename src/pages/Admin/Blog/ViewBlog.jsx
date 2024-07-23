@@ -50,7 +50,7 @@ const ViewBlog = () => {
     {
       field: 'categoryName',
       headerName: 'Chủ đề ',
-      width: 200,
+      width: 180,
     },
     {
       field: 'title',
@@ -60,7 +60,7 @@ const ViewBlog = () => {
     {
       field: 'createDate',
       headerName: 'Ngày tạo',
-      width: 250,
+      width: 180,
       renderCell: (params) => (
         <>
           <Box mt={2}>
@@ -72,7 +72,7 @@ const ViewBlog = () => {
     {
       field: '',
       headerName: 'Hành động',
-      width: 150,
+      width: 100,
       renderCell: (params) => (
         <Box display={'flex'}>
           <IconButton onClick={(e) => handleEdit(params?.row?.blogId)}>

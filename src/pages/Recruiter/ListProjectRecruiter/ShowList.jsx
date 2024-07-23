@@ -7,16 +7,12 @@ import {
   Typography,
   Alert,
 } from '@mui/material';
-import StarIcon from '@mui/icons-material/Star';
-import { useSelector } from 'react-redux';
-import { ROLES } from '../../../constaints/role';
 import { useNavigate } from 'react-router-dom';
 import ProjectDescription from '../../../components/ProjectDescription';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
 import { formatCurrency } from '../../../utils/formatCurrency';
 
 const ShowList = ({ listProject }) => {
-  const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const navigate = useNavigate();
 
   const handleDetail = (id) => {
@@ -40,17 +36,17 @@ const ShowList = ({ listProject }) => {
       {listProject?.items?.length !== 0 &&
         listProject?.items?.map((project, index) => (
           <Box key={index} mt={1} className="project-item">
-            <Box
-              mb={3}
-              sx={{
-                textDecoration: 'none',
-                color: 'inherit',
-                cursor: 'pointer',
-                '&:hover': { backgroundColor: '#f0f0f0' },
-              }}
-              onClick={() => handleDetail(project?.id)}
-            >
-              <Box display="flex">
+            <Box mb={3}>
+              <Box
+                display="flex"
+                sx={{
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  cursor: 'pointer',
+                  '&:hover': { backgroundColor: '#f0f0f0' },
+                }}
+                onClick={() => handleDetail(project?.id)}
+              >
                 <Box>
                   <Box display="flex" alignItems="center">
                     <TypographyTitle title={project?.title} color="#3366FF" />
@@ -91,35 +87,34 @@ const ShowList = ({ listProject }) => {
                 <Box m={2}>
                   <ProjectDescription description={project?.description} />
                 </Box>
-                <Typography fontWeight="bold" fontSize="14px">
-                  Kỹ năng yêu cầu
-                </Typography>
+                {project?.skill?.length > 0 && (
+                  <Typography fontWeight="bold" fontSize="14px">
+                    Kỹ năng yêu cầu
+                  </Typography>
+                )}
+
                 <Box display="flex" flexWrap="wrap">
-                  {project?.skill?.map((item, index) => (
-                    <Box
-                      key={index}
-                      sx={{
-                        mt: 1,
-                        borderRadius: '10px',
-                        padding: '5px',
-                        display: 'inline-block',
-                        ml: 2,
-                        border: '1px solid blue',
-                      }}
-                    >
-                      <Typography fontSize="15px"> {item} </Typography>
-                    </Box>
-                  ))}
+                  {project?.skill?.length > 0 &&
+                    project?.skill?.map((item, index) => (
+                      <Box
+                        key={index}
+                        sx={{
+                          mt: 1,
+                          borderRadius: '10px',
+                          padding: '5px',
+                          display: 'inline-block',
+                          ml: 2,
+                          border: '1px solid blue',
+                        }}
+                      >
+                        <Typography fontSize="15px"> {item} </Typography>
+                      </Box>
+                    ))}
                 </Box>
               </Box>
-              <Box mt={1} display="flex">
-                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                  <StarIcon sx={{ color: '#FFD700', fontSize: '20px' }} />
-                  <Typography>5.0</Typography>
-                </Box>
-                <Box ml="auto">
-                  <Typography>{project?.timeAgo}</Typography>
-                </Box>
+
+              <Box ml="auto">
+                <Typography>{project?.timeAgo}</Typography>
               </Box>
               <Box mt={1}>
                 <Typography fontSize="10px">

@@ -162,14 +162,17 @@ const Search = () => {
               value={categoryId}
               onChange={(e) => handleChangeCategory(e.target.value)}
             >
-              <MenuItem value="">Tất cả</MenuItem>
+              <MenuItem value={0}>Tất cả</MenuItem>
 
-              {listCategory?.length !== 0 &&
-                listCategory.map((item, index) => (
-                  <MenuItem key={index} value={item?.id}>
-                    {item?.categoryName}
-                  </MenuItem>
-                ))}
+              {listCategory &&
+                listCategory.length > 0 &&
+                listCategory
+                  .filter((item) => item.id !== 4)
+                  .map((item, index) => (
+                    <MenuItem key={index} value={item.id}>
+                      {item.categoryName}
+                    </MenuItem>
+                  ))}
             </Select>
 
             {listSkill && listSkill?.length !== 0 && (

@@ -18,18 +18,31 @@ import { useTranslation } from 'react-i18next';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { useSelector } from 'react-redux';
+import ListBlog from '../../Admin/Blog/Publish/ListBlog';
+import LoadingComponent from '../../../components/LoadingComponent';
+import blogApi from '../../../services/blogApi';
 
 const Home = () => {
   const [listCategory, setListCategory] = useState([]);
   const navigate = useNavigate();
   const { t } = useTranslation('home');
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
+  const [listBlogHomePage, setListBlogHomePage] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getCategory = async () => {
       try {
+        setLoading(true);
+        let params = {
+          Top: 4,
+          IsHomePage: true,
+        };
         const res = await categoryApi.GetAllCategory();
         setListCategory(res);
+        const res1 = await blogApi.Gets(params);
+        setListBlogHomePage(res1);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching categories:', error);
       }
@@ -71,6 +84,8 @@ const Home = () => {
     <>
       <HeroSection />
       <Box m={3}>
+        {loading && <LoadingComponent loading={loading} />}
+
         <Box mb={3}>
           <TypographyHeader title={t('popular_category')} />
           <Carousel
@@ -123,6 +138,7 @@ const Home = () => {
           </Carousel>
         </Box>
         <Divider />
+
         <Box mt={3}>
           <TypographyHeader title={t('website_can_help_you_about_?')} />
           <Box display="flex">
@@ -221,6 +237,11 @@ const Home = () => {
               />
             </Box>
           </Box>
+        </Box>
+
+        <Box mt={3}>
+          <TypographyHeader title="Tin tức" />
+          <ListBlog listBlog={listBlogHomePage} />
         </Box>
       </Box>
     </>

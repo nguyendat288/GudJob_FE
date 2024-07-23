@@ -1,37 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { Box, Typography, Link } from '@mui/material';
 import parse, { domToReact } from 'html-react-parser';
-import { useLocation } from 'react-router-dom';
 
-const ProjectDescription = ({ description }) => {
+const BlogDescription = ({ description }) => {
+  // Ensure the description is a string
   const validDescription = typeof description === 'string' ? description : '';
-  const [showFullDescription, setShowFullDescription] = useState(false);
-  const [isOverflowing, setIsOverflowing] = useState(false);
-  const descriptionRef = useRef(null);
-  const location = useLocation();
-
-  const isDetailPage = location.pathname.includes('detail/');
-
-  const toggleDescription = () => {
-    setShowFullDescription((prev) => !prev);
-  };
-
-  useEffect(() => {
-    if (descriptionRef.current && !isDetailPage) {
-      const height = descriptionRef.current.scrollHeight;
-      const lineHeight = parseFloat(
-        getComputedStyle(descriptionRef.current).lineHeight
-      );
-      const maxHeight = lineHeight * 3;
-      setIsOverflowing(height > maxHeight);
-    }
-  }, [validDescription, isDetailPage]);
 
   const parsedDescription = parse(validDescription, {
     replace: (domNode) => {
       if (domNode.type === 'tag') {
         switch (domNode.name) {
           case 'p':
+            // Replace <p> tags with Typography wrapped in a div
             return (
               <Box component="div" sx={{ marginBottom: 2 }}>
                 <Typography variant="body1">
@@ -40,6 +20,7 @@ const ProjectDescription = ({ description }) => {
               </Box>
             );
           case 'a':
+            // Replace <a> tags with MUI Link component
             return (
               <Link
                 href={domNode.attribs.href}
@@ -51,6 +32,7 @@ const ProjectDescription = ({ description }) => {
               </Link>
             );
           case 'div':
+            // Replace <div> tags with MUI Box component
             return (
               <Box sx={{ marginBottom: 2 }}>{domToReact(domNode.children)}</Box>
             );
@@ -67,6 +49,7 @@ const ProjectDescription = ({ description }) => {
               </Typography>
             );
           case 'strong':
+            // Replace <strong> tags with Typography component with fontWeight
             return (
               <Typography
                 component="span"
@@ -77,6 +60,7 @@ const ProjectDescription = ({ description }) => {
               </Typography>
             );
           case 'em':
+            // Replace <em> tags with Typography component with fontStyle
             return (
               <Typography
                 component="span"
@@ -87,6 +71,7 @@ const ProjectDescription = ({ description }) => {
               </Typography>
             );
           case 'img':
+            // Replace <img> tags with MUI Box component containing an img
             return (
               <Box
                 component="img"
@@ -102,32 +87,7 @@ const ProjectDescription = ({ description }) => {
     },
   });
 
-  return (
-    <Box>
-      <Box
-        ref={descriptionRef}
-        sx={{
-          display: '-webkit-box',
-          WebkitLineClamp: showFullDescription ? 'none' : 2,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-        }}
-      >
-        {parsedDescription}
-      </Box>
-      {isOverflowing && (
-        <Link
-          component="button"
-          variant="body2"
-          onClick={toggleDescription}
-          sx={{ mt: 2 }}
-        >
-          {showFullDescription ? 'Ẩn bớt' : '...xem thêm'}
-        </Link>
-      )}
-    </Box>
-  );
+  return <Box>{parsedDescription}</Box>;
 };
 
-export default ProjectDescription;
+export default BlogDescription;
