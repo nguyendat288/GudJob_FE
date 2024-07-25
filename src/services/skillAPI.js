@@ -30,7 +30,6 @@ const skillApi = {
         ...(SkillName && { SkillName }),
         ...(CategoryId && { CategoryId }),
       };
-      console.log('params', params);
       const response = await axiosClient.get(`${BASE_URL}/api/Skill/Gets`, {
         params,
       });
@@ -41,7 +40,6 @@ const skillApi = {
   },
   UpdateSkill: async (data) => {
     try {
-      console.log('data', data);
       const response = await axiosClient.put(
         `${BASE_URL}/api/Skill/Update`,
         data

@@ -389,7 +389,7 @@ const ExperienceEducation = () => {
       !experiences ||
       experiences === null
     ) {
-      return <Typography>Hiện chưa có bất kì học vấn nào</Typography>;
+      return <Typography>Hiện chưa có bất kì kinh nghiệm nào</Typography>;
     } else {
       return experiences?.map((exp, index) => (
         <Box key={index} mb={2} border="1px solid #ccc" borderRadius={5} p={2}>

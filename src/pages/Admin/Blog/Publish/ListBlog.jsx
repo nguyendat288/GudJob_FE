@@ -49,7 +49,7 @@ const ListBlog = ({ listBlog }) => {
         <Box flex="1.5" ml={2}>
           {listBlog.length > 0 &&
             listBlog.slice(1).map((blog, index) => (
-              <>
+              <div key={index}>
                 <Divider />
                 <Box key={index} mb={2} mt={1} display="flex">
                   <img
@@ -86,7 +86,7 @@ const ListBlog = ({ listBlog }) => {
                     </Typography>
                   </Box>
                 </Box>
-              </>
+              </div>
             ))}
         </Box>
       </Box>

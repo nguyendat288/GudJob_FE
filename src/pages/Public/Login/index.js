@@ -1,4 +1,11 @@
-import { Box, Divider, IconButton, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  TextField,
+  Typography,
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -38,12 +45,22 @@ const Login = () => {
   const loginWithGoogle = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        const accessToken = tokenResponse.access_token.toString();
+        const accessToken = tokenResponse.access_token;
         await authApi.loginWithGoogle(accessToken, dispatch, navigate);
       } catch (error) {
-        if (error.response.status === 415) {
+        console.error('Google login error:', error);
+        if (error.response && error.response.status === 415) {
+          setErrorText('Unsupported media type.');
+        } else {
+          setErrorText('An error occurred during Google login.');
         }
+        setErrorPassword(true);
       }
+    },
+    onError: (error) => {
+      console.error('Google login error:', error);
+      setErrorText('Failed to login with Google.');
+      setErrorPassword(true);
     },
   });
 
@@ -204,7 +221,7 @@ const Login = () => {
                 <Typography>hoặc</Typography>
               </Divider>
               <Box id="signInButton" mt={2}>
-                <LoadingButton
+                <Button
                   fullWidth
                   size="large"
                   sx={{
@@ -214,13 +231,12 @@ const Login = () => {
                     textTransform: 'none',
                     fontSize: '17px',
                   }}
-                  type="submit"
                   onClick={() => loginWithGoogle()}
                   variant="contained"
                 >
                   <GoogleIcon sx={{ marginRight: '10px' }} />
                   Đăng nhập bằng Google
-                </LoadingButton>
+                </Button>
               </Box>
               <Typography
                 sx={{ color: 'white', marginTop: '10px' }}

@@ -1,4 +1,3 @@
-// LoadingComponent.js
 import React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';

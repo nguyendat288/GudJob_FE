@@ -1,7 +1,6 @@
 import { Box, Button, Divider, TextField, Typography } from '@mui/material';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import profileApi from '../../../services/profileApi';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 function ProfileSetting() {
@@ -11,7 +10,6 @@ function ProfileSetting() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [description, setDescription] = useState('');
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const getData = async () => {

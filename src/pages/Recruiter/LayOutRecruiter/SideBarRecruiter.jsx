@@ -17,7 +17,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       style={{
         color: selected === title ? '#000000' : '#000000',
         backgroundColor: selected === title ? '#DDDDDD' : 'transparent',
-        cursor: 'pointer'
+        cursor: 'pointer',
       }}
     >
       <Typography>{title}</Typography>
@@ -33,9 +33,9 @@ const SideBarRecruiter = () => {
 
   return (
     <Box>
-      <Sidebar collapsed={isCollapsed} width='300px' style={{ height: '100%' }}>
+      <Sidebar collapsed={isCollapsed} width="300px" sx={{ height: '100%' }}>
         <Menu
-          iconShape='square'
+          iconShape="square"
           menuItemStyles={{
             button: ({ level, active, disabled }) => {
               if (level === 0)
@@ -43,7 +43,6 @@ const SideBarRecruiter = () => {
                   color: disabled ? '#B0E0E6' : '#000000',
                   backgroundColor: active ? '#B0E2FF' : undefined,
                   cursor: 'pointer',
-                  
                 };
             },
           }}
@@ -54,17 +53,17 @@ const SideBarRecruiter = () => {
             style={{
               margin: '10px 0 10px 0',
               color: '#e0e0e0',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             {!isCollapsed && (
               <Box
-                display='flex'
-                justifyContent='space-between'
-                alignItems='center'
-                ml='15px'
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                ml="15px"
               >
-                <Typography fontSize='30px'>GoodJob</Typography>
+                <Typography fontSize="30px">GoodJob</Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
                 </IconButton>
@@ -72,18 +71,22 @@ const SideBarRecruiter = () => {
             )}
           </MenuItem>
           {!isCollapsed && (
-            <Box mb='25px'>
-              <Box display='flex' justifyContent='center' alignItems='center'>
+            <Box mb="25px">
+              <Box display="flex" justifyContent="center" alignItems="center">
                 <img
-                  alt='profile-user'
-                  width='80px'
-                  height='80px'
+                  alt="profile-user"
+                  width="80px"
+                  height="80px"
                   src={currentUser?.avatar}
                   style={{ cursor: 'pointer', borderRadius: '50%' }}
                 />
               </Box>
-              <Box textAlign='center'>
-                <Typography variant='h5' fontWeight='bold' sx={{ m: '10px 0 0 0' }}>
+              <Box textAlign="center">
+                <Typography
+                  variant="h5"
+                  fontWeight="bold"
+                  sx={{ m: '10px 0 0 0' }}
+                >
                   {currentUser?.name}
                 </Typography>
               </Box>
@@ -93,27 +96,27 @@ const SideBarRecruiter = () => {
           <Box paddingLeft={isCollapsed ? undefined : '10%'}>
             <Divider />
             <Item
-              title='Trang chủ'
-              to='/recruiter'
+              title="Trang chủ"
+              to="/recruiter"
               icon={<HouseOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Divider />
-            <Typography variant='h6' sx={{ m: '15px 0 5px 20px' }}>
+            <Typography variant="h6" sx={{ m: '15px 0 5px 20px' }}>
               Project
             </Typography>
-            <SubMenu label='Quản lý dự án' icon={<QuizIcon />}>
+            <SubMenu label="Quản lý dự án" icon={<QuizIcon />}>
               <Item
-                title='Danh sách dự án'
-                to='/list-project-recruiter'
+                title="Danh sách dự án"
+                to="/list-project-recruiter"
                 icon={<QuizIcon />}
                 selected={selected}
                 setSelected={setSelected}
               />
               <Item
-                title='Tạo dự án'
-                to='/create-new-project'
+                title="Tạo dự án"
+                to="/create-new-project"
                 icon={<QuizIcon />}
                 selected={selected}
                 setSelected={setSelected}

@@ -88,10 +88,10 @@ const projectApi = {
       }
     }
   },
-  GetAllProjectByUserId: async (id, index, size) => {
+  GetAllProjectByUserId: async (id, statusId, index, size) => {
     try {
       const response = await axiosClient.get(
-        `${BASE_URL}/api/Projects/GetProjectsByUserId?UserId=${id}&PageIndex=${index}&PageSize=${size}`
+        `${BASE_URL}/api/Projects/GetProjectsByUserId?UserId=${id}&StatusId=${statusId}&PageIndex=${index}&PageSize=${size}`
       );
       return response;
     } catch (error) {
@@ -100,7 +100,7 @@ const projectApi = {
       }
     }
   },
-  SearchHomePage: async (params, listSkillSelected) => {
+  SearchHomePage: async (params, listSkillSelected, userId) => {
     try {
       const searchParams = new URLSearchParams();
       for (const key in params) {
@@ -113,12 +113,19 @@ const projectApi = {
           searchParams.append('Skills', value)
         );
       }
-      const response = await axios.get(
-        `${BASE_URL}/api/Projects/SearchHomePage`,
-        { params: searchParams }
-      );
-
-      return response?.data;
+      let response;
+      if (userId) {
+        response = await axiosClient.get(
+          `${BASE_URL}/api/Projects/SearchHomePage?userId=${userId}`,
+          { params: searchParams }
+        );
+        return response;
+      } else {
+        response = await axios.get(`${BASE_URL}/api/Projects/SearchHomePage`, {
+          params: searchParams,
+        });
+        return response?.data;
+      }
     } catch (error) {
       if (error.response.status === 500) {
         toast.error('Something wrong ');
@@ -138,10 +145,53 @@ const projectApi = {
       }
     }
   },
-  changeProjectStatus: async (data) => {
+  ApproveProject: async (data) => {
     try {
-      const response = await axiosClient.post(
-        `${BASE_URL}/api/Projects/UpdateStatus?statusId=2&projectId=${data.projectId}`
+      let params = {
+        statusId: 2,
+        projectId: data.projectId,
+      };
+      const response = await axiosClient.put(
+        `${BASE_URL}/api/Projects/UpdateStatus`,
+        params
+      );
+      return response;
+    } catch (error) {
+      if (error.response.status === 500) {
+        toast.error('Something wrong ');
+      }
+      throw error;
+    }
+  },
+  RejectProject: async (data) => {
+    try {
+      let params = {
+        statusId: 5,
+        projectId: data.projectId,
+        rejectReason: data.rejectReason,
+      };
+      const response = await axiosClient.put(
+        `${BASE_URL}/api/Projects/UpdateStatus`,
+        params
+      );
+      return response;
+    } catch (error) {
+      if (error.response.status === 500) {
+        toast.error('Something wrong ');
+      }
+      throw error;
+    }
+  },
+  MarkDoneProject: async (data) => {
+    try {
+      let params = {
+        statusId: data.statusId,
+        projectId: data.projectId,
+        bidId: data.bidId,
+      };
+      const response = await axiosClient.put(
+        `${BASE_URL}/api/Projects/UpdateStatus`,
+        params
       );
       return response;
     } catch (error) {
@@ -188,6 +238,18 @@ const projectApi = {
       return response;
     } catch (error) {
       console.error('Failed to delete favorite project:', error);
+      throw error;
+    }
+  },
+  MakeDoneProject: async (data) => {
+    try {
+      const response = await axiosClient.post(
+        `${BASE_URL}/api/Projects/MakeDoneProject`,
+        data
+      );
+      return response;
+    } catch (error) {
+      console.error('Failed to make done project:', error);
       throw error;
     }
   },

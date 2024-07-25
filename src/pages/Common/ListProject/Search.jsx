@@ -17,9 +17,11 @@ import ShowList from '../../Recruiter/ListProjectRecruiter/ShowList';
 import categoryApi from '../../../services/categoryApi';
 import Header from '../../Recruiter/LayOutRecruiter/Header';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import LoadingComponent from '../../../components/LoadingComponent';
+import ShowListSkeleton from '../../../components/Skeleton/ShowListSkeleton';
+import { useSelector } from 'react-redux';
 
 const Search = () => {
+  const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const { searchKey } = useParams();
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
@@ -32,7 +34,7 @@ const Search = () => {
   const [duration, setDuration] = useState(0);
   const [minBudget, setMinBudget] = useState(0);
   const [maxBudget, setMaxBudget] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [reloadList, setReloadList] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -45,14 +47,16 @@ const Search = () => {
         MaxBudget: maxBudget === 0 ? null : maxBudget,
         Duration: duration === 0 ? null : duration,
       };
-      setLoading(true);
-      const res = await projectApi.SearchHomePage(params, listSkillSelected);
+      const res = await projectApi.SearchHomePage(
+        params,
+        listSkillSelected,
+        currentUser?.userId
+      );
       setListProject(res);
       setTotalPage(Math.ceil(res?.totalItemsCount / 5));
-      setLoading(false);
     };
     getData();
-  }, [searchKey, page]);
+  }, [searchKey, page, reloadList]);
 
   useEffect(() => {
     const getData = async () => {
@@ -95,18 +99,20 @@ const Search = () => {
       MaxBudget: maxBudget === 0 ? null : maxBudget,
       Duration: duration === 0 ? null : duration,
     };
-    setLoading(true);
-    const res = await projectApi.SearchHomePage(params, listSkillSelected);
+    const res = await projectApi.SearchHomePage(
+      params,
+      listSkillSelected,
+      currentUser?.userId
+    );
     setPage(1);
     setListProject(res);
     setTotalPage(Math.ceil(res?.totalItemsCount / 5));
-    setLoading(false);
   };
 
   return (
     <>
       <Box m={2}>
-        {loading && <LoadingComponent loading={loading} />}
+        {!listProject && <ShowListSkeleton />}
 
         {searchKey === undefined && (
           <>
@@ -125,7 +131,7 @@ const Search = () => {
 
       <Box display="flex" mt={3} ml={3}>
         <Box flex="3">
-          <ShowList listProject={listProject} />
+          <ShowList listProject={listProject} setReloadList={setReloadList} />
           <Box
             mt={2}
             display="flex"

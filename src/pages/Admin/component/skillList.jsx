@@ -389,7 +389,7 @@ const SkillList = ({
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     categoryId: false,
   });
-  console.log('selectedCategory', selectedCategory);
+
   return (
     <Box className="p-4" sx={{ width: '100%', overflow: 'auto' }}>
       <Box
