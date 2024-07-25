@@ -8,7 +8,7 @@ import {
   LinearProgress,
   Pagination,
 } from '@mui/material';
-import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
+import BookmarkBorderTwoToneIcon from '@mui/icons-material/BookmarkBorderTwoTone';
 import { formatCurrency } from '../../../utils/formatCurrency';
 import TypographyHeader from '../../../components/Typography/TypographyHeader';
 
@@ -43,7 +43,7 @@ const FavoriteProjectsList = ({
               {project.projectName}
             </Typography>
             <IconButton onClick={() => onRemoveFavorite(project.projectId)}>
-              <FavoriteTwoToneIcon className="text-red-500" />
+              <BookmarkBorderTwoToneIcon sx={{ color: '#fad702' }} />
             </IconButton>
           </Box>
           <Typography variant="body1" className="mt-2">

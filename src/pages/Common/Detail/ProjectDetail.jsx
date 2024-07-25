@@ -40,6 +40,7 @@ const ProjectDetail = ({
     await reportApi.createReport(reportData);
     toast.error('Đã khiếu nại dự án');
   };
+
   return (
     <Box display="flex" mt={4}>
       <Box flex="4">
@@ -116,38 +117,54 @@ const ProjectDetail = ({
               Ngày tạo: {formatDate(detail?.createdDate)}
             </Typography>
             <Box display="flex" alignItems="center">
-              <Tooltip title="Report this project">
-                {currentUser?.userId !== detail?.createdBy && (
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    onClick={() => setIsReportModalOpen(true)}
-                    className="text-blue-600 cursor-pointer"
-                  >
+              {currentUser?.userId !== detail?.createdBy && (
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  onClick={() => setIsReportModalOpen(true)}
+                  className="text-blue-600 cursor-pointer"
+                >
+                  <Tooltip title="Report this project">
                     <FlagCircleIcon />
-                    <Typography ml={1} fontSize="12px">
-                      Tố cáo dự án
-                    </Typography>
-                  </Box>
-                )}
-              </Tooltip>
+                  </Tooltip>
+                  <Typography ml={1} fontSize="12px">
+                    Tố cáo dự án
+                  </Typography>
+                </Box>
+              )}
             </Box>
           </Box>
           <Box p={4} pb={0}>
             <Box
               p={2}
-              border="1px solid orange"
+              border="1px solid"
               borderRadius="4px"
-              bgcolor="#FFF8E1"
+              style={{
+                backgroundColor:
+                  detail?.statusId === 5
+                    ? 'var(--background-warning-color)'
+                    : '#FFF8E1',
+                borderColor:
+                  detail?.statusId === 5 ? 'var(--secondary-color)' : 'orange',
+              }}
             >
-              <Typography fontWeight="bold" color="orange">
-                Cảnh giác với những trò lừa đảo
+              <Typography
+                fontWeight="bold"
+                style={{
+                  color:
+                    detail?.statusId === 5
+                      ? 'var(--secondary-color)'
+                      : 'orange',
+                }}
+              >
+                {detail?.statusId === 5
+                  ? 'Lý do dự án bị từ chối'
+                  : 'Cảnh giác với những trò lừa đảo'}
               </Typography>
               <Typography fontSize="14px">
-                Nếu bạn được yêu cầu trả tiền đặt cọc hoặc nếu bạn được yêu cầu
-                trò chuyện trên Telegram, WhatsApp hoặc nền tảng nhắn tin khác
-                thì đó có thể là một trò lừa đảo. Báo cáo các dự án này hoặc
-                liên hệ với bộ phận Hỗ trợ để được hỗ trợ.{' '}
+                {detail?.statusId === 5
+                  ? detail?.rejectReason
+                  : 'Nếu bạn được yêu cầu trả tiền đặt cọc hoặc nếu bạn được yêu cầu trò chuyện trên Telegram, WhatsApp hoặc nền tảng nhắn tin khác thì đó có thể là một trò lừa đảo. Báo cáo các dự án này hoặc liên hệ với bộ phận Hỗ trợ để được hỗ trợ.'}
               </Typography>
             </Box>
           </Box>

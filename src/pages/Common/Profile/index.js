@@ -78,8 +78,6 @@ function Profile() {
     getData();
   }, [userId, currentUser.userId]);
 
-  // const isOwnProfile = userId === undefined;
-
   const handleReport = async (reportData) => {
     await reportApi.createReport(reportData);
     toast.error('Đã khiếu nại người dùng');
@@ -95,22 +93,29 @@ function Profile() {
         rateToUserId: userId,
       };
       await profileApi.submitRating(data);
-      toast.success('Đánh giá thành công');
-      setProfile((prevProfile) => ({
-        ...prevProfile,
-        ratings: [
-          ...prevProfile.ratings,
-          { star: newRating, comment: newComment },
-        ],
-      }));
+      toast.success('Đánh giá người dùng', profile.name);
+
+      setProfile((prevProfile) => {
+        const updatedRatings = prevProfile.ratings
+          ? [...prevProfile.ratings]
+          : [];
+        updatedRatings.push({ star: newRating, comment: newComment });
+
+        return {
+          ...prevProfile,
+          ratings: updatedRatings,
+        };
+      });
+
       setNewRating(0);
       setNewComment('');
     } catch (error) {
-      toast.error('Lỗi khi đánh giá');
+      toast.error(error.response.data);
     } finally {
       setSubmitting(false);
     }
   };
+
   const handleContact = async () => {
     let res = await chatApi.CreateNewConversation(currentUser?.userId, userId);
     console.log(res);
@@ -485,12 +490,12 @@ function Profile() {
                         <Typography
                           sx={{ fontSize: '1rem', fontWeight: 'bold' }}
                         >
-                          Người dùng: {rating.userRate}
+                          Người dùng: {rating?.userRate}
                         </Typography>
                         <Typography
                           sx={{ fontSize: '1rem', fontWeight: 'bold' }}
                         >
-                          {rating.comment}
+                          {rating?.comment}
                         </Typography>
                         <Rating name="read-only" value={rating.star} readOnly />
                       </Paper>

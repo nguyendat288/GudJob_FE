@@ -282,7 +282,9 @@ const TopBarFreelancer = () => {
               <Box display="flex" gap={2} alignItems="center">
                 <IconButton onClick={handleMessageClick}>
                   <Badge badgeContent={numberOfMessage} color="error">
-                    <MessageOutlinedIcon />
+                    <Tooltip title="Tin nhắn">
+                      <MessageOutlinedIcon />
+                    </Tooltip>
                   </Badge>
                 </IconButton>
 
@@ -318,7 +320,9 @@ const TopBarFreelancer = () => {
 
                 <IconButton onClick={handleNotificationClick}>
                   <Badge badgeContent={numberOfNotification} color="error">
-                    <NotificationsNoneOutlinedIcon />
+                    <Tooltip title="Thông báo">
+                      <NotificationsNoneOutlinedIcon />
+                    </Tooltip>
                   </Badge>
                 </IconButton>
 
@@ -444,7 +448,9 @@ const TopBarFreelancer = () => {
                 </Menu>
 
                 <IconButton onClick={() => navigate('/favorite-list')}>
-                  <FavoriteBorderOutlinedIcon />
+                  <Tooltip title="Danh sách yêu thích">
+                    <FavoriteBorderOutlinedIcon />
+                  </Tooltip>
                 </IconButton>
 
                 <LanguageSelector />

@@ -22,7 +22,7 @@ const BlogDetail = () => {
     };
     getBlog();
   }, []);
-  console.log(blog);
+
   return (
     <Box>
       {loading && <LoadingComponent loading={loading} />}

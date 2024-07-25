@@ -12,13 +12,16 @@ import React, { useEffect, useState } from 'react';
 import profileApi from '../../../services/profileApi';
 import { useSelector } from 'react-redux';
 import { formatDate } from '../../../utils/formatDate';
+import projectApi from '../../../services/projectApi';
+import { toast } from 'react-toastify';
 
 function CurrentProject() {
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const [allProjects, setAllProjects] = useState(null);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(4);
-  const [statusId, setStatusId] = useState(2); // Default to "Đã bid"
+  const [statusId, setStatusId] = useState(2);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -35,7 +38,7 @@ function CurrentProject() {
       }
     };
     fetchProjects();
-  }, [page, pageSize, currentUser?.userId, statusId]);
+  }, [page, pageSize, currentUser?.userId, statusId, reload]);
 
   const handlePageChange = (event, value) => {
     setPage(value);
@@ -44,6 +47,22 @@ function CurrentProject() {
   const handleTabChange = (newStatusId) => {
     setStatusId(newStatusId);
     setPage(1);
+  };
+
+  const handleMarkAsDone = async (projectId, bidId, statusId) => {
+    try {
+      let data = {
+        projectId: projectId,
+        bidId: bidId,
+        statusId: statusId,
+      };
+      await projectApi.MarkDoneProject(data);
+      setReload((prev) => !prev);
+      toast.success('Project marked as done successfully');
+    } catch (error) {
+      console.log(error);
+      console.error('Error marking project as done:', error);
+    }
   };
 
   return (
@@ -82,6 +101,16 @@ function CurrentProject() {
               }`}
             >
               Đang làm
+            </button>
+            <button
+              onClick={() => handleTabChange(9)}
+              className={`px-4 py-2 rounded-full transition-all duration-300 ${
+                statusId === 9
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-100 text-black'
+              }`}
+            >
+              Đợi kiểm
             </button>
             <button
               onClick={() => handleTabChange(6)}
@@ -130,7 +159,18 @@ function CurrentProject() {
                     </Box>
                     {project.statusId === 3 && (
                       <Box sx={{ position: 'absolute', bottom: 8, right: 8 }}>
-                        <Button variant="outlined" color="warning">
+                        <Button
+                          variant="outlined"
+                          color="warning"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleMarkAsDone(
+                              project?.projectId,
+                              project?.bidId,
+                              9
+                            );
+                          }}
+                        >
                           Mark as done
                         </Button>
                       </Box>

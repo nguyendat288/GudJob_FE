@@ -294,7 +294,7 @@ const CreateProject = () => {
                   inputProps={{
                     'aria-label': 'weight',
                   }}
-                  onChange={(e) => setBudgetMin(e.target.value)}
+                  onChange={(e) => setBudgetMin(parseInt(e.target.value, 10))}
                 />
                 <Typography color="red">{helperTextBudgetMin}</Typography>
               </Box>
@@ -315,7 +315,7 @@ const CreateProject = () => {
                   inputProps={{
                     'aria-label': 'weight',
                   }}
-                  onChange={(e) => setBudgetMax(e.target.value)}
+                  onChange={(e) => setBudgetMax(parseInt(e.target.value, 10))}
                 />
                 <Typography color="red">{helperTextBudgetMax}</Typography>
               </Box>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Container,
@@ -14,15 +14,13 @@ import { useNavigate } from 'react-router-dom';
 import ProjectDescription from '../../../components/ProjectDescription';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
 import { formatCurrency } from '../../../utils/formatCurrency';
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkAddedTwoToneIcon from '@mui/icons-material/BookmarkAddedTwoTone';
 import { useSelector } from 'react-redux';
 import projectApi from '../../../services/projectApi';
 
-const ShowList = ({ listProject }) => {
+const ShowList = ({ listProject, setReloadList }) => {
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
-  const [favoriteProjects, setFavoriteProjects] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const [snackbar, setSnackbar] = useState({
@@ -35,21 +33,6 @@ const ShowList = ({ listProject }) => {
     navigate(`/detail/${id}`);
   };
 
-  useEffect(() => {
-    const fetchFavoriteProjects = async () => {
-      try {
-        const response = await projectApi.GetFavoriteProjects(
-          currentUser?.userId
-        );
-        setFavoriteProjects(response.items);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchFavoriteProjects();
-  }, [currentUser, loading]);
-
   const handleAddFavorite = async (userId, projectId) => {
     try {
       const response = await projectApi.AddFavorite({ userId, projectId });
@@ -58,8 +41,7 @@ const ShowList = ({ listProject }) => {
         message: response.message,
         severity: 'success',
       });
-      setFavoriteProjects((prev) => [...prev, projectId]);
-      setLoading((prev) => !prev);
+      setReloadList((prev) => !prev);
     } catch (error) {
       setSnackbar({
         open: true,
@@ -78,8 +60,7 @@ const ShowList = ({ listProject }) => {
         message: response.message,
         severity: 'success',
       });
-      setFavoriteProjects((prev) => prev.filter((id) => id !== projectId));
-      setLoading((prev) => !prev);
+      setReloadList((prev) => !prev);
     } catch (error) {
       setSnackbar({
         open: true,
@@ -92,10 +73,6 @@ const ShowList = ({ listProject }) => {
 
   const handleCloseSnackbar = () => {
     setSnackbar((prev) => ({ ...prev, open: false }));
-  };
-
-  const isFavorite = (projectId) => {
-    return favoriteProjects.some((project) => project.projectId === projectId);
   };
 
   return (
@@ -206,24 +183,26 @@ const ShowList = ({ listProject }) => {
                     ))}
                 </Box>
               </Box>
-              <Box mt={1} display="flex" flexDirection="flex-end">
+              <Box mt={1} display="flex" justifyContent={'end'}>
                 <Box className="flex items-center">
                   <Typography className="mr-2">{project?.timeAgo}</Typography>
                 </Box>
-                <IconButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    isFavorite(project?.id)
-                      ? handleDeleteFavorite(currentUser?.userId, project?.id)
-                      : handleAddFavorite(currentUser?.userId, project?.id);
-                  }}
-                >
-                  {isFavorite(project?.id) ? (
-                    <FavoriteTwoToneIcon sx={{ color: 'red' }} />
-                  ) : (
-                    <FavoriteBorderOutlinedIcon />
-                  )}
-                </IconButton>
+                {currentUser?.userId && (
+                  <IconButton
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      project.isFavorite
+                        ? handleDeleteFavorite(currentUser?.userId, project?.id)
+                        : handleAddFavorite(currentUser?.userId, project?.id);
+                    }}
+                  >
+                    {project.isFavorite ? (
+                      <BookmarkAddedTwoToneIcon sx={{ color: '#fad702' }} />
+                    ) : (
+                      <BookmarkBorderIcon />
+                    )}
+                  </IconButton>
+                )}
               </Box>
               <Box mt={1} display="flex" justifyContent="space-between">
                 <Typography fontSize="10px" className="flex items-center">

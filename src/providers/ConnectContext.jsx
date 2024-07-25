@@ -40,7 +40,6 @@ const ChatProvider = ({ children }) => {
             .withUrl(`${BASE_URL}/chat`)
             .configureLogging(LogLevel.Information)
             .build();
-          console.log(connection);
 
           connection.onclose((e) => {
             setConnection(null);
@@ -86,8 +85,6 @@ const ChatProvider = ({ children }) => {
   useEffect(() => {
     chatSelectRef.current = chatSelect; // Update the ref whenever chatSelect changes
   }, [chatSelect]);
-
-  console.log('connectionnnnn ' + connection);
 
   useEffect(() => {
     const getNotification = async () => {
