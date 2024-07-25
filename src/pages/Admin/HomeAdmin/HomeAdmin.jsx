@@ -121,7 +121,7 @@ const HomeAdmin = () => {
             onClick={handleDownload}
           >
             <DownloadOutlinedIcon sx={{ mr: '10px' }} />
-            Download Reports
+            Export
           </Button>
         </Box>
       </Box>

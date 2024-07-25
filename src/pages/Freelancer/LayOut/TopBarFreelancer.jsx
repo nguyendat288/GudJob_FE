@@ -51,6 +51,15 @@ const TopBarFreelancer = () => {
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [anchorElMessage, setAnchorElMessage] = useState(null);
 
+  const hanldCloseAll = () => {
+    setAnchorElUser(null);
+    setAnchorEl(null);
+    setMenuAnchorEl(null);
+    setTopMenuAnchorEl(null);
+    setAnchorElMessage(null);
+    setSelectedNotification(null);
+  };
+
   const {
     connection,
     userConnection,
@@ -82,10 +91,12 @@ const TopBarFreelancer = () => {
   };
 
   const handleProfile = () => {
+    hanldCloseAll();
     navigate('/profile');
   };
 
   const handleSetting = () => {
+    hanldCloseAll();
     navigate('/profile-setting');
   };
 
@@ -104,6 +115,7 @@ const TopBarFreelancer = () => {
     } catch (error) {}
   };
   const handleSearch = () => {
+    hanldCloseAll();
     navigate(`/search/${search}`);
   };
 
@@ -164,8 +176,7 @@ const TopBarFreelancer = () => {
       await notificationApi.DeleteAllNotification(currentUser?.userId);
       removeNotificationStatusAll();
     }
-
-    handleTopMenuClose();
+    hanldCloseAll();
   };
 
   const handleCheck = async (link, notificationId, isRead) => {
@@ -176,6 +187,7 @@ const TopBarFreelancer = () => {
     } else {
       navigate(link);
     }
+    hanldCloseAll();
   };
 
   const getNotificationColor = (isRead) => {
@@ -218,6 +230,7 @@ const TopBarFreelancer = () => {
     if (senderId !== currentUser?.userId && isRead === 0) {
       await chatApi.markToRead(conversationId);
     }
+    hanldCloseAll();
     navigate(`/chat/${conversationId}/${userId}`);
   };
 
@@ -391,13 +404,6 @@ const TopBarFreelancer = () => {
                                 item?.isRead
                               ),
                             }}
-                            onClick={() =>
-                              handleCheck(
-                                item?.link,
-                                item?.notificationId,
-                                item?.isRead
-                              )
-                            }
                           >
                             <ListItemText
                               primary={
@@ -411,6 +417,13 @@ const TopBarFreelancer = () => {
                                     {new Date(item?.datetime).toLocaleString()}
                                   </Typography>
                                 </Box>
+                              }
+                              onClick={() =>
+                                handleCheck(
+                                  item?.link,
+                                  item?.notificationId,
+                                  item?.isRead
+                                )
                               }
                             />
                             <IconButton

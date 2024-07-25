@@ -11,7 +11,6 @@ import {
   TextField,
 } from '@mui/material';
 import React, { useState } from 'react';
-import ProjectDescription from '../../../components/ProjectDescription';
 import { ROLES } from '../../../constaints/role';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
 import { formatDate } from '../../../utils/formatDate';
@@ -23,6 +22,7 @@ import TypographyHeader from '../../../components/Typography/TypographyHeader';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { formatCurrency } from '../../../utils/formatCurrency';
+import BlogDescription from '../../../components/BlogDescription';
 
 const ProjectDetail = ({
   detail,
@@ -86,7 +86,7 @@ const ProjectDetail = ({
               Thông tin mô tả
             </Typography>
             <Box mt={2}>
-              <ProjectDescription description={detail?.description} />
+              <BlogDescription description={detail?.description} />
             </Box>
           </Box>
           <Box pl={4}>
