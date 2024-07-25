@@ -15,19 +15,21 @@ const chatApi = {
   },
   CreateNewConversation: async (user1, user2) => {
     try {
-      const response = await axios.post(
+      const response = await axiosClient.post(
         `${BASE_URL}/api/Chat/AddConversation/${user1}/${user2}`
       );
 
-      return response?.data;
+      return response;
     } catch (error) {
       throw error;
     }
   },
   GetInfo: async (userId) => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/Chat/Info/${userId}`);
-      return response?.data;
+      const response = await axiosClient.get(
+        `${BASE_URL}/api/Chat/Info/${userId}`
+      );
+      return response;
     } catch (error) {
       throw error;
     }

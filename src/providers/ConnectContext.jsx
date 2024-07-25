@@ -24,7 +24,7 @@ const ChatProvider = ({ children }) => {
   const [isConnect, setIsConnect] = useState(false);
   const [numberOfNotification, setNumberOfNotification] = useState(0);
 
-  const [chatSelect, setChatSelect] = useState(0);
+  const [chatSelect, setChatSelect] = useState(-1);
   const chatSelectRef = useRef(chatSelect);
 
   const [listMessages, setListMessage] = useState([]);
@@ -128,7 +128,7 @@ const ChatProvider = ({ children }) => {
 
   useEffect(() => {
     const getListMessages = async () => {
-      if (currentUser != null && currentUser.role !== 'Admin') {
+      if (currentUser != null && chatSelect != -1) {
         try {
           let res = await chatApi.GetMessageByConversation(chatSelect, 1);
           setListMessage(res?.items);
