@@ -36,6 +36,7 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import chatApi from '../../../services/chatApi';
 import UpdateSkillModal from './component/UpdateSkillModal';
+import CustomAvatar from '../../../components/CustomAvatar';
 
 const labels = {
   1: 'Rất tệ',
@@ -131,12 +132,17 @@ function Profile() {
             id="profile"
             className="flex flex-col items-center py-12 bg-gray-100 rounded-t-none rounded-lg shadow-md"
           >
-            <Avatar
-              alt="Avatar"
-              src={profile?.avatar}
-              sx={{ height: 80, width: 80 }}
-              className="shadow-lg"
-            />
+            {profile?.avatar === null ? (
+              <CustomAvatar name={profile?.name} size={80} />
+            ) : (
+              <Avatar
+                alt="Avatar"
+                src={profile?.avatar}
+                sx={{ height: 80, width: 80 }}
+                className="shadow-lg"
+              />
+            )}
+
             <Typography sx={{ fontSize: '1.25rem' }} className="mt-4">
               Hello, I'm
             </Typography>
