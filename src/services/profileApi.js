@@ -49,7 +49,6 @@ const profileApi = {
         `${BASE_URL}/api/Users/Update`,
         data
       );
-      console.log('response', response);
       return response;
     } catch (error) {
       console.error(

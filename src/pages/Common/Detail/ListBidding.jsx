@@ -21,6 +21,7 @@ import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import { formatDateTime } from '../../../utils/formatDate';
 import { formatCurrency } from '../../../utils/formatCurrency';
+import CustomAvatar from '../../../components/CustomAvatar';
 
 const ListBidding = ({
   listBidding,
@@ -61,6 +62,7 @@ const ListBidding = ({
       </Tooltip>
     );
   };
+
   return (
     <Box display="flex">
       <Box flex="4">
@@ -76,14 +78,18 @@ const ListBidding = ({
                 <Box p={3}>
                   <Box display="flex">
                     <Box display="flex">
-                      <Avatar
-                        alt="Remy Sharp"
-                        sx={{
-                          width: '65px',
-                          height: '65px',
-                        }}
-                        src={item?.appUser2?.avatar}
-                      />
+                      {item?.appUser2?.avatar === null ? (
+                        <CustomAvatar name={item?.appUser2?.name} size={65} />
+                      ) : (
+                        <Avatar
+                          alt="Remy Sharp"
+                          sx={{
+                            width: '65px',
+                            height: '65px',
+                          }}
+                          src={item?.appUser2?.avatar}
+                        />
+                      )}
                       <Box ml={2}>
                         <Box display="flex" alignItems="center">
                           <Typography
@@ -117,21 +123,27 @@ const ListBidding = ({
                             </Box>
                           </Tooltip>
                           <Tooltip title="Tổng số đánh giá">
-                            <Typography>
-                              <HowToVoteIcon /> {item?.appUser2?.totalRate}
-                            </Typography>
+                            <Box
+                              sx={{
+                                fontFamily: 'Josefin Sans',
+                              }}
+                            >
+                              <HowToVoteIcon />{' '}
+                              {item?.appUser2?.totalRate ??
+                                'No rating available'}
+                            </Box>
                           </Tooltip>
                           <Tooltip title="Địa chỉ">
-                            {(item?.appUser2?.city != null ||
-                              item?.appUser2?.country != null) && (
-                              <>
-                                <Typography>
+                            <span>
+                              {(item?.appUser2?.city != null ||
+                                item?.appUser2?.country != null) && (
+                                <>
                                   <FmdGoodIcon color="primary" />{' '}
                                   {item?.appUser2?.city}{' '}
                                   {item?.appUser2?.country}{' '}
-                                </Typography>
-                              </>
-                            )}
+                                </>
+                              )}
+                            </span>
                           </Tooltip>
                         </Box>
                         {renderSkill(item?.appUser2?.skill)}

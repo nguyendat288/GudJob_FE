@@ -2,7 +2,9 @@ import {
   Box,
   Button,
   Card,
+  CardActions,
   CardContent,
+  CardHeader,
   Chip,
   Grid,
   Pagination,
@@ -18,6 +20,7 @@ import AddIcon from '@mui/icons-material/Add';
 import LoadingComponent from '../../../components/LoadingComponent';
 import { formatDate } from '../../../utils/formatDate';
 import { toast } from 'react-toastify';
+import { truncateText } from '../../../utils/truncateText';
 
 const ListProjectRecruiter = () => {
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
@@ -96,7 +99,6 @@ const ListProjectRecruiter = () => {
   };
 
   const handleChange = (e) => {
-    console.log('vao day');
     setSearch(e.target.value);
   };
 
@@ -220,7 +222,9 @@ const ListProjectRecruiter = () => {
               <Grid item xs={12} md={6} key={index}>
                 <Card
                   sx={{
-                    position: 'relative',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%',
                     '&:hover': {
                       backgroundColor: '#f5f5f5',
                       cursor: 'pointer',
@@ -228,14 +232,26 @@ const ListProjectRecruiter = () => {
                   }}
                   onClick={() => handleDetail(project?.id)}
                 >
-                  <CardContent>
-                    <Typography
-                      variant="h1"
-                      sx={{ fontSize: '1.5em' }}
-                      gutterBottom
-                    >
-                      {project.title}
-                    </Typography>
+                  <CardHeader
+                    action={
+                      <Chip
+                        label={project?.projectStatus?.statusName}
+                        color="primary"
+                      />
+                    }
+                    title={
+                      <Typography
+                        variant="h1"
+                        sx={{ fontSize: '1.5em' }}
+                        gutterBottom
+                      >
+                        {truncateText(project?.title, 40)}
+                      </Typography>
+                    }
+                  />
+                  <CardContent
+                    sx={{ flexGrow: 1, paddingTop: 0, paddingBottom: 0 }}
+                  >
                     <Typography variant="body1" component="div">
                       <strong>Category:</strong>{' '}
                       {project?.category?.categoryName}
@@ -261,27 +277,22 @@ const ListProjectRecruiter = () => {
                         <i>Select this project to see full reject reason</i>
                       </Typography>
                     )}
-                    <Box sx={{ position: 'absolute', top: 8, right: 8 }}>
-                      <Chip
-                        label={project?.projectStatus?.statusName}
-                        color="primary"
-                      />
-                    </Box>
-                    {(project.statusId === 3 || project.statusId === 9) && (
-                      <Box sx={{ position: 'absolute', bottom: 8, right: 8 }}>
-                        <Button
-                          variant="outlined"
-                          color="warning"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleMarkAsComplete(project?.id);
-                          }}
-                        >
-                          Mark as complete
-                        </Button>
-                      </Box>
-                    )}
                   </CardContent>
+                  <CardActions disableSpacing>
+                    {(project.statusId === 3 || project.statusId === 9) && (
+                      <Button
+                        variant="outlined"
+                        color="warning"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleMarkAsComplete(project?.id);
+                        }}
+                        sx={{ ml: 'auto' }}
+                      >
+                        Mark as complete
+                      </Button>
+                    )}
+                  </CardActions>
                 </Card>
               </Grid>
             ))}
@@ -303,9 +314,3 @@ const ListProjectRecruiter = () => {
 };
 
 export default ListProjectRecruiter;
-
-const style = {
-  p: 4,
-  overflow: 'auto',
-  maxHeight: window.innerHeight - 80,
-};

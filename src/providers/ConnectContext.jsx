@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, {
   createContext,
   useContext,
@@ -11,7 +10,6 @@ import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { useSelector } from 'react-redux';
 import notificationApi from '../services/notificationApi';
 import { BASE_URL } from '../services';
-import { SettingsInputComponentRounded } from '@mui/icons-material';
 import chatApi from '../services/chatApi';
 
 const ChatContext = createContext();
@@ -57,7 +55,7 @@ const ChatProvider = ({ children }) => {
   }, [currentUser, isConnect]);
 
   useEffect(() => {
-    if (isConnect == true && connection != null) {
+    if (isConnect === true && connection != null) {
       connection.on('ReceivedNotification', (data) => {
         const sound = new Audio(messageSound);
         sound.play();
@@ -70,7 +68,7 @@ const ChatProvider = ({ children }) => {
       connection.on('ReceivedMessage', (data) => {
         const sound = new Audio(messageSound);
         sound.play();
-        if (chatSelectRef?.current == data?.conversationId) {
+        if (chatSelectRef?.current === data?.conversationId) {
           setListMessage((msg) => [...msg, data]);
         }
         setNumberOfMessage((prevNumber) => prevNumber + 1);
