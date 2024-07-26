@@ -99,7 +99,11 @@ function Profile() {
         const updatedRatings = prevProfile.ratings
           ? [...prevProfile.ratings]
           : [];
-        updatedRatings.push({ star: newRating, comment: newComment });
+        updatedRatings.push({
+          userRate: currentUser?.name,
+          star: newRating,
+          comment: newComment,
+        });
 
         return {
           ...prevProfile,

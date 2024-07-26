@@ -315,7 +315,13 @@ const TopBarFreelancer = () => {
                     horizontal: 'center',
                   }}
                 >
-                  <Box p={2}>
+                  <Box
+                    p={2}
+                    sx={{
+                      maxHeight: '400px',
+                      overflow: 'auto',
+                    }}
+                  >
                     <Box
                       display="flex"
                       justifyContent="space-between"
@@ -353,7 +359,13 @@ const TopBarFreelancer = () => {
                     horizontal: 'center',
                   }}
                 >
-                  <Box p={2}>
+                  <Box
+                    p={2}
+                    sx={{
+                      maxHeight: '400px',
+                      overflow: 'auto',
+                    }}
+                  >
                     <Box
                       display="flex"
                       justifyContent="space-between"

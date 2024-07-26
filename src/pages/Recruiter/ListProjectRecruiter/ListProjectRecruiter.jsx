@@ -18,7 +18,7 @@ import AddIcon from '@mui/icons-material/Add';
 import LoadingComponent from '../../../components/LoadingComponent';
 import { formatDate } from '../../../utils/formatDate';
 import { toast } from 'react-toastify';
-
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 const ListProjectRecruiter = () => {
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const navigate = useNavigate();
@@ -106,11 +106,12 @@ const ListProjectRecruiter = () => {
       <Typography sx={{ fontSize: '2em', mb: 2 }} gutterBottom>
         Current Projects
       </Typography>
-      <Box display="flex" gap={5} flexGrow={1} mb={3}>
+      <Box display="flex" gap={5} mb={3}>
         <TextField
           sx={{
             width: '50%',
           }}
+          size="small"
           id="outlined-basic"
           label="Tìm kiếm "
           onChange={handleChange}
@@ -119,13 +120,13 @@ const ListProjectRecruiter = () => {
         <Button
           variant="contained"
           color="primary"
-          size="small"
           onClick={handleSearch}
           sx={{
-            whiteSpace: 'nowrap',
+            color: '#fff',
+            fontSize: '12px',
           }}
         >
-          Tìm kiếm
+          <SearchOutlinedIcon /> Tìm kiếm
         </Button>
         <Box ml="auto">
           <Tooltip title="Tạo dự án" arrow>
