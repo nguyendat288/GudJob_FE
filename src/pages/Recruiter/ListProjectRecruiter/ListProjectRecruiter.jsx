@@ -303,9 +303,3 @@ const ListProjectRecruiter = () => {
 };
 
 export default ListProjectRecruiter;
-
-const style = {
-  p: 4,
-  overflow: 'auto',
-  maxHeight: window.innerHeight - 80,
-};
