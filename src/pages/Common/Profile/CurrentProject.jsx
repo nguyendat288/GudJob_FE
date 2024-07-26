@@ -7,6 +7,8 @@ import {
   Grid,
   Pagination,
   Button,
+  CardHeader,
+  CardActions,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import profileApi from '../../../services/profileApi';
@@ -14,6 +16,7 @@ import { useSelector } from 'react-redux';
 import { formatDate } from '../../../utils/formatDate';
 import projectApi from '../../../services/projectApi';
 import { toast } from 'react-toastify';
+import { truncateText } from '../../../utils/truncateText';
 
 function CurrentProject() {
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
@@ -129,16 +132,29 @@ function CurrentProject() {
         <Box>
           <Grid container spacing={2}>
             {allProjects.items.map((project, index) => (
-              <Grid item xs={12} md={6} key={index}>
-                <Card sx={{ position: 'relative' }}>
-                  <CardContent>
-                    <Typography
-                      variant="h1"
-                      sx={{ fontSize: '1.5em' }}
-                      gutterBottom
-                    >
-                      {project.projectName}
-                    </Typography>
+              <Grid item xs={12} sm={6} key={index}>
+                <Card
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%',
+                  }}
+                >
+                  <CardHeader
+                    action={<Chip label={project.status} color="primary" />}
+                    title={
+                      <Typography
+                        variant="h1"
+                        sx={{ fontSize: '1.5em' }}
+                        gutterBottom
+                      >
+                        {truncateText(project?.projectName, 40)}
+                      </Typography>
+                    }
+                  />
+                  <CardContent
+                    sx={{ flexGrow: 1, paddingTop: 0, paddingBottom: 0 }}
+                  >
                     <Typography variant="body1" component="div">
                       <strong>Project Owner:</strong> {project.projectOwner}
                     </Typography>
@@ -154,28 +170,26 @@ function CurrentProject() {
                     <Typography variant="body1" component="div">
                       <strong>Time Bid:</strong> {formatDate(project.timeBid)}
                     </Typography>
-                    <Box sx={{ position: 'absolute', top: 8, right: 8 }}>
-                      <Chip label={project.status} color="primary" />
-                    </Box>
-                    {project.statusId === 3 && (
-                      <Box sx={{ position: 'absolute', bottom: 8, right: 8 }}>
-                        <Button
-                          variant="outlined"
-                          color="warning"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleMarkAsDone(
-                              project?.projectId,
-                              project?.bidId,
-                              9
-                            );
-                          }}
-                        >
-                          Mark as done
-                        </Button>
-                      </Box>
-                    )}
                   </CardContent>
+                  <CardActions disableSpacing>
+                    {project.statusId === 3 && (
+                      <Button
+                        variant="outlined"
+                        color="warning"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleMarkAsDone(
+                            project?.projectId,
+                            project?.bidId,
+                            9
+                          );
+                        }}
+                        sx={{ ml: 'auto' }}
+                      >
+                        Mark as done
+                      </Button>
+                    )}
+                  </CardActions>
                 </Card>
               </Grid>
             ))}
