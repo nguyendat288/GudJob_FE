@@ -44,6 +44,7 @@ import BlogDetail from '../pages/Admin/Blog/Publish/BlogDetail';
 import HomeBlog from '../pages/Admin/Blog/Publish/HomeBlog';
 import ListSkill from '../pages/Admin/List/ListSkill';
 import FavoriteProjectsPage from '../pages/Common/FavoriteList/FavoriteProjectsPage';
+import Payment from '../pages/Public/Payment';
 
 export default function Router() {
   let router = useRoutes([
@@ -110,6 +111,14 @@ export default function Router() {
               element: (
                 <Suspense fallback={<>Loading...</>}>
                   <Detail />
+                </Suspense>
+              ),
+            },
+            {
+              path: PUBLIC_PATH.PAYMENT,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <Payment />
                 </Suspense>
               ),
             },
