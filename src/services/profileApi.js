@@ -125,6 +125,21 @@ const profileApi = {
       throw error;
     }
   },
+
+  verifyEmail: async (data) => {
+    try {
+      const response = await axiosClient.post(
+        `${BASE_URL}/api/Users/SendConfirmEmail?link=${data}`
+      );
+      return response;
+    } catch (error) {
+      console.error(
+        'Error during changePassword API call:',
+        error.response || error.message
+      );
+      throw error;
+    }
+  },
 };
 
 export default profileApi;
