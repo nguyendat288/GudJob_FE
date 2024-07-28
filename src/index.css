@@ -5,6 +5,7 @@
 
 :root {
   --primary-color: #fad702;
+  --prime-color: #ffbc06;
   --secondary-color: #ff4081;
   --background-color: #595855;
   --background-warning-color: #ffd1d1;
@@ -29,6 +30,11 @@ code {
 .login-body {
   background-image: url('./assets/background.jpg');
   background-size: 1920px 1080px;
+}
+
+.max-width-container {
+  margin: 0 auto !important;
+  max-width: 1400px;
 }
 
 /* SIDEBAR */
@@ -225,4 +231,34 @@ code {
   margin: 0 20px;
   overflow: 'hidden';
   padding: 2rem 0;
+}
+
+@keyframes flyInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes flyInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.fly-in-left {
+  animation: flyInFromLeft 1s forwards;
+}
+
+.fly-in-right {
+  animation: flyInFromRight 1s forwards;
 }

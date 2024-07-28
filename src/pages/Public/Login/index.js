@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { LoadingButton } from '@mui/lab';
@@ -32,7 +32,8 @@ const style = {
 };
 
 const Login = () => {
-  const [showLogin, setShowLogin] = useState(true);
+  const { state } = useLocation();
+  const [showLogin, setShowLogin] = useState(state ? state.showLogin : true);
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);

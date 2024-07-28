@@ -5,7 +5,6 @@ import {
   PUBLIC_PATH,
   RECRUITER_PATH,
 } from '../constaints/path';
-import Register from '../pages/Public/Register';
 import Login from '../pages/Public/Login';
 import Profile from '../pages/Common/Profile';
 import Setting from '../pages/Common/Profile/Setting';
@@ -55,10 +54,6 @@ export default function Router() {
     {
       path: PUBLIC_PATH.RESET,
       element: <ResetPasswordPage />,
-    },
-    {
-      path: PUBLIC_PATH.REGISTER,
-      element: <Register />,
     },
     {
       path: PUBLIC_PATH.BLOG,

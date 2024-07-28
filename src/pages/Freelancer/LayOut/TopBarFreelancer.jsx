@@ -19,9 +19,9 @@ import {
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
+import MessageRoundedIcon from '@mui/icons-material/MessageRounded';
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,16 +30,69 @@ import { logOutSuccess } from '../../../redux/authSlice';
 import { toast } from 'react-toastify';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import WorkOutlineRoundedIcon from '@mui/icons-material/WorkOutlineRounded';
 import profileApi from '../../../services/profileApi';
 import LanguageSelector from '../../../components/language-selector';
 import { UseChatState } from '../../../providers/ConnectContext';
-
 import { MoreVert as MoreVertIcon } from '@mui/icons-material';
 
 import notificationApi from '../../../services/notificationApi';
 import ListUser from '../../Common/Chat/ListUser';
 import chatApi from '../../../services/chatApi';
 import CustomAvatar from '../../../components/CustomAvatar';
+import { styled } from '@mui/system';
+
+const CustomLogin = styled(Button)(({ theme }) => ({
+  backgroundColor: 'var(--primary-color)',
+  color: 'var(--primary-color)',
+  border: '1px solid var(--background-color)',
+  borderRadius: '30px',
+  padding: '10px 20px',
+  fontSize: '16px',
+  fontWeight: 'bold',
+  cursor: 'pointer',
+  position: 'relative',
+  overflow: 'hidden',
+  letterSpacing: '0.05rem',
+  transition: 'background-color 0.3s, transform 0.3s, color 0.4s',
+  '& span': {
+    position: 'relative',
+    color: 'var(--text-color)',
+    zIndex: 10,
+    transition: 'color 0.4s',
+  },
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '120%',
+    height: '150%',
+    zIndex: 0,
+    background: '#fff',
+    transform: 'skew(30deg)',
+    transition: 'transform 0.4s cubic-bezier(0.3, 1, 0.8, 1)',
+  },
+  '&:hover::before': {
+    transform: 'translate3d(100%, 0, 0)',
+  },
+  '&:hover span': {
+    color: 'var(--primary-color)',
+  },
+  '&:hover': {
+    backgroundColor: 'var(--text-color)',
+    border: '1px solid var(--background-color)',
+    color: 'var(--primary-color)',
+  },
+  '&:active': {
+    transform: 'scale(1)',
+  },
+  '&:disabled': {
+    backgroundColor: 'var(--background-warning-color)',
+    cursor: 'not-allowed',
+    opacity: 0.7,
+  },
+}));
 
 const TopBarFreelancer = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -84,6 +137,10 @@ const TopBarFreelancer = () => {
 
   const handleProfile = () => {
     navigate('/profile');
+  };
+
+  const handleProject = () => {
+    navigate('/current-project');
   };
 
   const handleSetting = () => {
@@ -231,7 +288,7 @@ const TopBarFreelancer = () => {
 
   return (
     <>
-      <AppBar position="static" sx={{ bgcolor: 'white' }}>
+      <AppBar position="sticky" sx={{ bgcolor: '#fff', mb: 5 }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
             <Typography
@@ -241,13 +298,14 @@ const TopBarFreelancer = () => {
               href="/home"
               sx={{
                 display: 'flex',
-                fontFamily: 'monospace',
-                fontWeight: 700,
+                fontWeight: 'bold',
+                fontSize: '1.5rem',
                 letterSpacing: '.3rem',
                 textDecoration: 'none',
                 mr: 2,
+                color: 'var(--background-color)',
               }}
-              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text"
+              // className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text"
             >
               GoodJob
             </Typography>
@@ -284,7 +342,7 @@ const TopBarFreelancer = () => {
                 <IconButton onClick={handleMessageClick}>
                   <Badge badgeContent={numberOfMessage} color="error">
                     <Tooltip title="Tin nhắn">
-                      <MessageOutlinedIcon />
+                      <MessageRoundedIcon />
                     </Tooltip>
                   </Badge>
                 </IconButton>
@@ -309,7 +367,9 @@ const TopBarFreelancer = () => {
                       justifyContent="space-between"
                       alignItems="center"
                     >
-                      <Typography variant="h6">Tin nhắn</Typography>
+                      <Typography variant="h6" className="font-bold text-xl">
+                        Đoạn chat
+                      </Typography>
                     </Box>
                     <ListUser
                       listUser={userConnection}
@@ -322,7 +382,7 @@ const TopBarFreelancer = () => {
                 <IconButton onClick={handleNotificationClick}>
                   <Badge badgeContent={numberOfNotification} color="error">
                     <Tooltip title="Thông báo">
-                      <NotificationsNoneOutlinedIcon />
+                      <NotificationsRoundedIcon />
                     </Tooltip>
                   </Badge>
                 </IconButton>
@@ -347,7 +407,9 @@ const TopBarFreelancer = () => {
                       justifyContent="space-between"
                       alignItems="center"
                     >
-                      <Typography variant="h6">Thông báo</Typography>
+                      <Typography variant="h6" className="font-bold text-xl">
+                        Thông báo
+                      </Typography>
                       <IconButton edge="end" onClick={handleTopMenuOpen}>
                         <MoreVertIcon />
                       </IconButton>
@@ -450,7 +512,7 @@ const TopBarFreelancer = () => {
 
                 <IconButton onClick={() => navigate('/favorite-list')}>
                   <Tooltip title="Danh sách yêu thích">
-                    <FavoriteBorderOutlinedIcon />
+                    <FavoriteRoundedIcon />
                   </Tooltip>
                 </IconButton>
 
@@ -491,6 +553,12 @@ const TopBarFreelancer = () => {
                       Profile
                     </Typography>
                   </MenuItem>
+                  <MenuItem onClick={handleProject}>
+                    <Typography sx={{ display: 'flex', alignItems: 'center' }}>
+                      <WorkOutlineRoundedIcon sx={{ mr: 1 }} />
+                      Projects
+                    </Typography>
+                  </MenuItem>
                   <MenuItem onClick={handleSetting}>
                     <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                       <SettingsOutlinedIcon sx={{ mr: 1 }} />
@@ -507,15 +575,24 @@ const TopBarFreelancer = () => {
               </Box>
             ) : (
               <Box display="flex" gap={2}>
-                <Button variant="outlined" onClick={() => navigate('/login')}>
-                  Sign in
-                </Button>
-                <Button
+                <CustomLogin
                   variant="outlined"
-                  onClick={() => navigate('/register')}
+                  disableElevation
+                  onClick={() =>
+                    navigate('/login', { state: { showLogin: true } })
+                  }
                 >
-                  Sign up
-                </Button>
+                  <span>Đăng nhập</span>
+                </CustomLogin>
+                <CustomLogin
+                  variant="outlined"
+                  disableElevation
+                  onClick={() =>
+                    navigate('/login', { state: { showLogin: false } })
+                  }
+                >
+                  <span>Đăng kí</span>
+                </CustomLogin>
               </Box>
             )}
           </Toolbar>
