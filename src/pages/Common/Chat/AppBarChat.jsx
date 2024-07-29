@@ -9,8 +9,13 @@ import {
 } from '@mui/material';
 import React from 'react';
 import CustomAvatar from '../../../components/CustomAvatar';
+import { useNavigate } from 'react-router-dom';
 
 const AppBarChat = ({ user }) => {
+  const navigate = useNavigate();
+  const handleProfile = () => {
+    navigate(`/profile/${user?.userId}`);
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -27,7 +32,18 @@ const AppBarChat = ({ user }) => {
           ) : (
             <Avatar alt="Remy Sharp" src={user?.avatar} />
           )}
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: 2 }}>
+          <Typography
+            variant="h6"
+            onClick={(e) => handleProfile()}
+            component="div"
+            sx={{
+              '&:hover': {
+                cursor: 'pointer',
+              },
+              flexGrow: 1,
+              ml: 2,
+            }}
+          >
             {user?.name}
           </Typography>
           <Button color="inherit">Lựa chọn khác </Button>

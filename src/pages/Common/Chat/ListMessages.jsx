@@ -14,7 +14,7 @@ const ListMessages = ({ user, messages, currentUser, loadMoreMessages }) => {
 
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
-
+  const [count, setCount] = useState(0);
   const [isFetching, setIsFetching] = useState(false);
 
   const scrollToBottom = useCallback(() => {
@@ -27,6 +27,7 @@ const ListMessages = ({ user, messages, currentUser, loadMoreMessages }) => {
       console.log('aaaaa');
       setIsFetching(true);
       await loadMoreMessages();
+      setCount(count + 1);
       setIsFetching(false);
     }
   };
@@ -42,7 +43,9 @@ const ListMessages = ({ user, messages, currentUser, loadMoreMessages }) => {
   }, [isFetching]);
 
   useEffect(() => {
-    scrollToBottom();
+    if (count === 0) {
+      scrollToBottom();
+    }
   }, [messages, scrollToBottom]);
 
   return (

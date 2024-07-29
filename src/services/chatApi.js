@@ -7,7 +7,7 @@ const chatApi = {
     if (cursor === '0') {
       try {
         const response = await axiosClient.get(
-          `${BASE_URL}/api/Chat/messages/${conversationId}?limit=10`
+          `${BASE_URL}/api/Chat/messages/${conversationId}?limit=15`
         );
         return response;
       } catch (error) {
