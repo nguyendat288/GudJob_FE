@@ -32,8 +32,8 @@ const SideBarRecruiter = () => {
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
 
   return (
-    <Box>
-      <Sidebar collapsed={isCollapsed} width="300px" sx={{ height: '100%' }}>
+    <Box height="100%">
+      <Sidebar collapsed={isCollapsed} width="18.75rem" className="h-screen">
         <Menu
           iconShape="square"
           menuItemStyles={{
@@ -109,7 +109,7 @@ const SideBarRecruiter = () => {
             <SubMenu label="Quản lý dự án" icon={<QuizIcon />}>
               <Item
                 title="Danh sách dự án"
-                to="/list-project-recruiter"
+                to="/list-project-recruiter/3"
                 icon={<QuizIcon />}
                 selected={selected}
                 setSelected={setSelected}

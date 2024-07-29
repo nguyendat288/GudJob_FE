@@ -15,7 +15,6 @@ import TypographyHeader from '../../../components/Typography/TypographyHeader';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { useSelector } from 'react-redux';
 import categoryApi from '../../../services/categoryApi';
 import 'ckeditor5/ckeditor5.css';
 import '../../../assets/css/MyEditor.css';

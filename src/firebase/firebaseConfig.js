@@ -1,20 +1,13 @@
 import { initializeApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
-const API_KEY = process.env.API_KEY;
-const AUTH_DOMAIN = process.env.AUTH_DOMAIN;
-const PROJECT_ID = process.env.PROJECT_ID;
-const STORAGE_BUCKET = process.env.STORAGE_BUCKET;
-const MESSAGING_SENDER_ID = process.env.MESSAGING_SENDER_ID;
-const APP_ID = process.env.APP_ID;
 
 const firebaseConfig = {
-  apiKey: API_KEY,
-  authDomain: AUTH_DOMAIN,
-  projectId: PROJECT_ID,
-  storageBucket: STORAGE_BUCKET,
-  messagingSenderId: MESSAGING_SENDER_ID,
-  appId: APP_ID,
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
 };
-
 const app = initializeApp(firebaseConfig);
 export const imageDb = getStorage(app);

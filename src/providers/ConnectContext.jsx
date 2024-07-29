@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, {
   createContext,
   useContext,
@@ -11,7 +10,6 @@ import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { useSelector } from 'react-redux';
 import notificationApi from '../services/notificationApi';
 import { BASE_URL } from '../services';
-import { SettingsInputComponentRounded } from '@mui/icons-material';
 import chatApi from '../services/chatApi';
 
 const ChatContext = createContext();
@@ -31,6 +29,8 @@ const ChatProvider = ({ children }) => {
   const [userConnection, setUserConnection] = useState([]);
   const [numberOfMessage, setNumberOfMessage] = useState(0);
   const [haveMess, setHaveMessage] = useState(0);
+  const [lastDate, setLastDate] = useState('0');
+  const lastDateRef = useRef(lastDate);
 
   useEffect(() => {
     const getData = async () => {
@@ -57,7 +57,7 @@ const ChatProvider = ({ children }) => {
   }, [currentUser, isConnect]);
 
   useEffect(() => {
-    if (isConnect == true && connection != null) {
+    if (isConnect === true && connection != null) {
       connection.on('ReceivedNotification', (data) => {
         const sound = new Audio(messageSound);
         sound.play();
@@ -70,7 +70,7 @@ const ChatProvider = ({ children }) => {
       connection.on('ReceivedMessage', (data) => {
         const sound = new Audio(messageSound);
         sound.play();
-        if (chatSelectRef?.current == data?.conversationId) {
+        if (chatSelectRef?.current === data?.conversationId) {
           setListMessage((msg) => [...msg, data]);
         }
         setNumberOfMessage((prevNumber) => prevNumber + 1);
@@ -85,6 +85,10 @@ const ChatProvider = ({ children }) => {
   useEffect(() => {
     chatSelectRef.current = chatSelect; // Update the ref whenever chatSelect changes
   }, [chatSelect]);
+
+  useEffect(() => {
+    lastDateRef.current = lastDate; // Update the ref whenever chatSelect changes
+  }, [lastDate]);
 
   useEffect(() => {
     const getNotification = async () => {
@@ -129,14 +133,36 @@ const ChatProvider = ({ children }) => {
   useEffect(() => {
     const getListMessages = async () => {
       if (currentUser != null && chatSelect != -1) {
+        setLastDate('0');
         try {
-          let res = await chatApi.GetMessageByConversation(chatSelect, 1);
-          setListMessage(res?.items);
+          let res = await chatApi.GetMessageByConversation(chatSelect, '0');
+          setLastDate(res?.nextCursor);
+          setListMessage(res?.items?.reverse());
         } catch (err) {}
       }
     };
     getListMessages();
   }, [chatSelect]);
+
+  const loadMoreMessages = async () => {
+    console.log('chatSelectRef ', chatSelectRef);
+    console.log('chatSelect ', chatSelect);
+    console.log('lastDate ', lastDateRef);
+
+    if (
+      currentUser != null &&
+      chatSelectRef != -1 &&
+      chatSelectRef?.current == chatSelect &&
+      lastDateRef != '0'
+    ) {
+      try {
+        let res = await chatApi.GetMessageByConversation(chatSelect, lastDate);
+        setLastDate(res?.nextCursor);
+        res?.items.map((item) => setListMessage((msg) => [item, ...msg]));
+        console.log('bbbbbb');
+      } catch (err) {}
+    }
+  };
 
   return (
     <ChatContext.Provider
@@ -157,6 +183,7 @@ const ChatProvider = ({ children }) => {
         setUserConnection,
         numberOfMessage,
         setNumberOfMessage,
+        loadMoreMessages,
       }}
     >
       {children}

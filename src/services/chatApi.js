@@ -3,14 +3,25 @@ import { BASE_URL } from '.';
 import axiosClient from '../utils/axiosClient';
 
 const chatApi = {
-  GetMessageByConversation: async (conversationId, pageIndex) => {
-    try {
-      const response = await axiosClient.get(
-        `${BASE_URL}/api/Chat/messages/${conversationId}/${pageIndex}`
-      );
-      return response;
-    } catch (error) {
-      throw error;
+  GetMessageByConversation: async (conversationId, cursor) => {
+    if (cursor === '0') {
+      try {
+        const response = await axiosClient.get(
+          `${BASE_URL}/api/Chat/messages/${conversationId}?limit=10`
+        );
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    } else {
+      try {
+        const response = await axiosClient.get(
+          `${BASE_URL}/api/Chat/messages/${conversationId}?cursor=${cursor}&limit=10`
+        );
+        return response;
+      } catch (error) {
+        throw error;
+      }
     }
   },
   CreateNewConversation: async (user1, user2) => {

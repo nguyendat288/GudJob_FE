@@ -39,6 +39,7 @@ import { MoreVert as MoreVertIcon } from '@mui/icons-material';
 import notificationApi from '../../../services/notificationApi';
 import ListUser from '../../Common/Chat/ListUser';
 import chatApi from '../../../services/chatApi';
+import CustomAvatar from '../../../components/CustomAvatar';
 
 const TopBarFreelancer = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -486,7 +487,11 @@ const TopBarFreelancer = () => {
 
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="Profile Picture" src={profile?.avatar} />
+                    {profile?.avatar === null ? (
+                      <CustomAvatar name={profile?.name} />
+                    ) : (
+                      <Avatar alt="Profile Picture" src={profile?.avatar} />
+                    )}
                   </IconButton>
                 </Tooltip>
 

@@ -22,6 +22,16 @@ const Statistic = {
       throw error;
     }
   },
+  RecruiterDashboard: async () => {
+    try {
+      const response = await axiosClient.get(
+        `${BASE_URL}/api/Dashboard/RecruiterDashboard`
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
   UsersPieChartData: async () => {
     try {
       const response = await axiosClient.get(

@@ -221,6 +221,7 @@ const Register = ({
         const response = await authApi.register(data, navigate);
         if (response) {
           toast.success('Registration successful!');
+          setShowLogin(true);
         }
       } catch (error) {
         toast.error('Registration failed. Please try again.');

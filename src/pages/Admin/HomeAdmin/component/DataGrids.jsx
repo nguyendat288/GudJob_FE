@@ -10,7 +10,7 @@ const DataGrids = ({ row, column }) => {
 
   return (
     <Box
-      height="70vh"
+      height="48vh"
       sx={{
         '& .MuiDataGrid-root': {
           border: 'none',

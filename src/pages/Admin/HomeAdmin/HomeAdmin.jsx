@@ -65,7 +65,7 @@ const HomeAdmin = () => {
     {
       field: 'userName',
       headerName: 'Người dùng',
-      width: 180,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -74,7 +74,7 @@ const HomeAdmin = () => {
     {
       field: 'role',
       headerName: 'Vai trò',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -83,7 +83,7 @@ const HomeAdmin = () => {
     {
       field: 'totalCompletedProjects',
       headerName: 'Số dự án hoàn thành',
-      width: 200,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -93,7 +93,7 @@ const HomeAdmin = () => {
     {
       field: 'totalPositiveRatings',
       headerName: 'Đánh giá tích cực',
-      width: 200,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -102,7 +102,7 @@ const HomeAdmin = () => {
     {
       field: 'totalNegativeRatings',
       headerName: 'Đánh giá tiêu cực',
-      width: 200,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -114,7 +114,7 @@ const HomeAdmin = () => {
     {
       field: 'skillName',
       headerName: 'Kỹ năng',
-      width: 180,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -123,7 +123,7 @@ const HomeAdmin = () => {
     {
       field: 'categoryName',
       headerName: 'Danh mục',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -132,7 +132,7 @@ const HomeAdmin = () => {
     {
       field: 'totalApprovedProject',
       headerName: 'Số dự án ',
-      width: 200,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -142,7 +142,7 @@ const HomeAdmin = () => {
     {
       field: 'totalUsers',
       headerName: 'Số lượng người dùng',
-      width: 200,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -154,7 +154,7 @@ const HomeAdmin = () => {
     {
       field: 'categoryName',
       headerName: 'Danh mục',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -163,7 +163,7 @@ const HomeAdmin = () => {
     {
       field: 'totalProjects',
       headerName: 'Tổng số dự án',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -172,7 +172,7 @@ const HomeAdmin = () => {
     {
       field: 'minimumBudget',
       headerName: 'Ngân sách tối thiểu',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -182,7 +182,7 @@ const HomeAdmin = () => {
     {
       field: 'maximumBudget',
       headerName: 'Ngân sách tối đa',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -192,7 +192,7 @@ const HomeAdmin = () => {
     {
       field: 'averageBudget',
       headerName: 'Ngân sách trung bình',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -202,7 +202,7 @@ const HomeAdmin = () => {
     {
       field: 'minimumDuration',
       headerName: 'Thời hạn tối thiểu ',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -212,7 +212,7 @@ const HomeAdmin = () => {
     {
       field: 'maximumDuration',
       headerName: 'Thời hạn tối đa ',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -221,7 +221,7 @@ const HomeAdmin = () => {
     {
       field: 'averageDuration',
       headerName: 'Thời hạn trung bình',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ textAlign: 'center', width: '100%' }}>{params.value}</Box>
@@ -314,7 +314,7 @@ const HomeAdmin = () => {
   };
 
   return (
-    <Box sx={{ style }}>
+    <Box sx={style}>
       <Box
         p={3}
         display="flex"
@@ -528,7 +528,6 @@ const HomeAdmin = () => {
         </Box>
         <Box m={3}>
           <Select
-            fullWidth="50%"
             sx={{ bgcolor: '#FFFFFF', mt: 2 }}
             value={typeStatistic}
             onChange={(e) => setTypeStatistic(e.target.value)}
@@ -540,7 +539,7 @@ const HomeAdmin = () => {
           <Box
             sx={{
               mt: 3,
-              height: '450px',
+              height: '480px',
             }}
           >
             {typeStatistic === '1' && (
