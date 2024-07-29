@@ -22,6 +22,16 @@ const Statistic = {
       throw error;
     }
   },
+  RecruiterDashboard: async () => {
+    try {
+      const response = await axiosClient.get(
+        `${BASE_URL}/api/Dashboard/RecruiterDashboard`
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
   UsersPieChartData: async () => {
     try {
       const response = await axiosClient.get(
@@ -42,13 +52,43 @@ const Statistic = {
       throw error;
     }
   },
-  ExportStatistic: async () => {
+  ExportStatistic: async (isChatGpt) => {
     try {
       const response = await axiosClient.get(
-        'https://app-doan.azurewebsites.net/api/Export/ExportStatistic',
+        `https://app-doan.azurewebsites.net/api/Export/ExportStatistic?isChat=${isChatGpt}`,
         {
           responseType: 'blob',
         }
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  StatisticUsers: async (pageIndex, pageSize) => {
+    try {
+      const response = await axiosClient.get(
+        `${BASE_URL}/api/Statistic/StatisticUsers?pageIndex=${pageIndex}&pageSize=${pageSize}`
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  StatisticSkills: async (pageIndex, pageSize) => {
+    try {
+      const response = await axiosClient.get(
+        `${BASE_URL}/api/Statistic/StatisticSkills?pageIndex=${pageIndex}&pageSize=${pageSize}`
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  StatisticProjects: async (pageIndex, pageSize) => {
+    try {
+      const response = await axiosClient.get(
+        `${BASE_URL}/api/Statistic/StatisticProjects?pageIndex=${pageIndex}&pageSize=${pageSize}`
       );
       return response;
     } catch (error) {

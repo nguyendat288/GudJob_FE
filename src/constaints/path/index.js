@@ -29,7 +29,7 @@ export const FREELANCER_PATH = {
 export const RECRUITER_PATH = {
   LAYOUT: '/',
   HOME_RECRUITER: '/recruiter',
-  LIST_PROJECT_RECRUITER: '/list-project-recruiter',
+  LIST_PROJECT_RECRUITER: '/list-project-recruiter/:status',
   CREATE_NEW_PROJECT: '/create-new-project',
   UPDATE_PROJECT: '/update-project/:projectId',
 };

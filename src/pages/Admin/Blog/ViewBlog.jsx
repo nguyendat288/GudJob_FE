@@ -18,6 +18,20 @@ import { useNavigate } from 'react-router-dom';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
+
+const style = {
+  position: 'absolute',
+  width: 400,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  borderRadius: '8px',
+  textAlign: 'center',
+};
+
 const ViewBlog = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -45,22 +59,31 @@ const ViewBlog = () => {
     {
       field: 'author',
       headerName: 'Tác giả',
-      width: 150,
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
     },
     {
       field: 'categoryName',
       headerName: 'Chủ đề ',
-      width: 180,
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
     },
     {
       field: 'title',
       headerName: 'Tiêu đề',
-      width: 250,
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
     },
     {
       field: 'createDate',
       headerName: 'Ngày tạo',
-      width: 180,
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+
       renderCell: (params) => (
         <>
           <Box mt={2}>
@@ -72,9 +95,10 @@ const ViewBlog = () => {
     {
       field: '',
       headerName: 'Hành động',
-      width: 100,
+      flex: 1,
+      headerAlign: 'center',
       renderCell: (params) => (
-        <Box display={'flex'}>
+        <Box display={'flex'} alignItems="center" justifyContent="center">
           <IconButton onClick={(e) => handleEdit(params?.row?.blogId)}>
             <Typography color="blue">
               <EditOutlinedIcon />
@@ -91,9 +115,10 @@ const ViewBlog = () => {
     {
       field: 'a',
       headerName: 'Công khai',
-      width: 150,
+      flex: 1,
+      headerAlign: 'center',
       renderCell: (params) => (
-        <Box display={'flex'}>
+        <Box display={'flex'} alignItems="center" justifyContent="center">
           <Switch
             checked={params?.row?.isPublished}
             value={params?.row?.isPublished}
@@ -204,16 +229,3 @@ const ViewBlog = () => {
 };
 
 export default ViewBlog;
-
-const style = {
-  position: 'absolute',
-  width: 400,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  borderRadius: '8px',
-  textAlign: 'center',
-};

@@ -32,19 +32,18 @@ const ListBlog = ({ listBlog }) => {
               sx={{
                 cursor: 'pointer',
               }}
+              onClick={() => handleNavigation(listBlog[0]?.blogId)}
             >
-              <TypographyTitle
-                marginT={1}
-                title={listBlog[0]?.title}
-                onClick={() => handleNavigation(listBlog[0]?.blogId)}
-              />
+              <TypographyTitle marginT={1} title={listBlog[0]?.title} />
             </Box>
           </Tooltip>
 
           <Typography mt={2}>{listBlog[0]?.shortDesction}</Typography>
-          <Typography mt={2} fontSize="10px">
-            <AccessTimeIcon /> {listBlog[0]?.createTime}
-          </Typography>
+          {listBlog[0] !== null && listBlog[0] !== undefined && (
+            <Typography mt={2} fontSize="10px">
+              <AccessTimeIcon /> {listBlog[0]?.createTime}
+            </Typography>
+          )}
         </Box>
         <Box flex="1.5" ml={2}>
           {listBlog.length > 0 &&

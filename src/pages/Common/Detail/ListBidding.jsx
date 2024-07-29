@@ -165,7 +165,7 @@ const ListBidding = ({
                   {currentUser != null &&
                     currentUser?.role === ROLES.RECRUITER &&
                     currentUser?.userId === createdBy &&
-                    detail.projectStatus.id !== 3 && (
+                    detail.projectStatus.id === 2 && (
                       <>
                         <Box display="flex" mt={1} ml="auto">
                           <Button

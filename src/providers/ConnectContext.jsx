@@ -29,6 +29,8 @@ const ChatProvider = ({ children }) => {
   const [userConnection, setUserConnection] = useState([]);
   const [numberOfMessage, setNumberOfMessage] = useState(0);
   const [haveMess, setHaveMessage] = useState(0);
+  const [lastDate, setLastDate] = useState('0');
+  const lastDateRef = useRef(lastDate);
 
   useEffect(() => {
     const getData = async () => {
@@ -85,6 +87,10 @@ const ChatProvider = ({ children }) => {
   }, [chatSelect]);
 
   useEffect(() => {
+    lastDateRef.current = lastDate; // Update the ref whenever chatSelect changes
+  }, [lastDate]);
+
+  useEffect(() => {
     const getNotification = async () => {
       if (currentUser != null) {
         let res = await notificationApi.GetAllNotification(currentUser?.userId);
@@ -127,14 +133,36 @@ const ChatProvider = ({ children }) => {
   useEffect(() => {
     const getListMessages = async () => {
       if (currentUser != null && chatSelect != -1) {
+        setLastDate('0');
         try {
-          let res = await chatApi.GetMessageByConversation(chatSelect, 1);
-          setListMessage(res?.items);
+          let res = await chatApi.GetMessageByConversation(chatSelect, '0');
+          setLastDate(res?.nextCursor);
+          setListMessage(res?.items?.reverse());
         } catch (err) {}
       }
     };
     getListMessages();
   }, [chatSelect]);
+
+  const loadMoreMessages = async () => {
+    console.log('chatSelectRef ', chatSelectRef);
+    console.log('chatSelect ', chatSelect);
+    console.log('lastDate ', lastDateRef);
+
+    if (
+      currentUser != null &&
+      chatSelectRef != -1 &&
+      chatSelectRef?.current == chatSelect &&
+      lastDateRef != '0'
+    ) {
+      try {
+        let res = await chatApi.GetMessageByConversation(chatSelect, lastDate);
+        setLastDate(res?.nextCursor);
+        res?.items.map((item) => setListMessage((msg) => [item, ...msg]));
+        console.log('bbbbbb');
+      } catch (err) {}
+    }
+  };
 
   return (
     <ChatContext.Provider
@@ -155,6 +183,7 @@ const ChatProvider = ({ children }) => {
         setUserConnection,
         numberOfMessage,
         setNumberOfMessage,
+        loadMoreMessages,
       }}
     >
       {children}

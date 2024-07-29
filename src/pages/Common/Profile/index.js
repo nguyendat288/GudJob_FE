@@ -94,7 +94,11 @@ const Profile = () => {
         const updatedRatings = prevProfile.ratings
           ? [...prevProfile.ratings]
           : [];
-        updatedRatings.push({ star: newRating, comment: newComment });
+        updatedRatings.push({
+          userRate: currentUser?.name,
+          star: newRating,
+          comment: newComment,
+        });
 
         return {
           ...prevProfile,
@@ -110,7 +114,7 @@ const Profile = () => {
       setSubmitting(false);
     }
   };
-
+  console.log(profile);
   const handleContact = async () => {
     let res = await chatApi.CreateNewConversation(currentUser?.userId, userId);
     navigate(`/chat/${res}/${userId}`);
