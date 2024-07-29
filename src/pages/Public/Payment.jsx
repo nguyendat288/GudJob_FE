@@ -12,6 +12,8 @@ import { LocalOffer, ShoppingCart, Loyalty, Edit } from '@mui/icons-material';
 import { styled } from '@mui/system';
 import QRCode from 'qrcode.react';
 import paymentApi from '../../services/paymentApi';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const BidBox = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -102,6 +104,8 @@ const QRModal = ({ open, handleClose, qrCodeData, bidNumber }) => (
 );
 
 const Payment = () => {
+  const currentUser = useSelector((state) => state.auth.login?.currentUser);
+  const navigate = useNavigate();
   const [bidNumber, setBidNumber] = useState(0);
   const [qrCodeData, setQrCodeData] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
@@ -149,7 +153,9 @@ const Payment = () => {
             <BidButton
               variant="contained"
               color="primary"
-              onClick={() => handleBuyBids(5)}
+              onClick={() => {
+                currentUser ? handleBuyBids(5) : navigate('/login');
+              }}
             >
               Buy Now
             </BidButton>
@@ -164,7 +170,9 @@ const Payment = () => {
             <BidButton
               variant="contained"
               color="secondary"
-              onClick={() => handleBuyBids(10)}
+              onClick={() => {
+                currentUser ? handleBuyBids(10) : navigate('/login');
+              }}
             >
               Buy Now
             </BidButton>
@@ -179,7 +187,9 @@ const Payment = () => {
             <BidButton
               variant="contained"
               color="success"
-              onClick={() => handleBuyBids(15)}
+              onClick={() => {
+                currentUser ? handleBuyBids(15) : navigate('/login');
+              }}
             >
               Buy Now
             </BidButton>
