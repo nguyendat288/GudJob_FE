@@ -41,6 +41,7 @@ import ListUser from '../../Common/Chat/ListUser';
 import chatApi from '../../../services/chatApi';
 import CustomAvatar from '../../../components/CustomAvatar';
 import { styled } from '@mui/system';
+import { ROLES } from '../../../constaints/role';
 
 const CustomLogin = styled(Button)(({ theme }) => ({
   backgroundColor: 'var(--primary-color)',
@@ -534,12 +535,13 @@ const TopBarFreelancer = () => {
                     Xoá thông báo
                   </MenuItem>
                 </Menu>
-
-                <IconButton onClick={() => navigate('/favorite-list')}>
-                  <Tooltip title="Danh sách yêu thích">
-                    <FavoriteRoundedIcon />
-                  </Tooltip>
-                </IconButton>
+                {currentUser?.role === ROLES.FREELANCER && (
+                  <IconButton onClick={() => navigate('/favorite-list')}>
+                    <Tooltip title="Danh sách yêu thích">
+                      <FavoriteRoundedIcon />
+                    </Tooltip>
+                  </IconButton>
+                )}
 
                 <LanguageSelector />
 

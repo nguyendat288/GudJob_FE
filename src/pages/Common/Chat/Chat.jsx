@@ -76,7 +76,7 @@ const Chat = () => {
           hanldeSelectChat={hanldeSelectChat}
         />
       </Box>
-      <Box flex="4">
+      <Box flex="3">
         <BoxChat
           messages={listMessages}
           currentUser={currentUser}
