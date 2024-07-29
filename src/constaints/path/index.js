@@ -11,6 +11,7 @@ export const PUBLIC_PATH = {
   DETAIL: '/detail/:projectId',
   RESET: '/reset-password',
   USER_PROFILE: '/profile/:userId',
+  PAYMENT: '/payment',
   NOT_FOUND: '*',
 };
 

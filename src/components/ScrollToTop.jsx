@@ -8,7 +8,8 @@ const StyledFab = styled(Fab)({
   bottom: '2rem',
   right: '2rem',
   backgroundColor: '#fad702',
-  color: '#black',
+  color: 'var(--text-color)',
+  transition: 'background-color 0.3s, color 0.3s',
   '&:hover': {
     backgroundColor: '#595855',
     color: '#fad702',

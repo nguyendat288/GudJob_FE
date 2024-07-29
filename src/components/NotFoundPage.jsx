@@ -24,7 +24,7 @@ export default function NotFoundPage() {
             </Typography>
             <Button
               variant="contained"
-              onClick={() => navigate(-2)}
+              onClick={() => navigate('/home')}
               sx={{ bgcolor: 'rgb(100, 149, 237)' }}
             >
               Back to Dashboard

@@ -1,10 +1,24 @@
 import React, { useImperativeHandle, useRef, useState } from 'react';
-import { Box, Typography, IconButton, Tooltip, TextField, InputAdornment, Button, Menu, MenuItem, FormControl, InputLabel, Select, Popover } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Tooltip,
+  TextField,
+  InputAdornment,
+  Button,
+  Menu,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
+  Popover,
+} from '@mui/material';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import RemoveCircleOutlineRoundedIcon from '@mui/icons-material/RemoveCircleOutlineRounded';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import { styled } from '@mui/material/styles';
 
 const StyledGridOverlayNoRows = styled('div')(({ theme }) => ({
@@ -124,7 +138,9 @@ function StatusInputValue(props) {
         label="Value"
         inputRef={statusRef}
       >
-        <MenuItem value=""><em>All</em></MenuItem>
+        <MenuItem value="">
+          <em>All</em>
+        </MenuItem>
         <MenuItem value="true">Đã duyệt</MenuItem>
         <MenuItem value="false">Chờ duyệt</MenuItem>
       </Select>
@@ -161,7 +177,19 @@ const statusOperators = [
   },
 ];
 
-const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSizeChange, typeDes, setTypeDes, onOpenModal, loading, setLoading }) => {
+const ReportList = ({
+  reports,
+  totalReports,
+  pageSize,
+  page,
+  pageChange,
+  pageSizeChange,
+  typeDes,
+  setTypeDes,
+  onOpenModal,
+  loading,
+  setLoading,
+}) => {
   const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElPop, setAnchorElPop] = useState(null);
@@ -180,7 +208,13 @@ const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSiz
   const open = Boolean(anchorElPop);
 
   const columns = [
-    { field: 'nameCreatedBy', headerName: 'Created By', sortable: false, width: 150, flex: 1 },
+    {
+      field: 'nameCreatedBy',
+      headerName: 'Created By',
+      sortable: false,
+      width: 150,
+      flex: 1,
+    },
     {
       field: 'reportInformation',
       headerName: 'Report Information',
@@ -193,14 +227,17 @@ const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSiz
         return (
           <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
             <Typography>
-              {reportToUrl ? `URL user: ${reportToUrl}` :
-                bidName ? `Bid Name: ${bidName}` :
-                  projectName ? `Project Name: ${projectName}` :
-                    'No Information'}
+              {reportToUrl
+                ? `URL user: ${reportToUrl}`
+                : bidName
+                ? `Bid Name: ${bidName}`
+                : projectName
+                ? `Project Name: ${projectName}`
+                : 'No Information'}
             </Typography>
           </Box>
         );
-      }
+      },
     },
     {
       field: 'reportName',
@@ -247,26 +284,35 @@ const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSiz
             <Typography sx={{ p: 1 }}>{popoverContent}</Typography>
           </Popover>
         </Box>
-      )
+      ),
     },
     {
-      field: 'isApproved',
+      field: 'status',
       headerName: 'Status',
       width: 150,
       flex: 1,
       sortable: false,
       filterOperators: statusOperators,
-      renderCell: (params) => (
-        params.value ? (
+      renderCell: (params) =>
+        params.row.isApproved === true ? (
           <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
-            <Typography>Đã Duyệt <CheckCircleOutlineIcon color='success' /></Typography>
+            <Typography>
+              Đã duyệt <CheckCircleOutlineIcon color="success" />
+            </Typography>
+          </Box>
+        ) : params.row.isRejected === true ? (
+          <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
+            <Typography>
+              Đã từ chối <CheckCircleOutlineIcon color="warning" />
+            </Typography>
           </Box>
         ) : (
           <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
-            <Typography>Chờ Duyệt <ErrorOutlineIcon color='warning' /></Typography>
+            <Typography>
+              Chờ duyệt <ErrorOutlineIcon color="warning" />
+            </Typography>
           </Box>
-        )
-      )
+        ),
     },
     {
       field: 'actions',
@@ -275,16 +321,36 @@ const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSiz
       flex: 1,
       sortable: false,
       filterable: false,
-      renderCell: (params) => (
-        <Tooltip title="Đánh dấu là đã xử lý">
+      renderCell: (params) => [
+        <Tooltip title="Đánh dấu là đã xử lý" key={`approve-${params.row.id}`}>
           <span>
-            <IconButton onClick={() => onOpenModal(params.row.id)} disabled={params.row.isApproved === true}>
-              <FactCheckIcon />
-            </IconButton>
+            <GridActionsCellItem
+              icon={<FactCheckIcon />}
+              label="Approve"
+              className="textPrimary"
+              disabled={
+                params.row.isApproved === true || params.row.isRejected === true
+              }
+              onClick={() => onOpenModal(params.row.id, true)}
+            />
           </span>
-        </Tooltip>
-      )
-    }
+        </Tooltip>,
+
+        <Tooltip title="Đánh dấu đã từ chối" key={`reject-${params.row.id}`}>
+          <span>
+            <GridActionsCellItem
+              icon={<RemoveCircleOutlineRoundedIcon />}
+              label="Reject"
+              className="textPrimary"
+              disabled={
+                params.row.isApproved === true || params.row.isRejected === true
+              }
+              onClick={() => onOpenModal(params.row.id, false)}
+            />
+          </span>
+        </Tooltip>,
+      ],
+    },
   ];
 
   const [paginationModel, setPaginationModel] = useState({
@@ -308,8 +374,15 @@ const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSiz
 
   return (
     <Box className="p-4" sx={{ width: '100%', overflow: 'auto' }}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography sx={{ fontSize: "1.5rem", fontWeight: "600" }}>Report List</Typography>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+      >
+        <Typography sx={{ fontSize: '1.5rem', fontWeight: '600' }}>
+          Report List
+        </Typography>
       </Box>
       <TextField
         label="Search reporter"
@@ -335,9 +408,15 @@ const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSiz
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               >
-                <MenuItem onClick={() => handleTypeSelect('user')}>Report User</MenuItem>
-                <MenuItem onClick={() => handleTypeSelect('bid')}>Report Bid</MenuItem>
-                <MenuItem onClick={() => handleTypeSelect('project')}>Report Project</MenuItem>
+                <MenuItem onClick={() => handleTypeSelect('user')}>
+                  Report User
+                </MenuItem>
+                <MenuItem onClick={() => handleTypeSelect('bid')}>
+                  Report Bid
+                </MenuItem>
+                <MenuItem onClick={() => handleTypeSelect('project')}>
+                  Report Project
+                </MenuItem>
                 <MenuItem onClick={() => handleTypeSelect('All')}>All</MenuItem>
               </Menu>
             </InputAdornment>
@@ -369,15 +448,17 @@ const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSiz
           }}
           slotProps={{
             pagination: {
-              labelRowsPerPage: "Số lượng report trên 1 trang",
+              labelRowsPerPage: 'Số lượng report trên 1 trang',
               labelDisplayedRows: ({ from, to, count }) => {
-                return `${from.toLocaleString('en')}-${to.toLocaleString('en')} trên ${count.toLocaleString('en')} report`
-              }
+                return `${from.toLocaleString('en')}-${to.toLocaleString(
+                  'en'
+                )} trên ${count.toLocaleString('en')} report`;
+              },
             },
             toolbar: {
               printOptions: { disableToolbarButton: true },
               csvOptions: { disableToolbarButton: true },
-            }
+            },
           }}
           localeText={{
             footerRowSelected: (count) =>
@@ -407,6 +488,6 @@ const ReportList = ({ reports, totalReports, pageSize, page, pageChange, pageSiz
       </Box>
     </Box>
   );
-}
+};
 
 export default ReportList;

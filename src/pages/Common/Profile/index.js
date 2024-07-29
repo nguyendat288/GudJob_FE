@@ -120,6 +120,16 @@ const Profile = () => {
     navigate(`/chat/${res}/${userId}`);
   };
 
+  const handleVerifyEmail = () => {
+    try {
+      const data = window.location.href;
+      const response = profileApi.verifyEmail(data);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Box
       className="pl-40 pr-40 p-4"
@@ -380,7 +390,11 @@ const Profile = () => {
                 </Grid>
                 {isOwnProfile && !profile?.emailConfirmed ? (
                   <Grid item xs={12} md={3}>
-                    <Link href="#" underline="hover">
+                    <Link
+                      href="#"
+                      underline="hover"
+                      onClick={handleVerifyEmail}
+                    >
                       <Typography>Xác thực</Typography>
                     </Link>
                   </Grid>

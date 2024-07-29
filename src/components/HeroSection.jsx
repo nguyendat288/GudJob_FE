@@ -1,12 +1,15 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import heroImage from '../assets/hero-image.png'
+import heroImage from '../assets/hero-image.png';
 
 function HeroSection() {
-  
   return (
     <Box
       sx={{
+        margin: '0 auto',
+        maxWidth: '1400px',
+        borderRadius: 4,
+        marginBottom: 5,
         height: '80vh',
         backgroundImage: `url(${heroImage})`,
         backgroundSize: 'cover',
@@ -18,8 +21,7 @@ function HeroSection() {
         color: 'white',
         textAlign: 'center',
       }}
-    >
-    </Box>
+    ></Box>
   );
 }
 

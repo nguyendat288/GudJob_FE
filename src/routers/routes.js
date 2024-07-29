@@ -5,7 +5,6 @@ import {
   PUBLIC_PATH,
   RECRUITER_PATH,
 } from '../constaints/path';
-import Register from '../pages/Public/Register';
 import Login from '../pages/Public/Login';
 import Profile from '../pages/Common/Profile';
 import Setting from '../pages/Common/Profile/Setting';
@@ -44,6 +43,7 @@ import BlogDetail from '../pages/Admin/Blog/Publish/BlogDetail';
 import HomeBlog from '../pages/Admin/Blog/Publish/HomeBlog';
 import ListSkill from '../pages/Admin/List/ListSkill';
 import FavoriteProjectsPage from '../pages/Common/FavoriteList/FavoriteProjectsPage';
+import Payment from '../pages/Public/Payment';
 
 export default function Router() {
   let router = useRoutes([
@@ -54,10 +54,6 @@ export default function Router() {
     {
       path: PUBLIC_PATH.RESET,
       element: <ResetPasswordPage />,
-    },
-    {
-      path: PUBLIC_PATH.REGISTER,
-      element: <Register />,
     },
     {
       path: PUBLIC_PATH.BLOG,
@@ -110,6 +106,14 @@ export default function Router() {
               element: (
                 <Suspense fallback={<>Loading...</>}>
                   <Detail />
+                </Suspense>
+              ),
+            },
+            {
+              path: PUBLIC_PATH.PAYMENT,
+              element: (
+                <Suspense fallback={<>Loading...</>}>
+                  <Payment />
                 </Suspense>
               ),
             },

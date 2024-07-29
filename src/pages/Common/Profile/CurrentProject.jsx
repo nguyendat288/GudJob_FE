@@ -11,6 +11,7 @@ import {
   CardActions,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import profileApi from '../../../services/profileApi';
 import { useSelector } from 'react-redux';
 import { formatDate } from '../../../utils/formatDate';
@@ -19,6 +20,7 @@ import { toast } from 'react-toastify';
 import { truncateText } from '../../../utils/truncateText';
 
 function CurrentProject() {
+  const navigate = useNavigate();
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const [allProjects, setAllProjects] = useState(null);
   const [page, setPage] = useState(1);
@@ -66,6 +68,10 @@ function CurrentProject() {
       console.log(error);
       console.error('Error marking project as done:', error);
     }
+  };
+
+  const handleDetail = (id) => {
+    navigate(`/detail/${id}`);
   };
 
   return (
@@ -138,7 +144,12 @@ function CurrentProject() {
                     display: 'flex',
                     flexDirection: 'column',
                     height: '100%',
+                    '&:hover': {
+                      backgroundColor: '#f5f5f5',
+                      cursor: 'pointer',
+                    },
                   }}
+                  onClick={() => handleDetail(project?.projectId)}
                 >
                   <CardHeader
                     action={<Chip label={project.status} color="primary" />}

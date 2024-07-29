@@ -48,7 +48,7 @@ const Footer = () => {
               Projects
             </Link>
             <Link
-              href="#"
+              href="/payment"
               variant="body2"
               color="#ffffff"
               display="block"
@@ -57,7 +57,7 @@ const Footer = () => {
                 '&:hover': { textDecoration: 'underline' },
               }}
             >
-              Membership
+              Thanh toán
             </Link>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
