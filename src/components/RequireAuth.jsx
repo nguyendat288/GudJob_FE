@@ -5,7 +5,6 @@ const RequireAuth = ({ allowedRoles }) => {
   if (currentUser !== null) {
     const role = currentUser.role;
     const token = currentUser.accessToken;
-    console.log(currentUser.role);
     if (token && allowedRoles.includes(role)) {
       return <Outlet />;
     } else {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Box } from '@mui/material'
 import SideBarAdmin from './SideBarAdmin'
 import TopBarAdmin from './TopBarAdmin'
-import { Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom';
 
 const LayOutAdmin = () => {
     return (
@@ -10,9 +10,9 @@ const LayOutAdmin = () => {
             <SideBarAdmin />
             <Box component="main" className="flex-grow p-4 ml-64 mt-16">
                 <TopBarAdmin />
-                <main className="flex-grow p-4 bg-gray-50">
+                <div className="flex-grow bg-gray-50">
                     <Outlet />
-                </main>
+                </div>
             </Box>
         </Box>
     );

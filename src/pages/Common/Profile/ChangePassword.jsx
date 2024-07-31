@@ -31,35 +31,21 @@ function ChangePassword() {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-        toast.error("New password and confirm password do not match");
+        toast.error("Mật khẩu mới và mật khẩu cũ không khớp !!!");
         return;
     }
 
-    const data = {
-        password: currentPassword,
-        newPassword: newPassword,
-        newPasswordConfirm: confirmPassword
-    };
-
-    console.log("Data being sent to the server:", data);
-
     try {
-        const response = await profileApi.changePassword(currentPassword, newPassword, confirmPassword);
-        console.log("Server response:", response);
-        toast.success("Password changed successfully!");
+        await profileApi.changePassword(currentPassword, newPassword, confirmPassword);
+        toast.success("Thay đổi mật khẩu thành công!");
     } catch (error) {
-        console.error("Error response from server:", error.response);
-        if (error.response && error.response.data) {
-            toast.error(error.response.data.message || "Something wrong occurred. Please try again.");
-        } else {
-            toast.error("Something wrong occurred. Please try again.");
-        }
+      toast.error("Something wrong occurred. Please try again.");
     }
 };
 
 
   return (
-    <Box p={3} borderRadius={5} border="1px solid #ccc" component="form" onSubmit={handleSave}>
+    <Box p={3} m={3} borderRadius={5} border="1px solid #ccc" component="form" onSubmit={handleSave}>
       <Typography sx={{fontSize: "2em"}} variant="h4" gutterBottom>Thay đổi mật khẩu</Typography>
       
       <Box mb={2}>

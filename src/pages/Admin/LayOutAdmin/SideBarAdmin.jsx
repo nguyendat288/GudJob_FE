@@ -1,52 +1,79 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Box, Divider, List, ListItemButton, ListItemText } from '@mui/material';
+import {
+  Box,
+  Divider,
+  List,
+  ListItemButton,
+  ListItemText,
+} from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import GroupIcon from '@mui/icons-material/Group';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import CategoryIcon from '@mui/icons-material/Category';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next'
-
+import { useTranslation } from 'react-i18next';
+import BookIcon from '@mui/icons-material/Book';
+import DesignServicesIcon from '@mui/icons-material/DesignServices';
 function SideBarAdmin() {
   const location = useLocation();
-  const {t} = useTranslation(['admin', 'common']);
+  const { t } = useTranslation(['admin', 'common']);
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
 
   const sidebarData = [
     {
-      title: t("dashboard", { ns: 'common' }),
-      link: "/admin",
-      icon: <DashboardIcon />
+      title: t('dashboard', { ns: 'common' }),
+      link: '/admin',
+      icon: <DashboardIcon />,
     },
     {
-      title: t("userList"),
-      link: "/users-list",
-      icon: <GroupIcon />
+      title: t('userList'),
+      link: '/users-list',
+      icon: <GroupIcon />,
     },
     {
-      title: t("reportList"),
-      link: "/report-list",
-      icon: <ReportProblemIcon />
+      title: t('reportList'),
+      link: '/report-list',
+      icon: <ReportProblemIcon />,
     },
     {
-      title: "Project List",
-      link: "/project-list",
-      icon: <AssignmentIndIcon />
+      title: 'Project Management',
+      link: '/project-list',
+      icon: <AssignmentIcon />,
     },
     {
-      title: t("roles"),
-      link: "/roles",
-      icon: <AssignmentIndIcon />
+      title: 'Category Management',
+      link: '/category-list',
+      icon: <CategoryIcon />,
+    },
+    {
+      title: 'Blog List',
+      link: '/view-blog',
+      icon: <BookIcon />,
+    },
+    {
+      title: 'Skill Management',
+      link: '/skill-list',
+      icon: <DesignServicesIcon />,
+    },
+    {
+      title: t('roles'),
+      link: '/roles',
+      icon: <AssignmentIndIcon />,
     },
   ];
 
   return (
     <Box className="fixed top-0 left-0 h-full w-64 bg-gray-100 text-gray-800 border-r-2 border-gray-200">
       {/* Sidebar */}
-      <Box className="w-64 bg-gray-100 text-gray-800 border-r-2 border-gray-200 flex flex-col justify-between" sx={{ mt: '64px', height: 'calc(100vh - 64px)' }}>
+      <Box
+        className="w-64 bg-gray-100 text-gray-800 border-r-2 border-gray-200 flex flex-col justify-between"
+        sx={{ mt: '64px', height: 'calc(100vh - 64px)' }}
+      >
         {/* Top Section */}
         <div className="flex flex-col">
           {/* Avatar and Admin Info */}
@@ -72,12 +99,16 @@ function SideBarAdmin() {
                       textDecoration: 'none',
                       color: 'inherit',
                       position: 'relative',
-                      backgroundColor: isSelected ? 'rgba(75, 85, 99, 0.5)' : 'inherit',
+                      backgroundColor: isSelected
+                        ? 'rgba(75, 85, 99, 0.5)'
+                        : 'inherit',
                       '&:hover': {
-                        backgroundColor: isSelected ? 'rgba(75, 85, 99, 1)' : 'rgba(75, 85, 99, 0.5)',
+                        backgroundColor: isSelected
+                          ? 'rgba(75, 85, 99, 1)'
+                          : 'rgba(75, 85, 99, 0.5)',
                         '&::before': {
                           opacity: 1,
-                        }
+                        },
                       },
                       '&::before': {
                         content: '""',
@@ -121,7 +152,7 @@ function SideBarAdmin() {
                 backgroundColor: 'rgba(75, 85, 99, 0.5)',
                 '&::before': {
                   opacity: 1,
-                }
+                },
               },
               '&::before': {
                 content: '""',
@@ -141,7 +172,7 @@ function SideBarAdmin() {
             }}
           >
             <div className="flex items-center">
-              <LogoutIcon sx={{mr: 1}}/>
+              <LogoutIcon sx={{ mr: 1 }} />
               <ListItemText primary={t('logout', { ns: 'common' })} />
             </div>
           </ListItemButton>

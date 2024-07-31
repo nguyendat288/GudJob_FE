@@ -1,28 +1,29 @@
-import { createTheme } from "@mui/material";
+import { createTheme } from '@mui/material';
 import {} from '@mui/lab/themeAugmentation';
 export const theme = createTheme({
   typography: {
     allVariants: {
-      fontFamily: ['Josefin Sans','sans-serif'].join(','),
+      fontFamily: ['Josefin Sans', 'sans-serif'].join(','),
       fontSize: 16,
-      fontWeight: '500'
+      fontWeight: '500',
+    },
+    button: {
+      textTransform: 'none',
     },
   },
-  palette:{
+  palette: {
     bgColorPrimary: {
-      main: '#f5f7f9'
-    }
+      main: '#f5f7f9',
+    },
   },
-  button: {
-    
-  },
+  button: {},
   components: {
     MuiTabPanel: {
       styleOverrides: {
         root: {
-          padding: 0
-        }
-      }
-    }
-  }
+          padding: 0,
+        },
+      },
+    },
+  },
 });

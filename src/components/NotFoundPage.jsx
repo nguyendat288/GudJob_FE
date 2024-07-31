@@ -1,26 +1,32 @@
-import { Box, Button, Container, Typography } from '@mui/material'
-import Grid from '@mui/material/Grid'
-import { useNavigate } from 'react-router-dom'
+import { Box, Button, Container, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import { useNavigate } from 'react-router-dom';
 
 export default function NotFoundPage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        minHeight: '100vh'
-      }}>
+        minHeight: '100vh',
+      }}
+    >
       <Container maxWidth="md">
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Typography fontSize="100px" fontWeight='bold'>404</Typography>
-            <Typography fontSize='20px'>The page you’re looking for doesn’t exist.</Typography>
+            <Typography fontSize="100px" fontWeight="bold">
+              404
+            </Typography>
+            <Typography fontSize="20px">
+              The page you’re looking for doesn’t exist.
+            </Typography>
             <Button
               variant="contained"
-              onClick={() => navigate(-1)}
-              sx={{ bgcolor: 'rgb(100, 149, 237)' }}>
+              onClick={() => navigate('/home')}
+              sx={{ bgcolor: 'rgb(100, 149, 237)' }}
+            >
               Back to Dashboard
             </Button>
           </Grid>
@@ -35,5 +41,5 @@ export default function NotFoundPage() {
         </Grid>
       </Container>
     </Box>
-  )
+  );
 }
