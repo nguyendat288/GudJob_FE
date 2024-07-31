@@ -9,6 +9,8 @@ import {
   InputAdornment,
   IconButton,
   TextField,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import React, { useState } from 'react';
 import { ROLES } from '../../../constaints/role';
@@ -23,6 +25,9 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { formatCurrency } from '../../../utils/formatCurrency';
 import BlogDescription from '../../../components/BlogDescription';
+import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
+import FavoriteBorderTwoToneIcon from '@mui/icons-material/FavoriteBorderTwoTone';
+import projectApi from '../../../services/projectApi';
 
 const ProjectDetail = ({
   detail,
@@ -33,12 +38,60 @@ const ProjectDetail = ({
   projectId,
   myBidding,
   handleOpen,
+  setReload,
 }) => {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success',
+  });
 
   const handleReport = async (reportData) => {
     await reportApi.createReport(reportData);
     toast.error('Đã khiếu nại dự án');
+  };
+
+  const handleDeleteFavorite = async (userId, projectId) => {
+    try {
+      const response = await projectApi.DeleteFavorite({ userId, projectId });
+      setSnackbar({
+        open: true,
+        message: response.message,
+        severity: 'success',
+      });
+      setReload((prev) => !prev);
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: 'Failed to remove project from favorites. Please try again.',
+        severity: 'error',
+      });
+      console.log(error);
+    }
+  };
+
+  const handleAddFavorite = async (userId, projectId) => {
+    try {
+      const response = await projectApi.AddFavorite({ userId, projectId });
+      setSnackbar({
+        open: true,
+        message: response.message,
+        severity: 'success',
+      });
+      setReload((prev) => !prev);
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: 'Failed to add project to favorites. Please try again.',
+        severity: 'error',
+      });
+      console.log(error);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
   return (
@@ -132,6 +185,22 @@ const ProjectDetail = ({
                   </Typography>
                 </Box>
               )}
+              <Box display="flex" sx={{ ml: 2 }}>
+                <IconButton
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    detail?.isFavorite
+                      ? handleDeleteFavorite(currentUser?.userId, detail?.id)
+                      : handleAddFavorite(currentUser?.userId, detail?.id);
+                  }}
+                >
+                  {detail?.isFavorite ? (
+                    <FavoriteTwoToneIcon sx={{ color: '#fad702' }} />
+                  ) : (
+                    <FavoriteBorderTwoToneIcon />
+                  )}
+                </IconButton>
+              </Box>
             </Box>
           </Box>
           <Box p={4} pb={0}>
@@ -301,6 +370,20 @@ const ProjectDetail = ({
           type="project"
           projectId={projectId}
         />
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={5000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        >
+          <Alert
+            onClose={handleCloseSnackbar}
+            variant="filled"
+            severity={snackbar.severity}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </Box>
     </Box>
   );

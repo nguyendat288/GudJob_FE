@@ -11,15 +11,17 @@ const profileApi = {
     }
   },
 
-  getUserProfileById: (userId) => {
+  getUserProfileById: async (userId, navigate) => {
     try {
-      const response = axiosClient.get(`${BASE_URL}/api/Users/GetUser`, {
+      const response = await axiosClient.get(`${BASE_URL}/api/Users/GetUser`, {
         params: { uid: userId },
         headers: { accept: '*/*' },
       });
       return response;
     } catch (error) {
-      throw error;
+      if (error.response?.status === 400) {
+        navigate('/*');
+      }
     }
   },
 

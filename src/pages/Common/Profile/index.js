@@ -31,6 +31,7 @@ import chatApi from '../../../services/chatApi';
 import UpdateSkillModal from './component/UpdateSkillModal';
 import CustomAvatar from '../../../components/CustomAvatar';
 import { formatDate } from '../../../utils/formatDate';
+import PhoneNumberVerificationModal from './component/VerifyModal';
 
 const labels = {
   1: 'Rất tệ',
@@ -51,6 +52,7 @@ const Profile = () => {
   const [isOwnProfile, setIsOwnProfile] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [isSkillModalOpen, setIsSkillModalOpen] = useState(false);
+  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
   const [newRating, setNewRating] = useState(0);
   const [newComment, setNewComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -63,7 +65,7 @@ const Profile = () => {
         if (parseInt(userId) === currentUser?.userId) {
           setIsOwnProfile(true);
         }
-        res = await profileApi.getUserProfileById(userId);
+        res = await profileApi.getUserProfileById(userId, navigate);
       } else {
         setIsOwnProfile(true);
         res = await profileApi.getUserProfile();
@@ -114,7 +116,7 @@ const Profile = () => {
       setSubmitting(false);
     }
   };
-  console.log(profile);
+
   const handleContact = async () => {
     let res = await chatApi.CreateNewConversation(currentUser?.userId, userId);
     navigate(`/chat/${res}/${userId}`);
@@ -173,7 +175,9 @@ const Profile = () => {
                     readOnly
                   />
                   <Typography>
-                    {profile?.avgRate ? profile.avgRate : 'No rating yet'} / 5
+                    {profile?.avgRate
+                      ? profile.avgRate + '/5'
+                      : 'No rating yet'}
                   </Typography>
                 </Box>
                 <Button variant="contained">Xem thống kê</Button>
@@ -363,17 +367,29 @@ const Profile = () => {
               <Grid container>
                 <Grid item xs={12} md={9}>
                   <Box className="flex items-center">
-                    <PhoneAndroidIcon color="error" />
+                    <PhoneAndroidIcon
+                      color={
+                        profile?.phoneNumberConfirmed ? 'success' : 'error'
+                      }
+                    />
                     <Typography sx={{ fontSize: '1rem', marginLeft: '0.5rem' }}>
                       Xác thực số điện thoại
                     </Typography>
                   </Box>
                 </Grid>
-                {isOwnProfile && (
+                {isOwnProfile && !profile?.phoneNumberConfirmed ? (
                   <Grid item xs={12} md={3}>
-                    <Link href="#" underline="hover">
+                    <Link
+                      href="#"
+                      underline="hover"
+                      onClick={() => setIsVerifyModalOpen(true)}
+                    >
                       <Typography>Xác thực</Typography>
                     </Link>
+                  </Grid>
+                ) : (
+                  <Grid item xs={12} md={1}>
+                    <CheckCircleIcon color="success" fontSize="medium" />
                   </Grid>
                 )}
               </Grid>
@@ -468,6 +484,8 @@ const Profile = () => {
                     <Typography
                       component={RouterLink}
                       to={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       sx={{ fontSize: '1rem' }}
                       color={'primary'}
                     >
@@ -477,7 +495,7 @@ const Profile = () => {
                 ))
               ) : (
                 <Typography sx={{ fontSize: '1rem' }}>
-                  You haven't added any skills yet.
+                  Bạn chưa thêm chứng chỉ nào.
                 </Typography>
               )}
             </Box>
@@ -539,6 +557,10 @@ const Profile = () => {
         onCloseSkill={() => setIsSkillModalOpen(false)}
         profile={profile}
         setProfile={setProfile}
+      />
+      <PhoneNumberVerificationModal
+        openVerify={isVerifyModalOpen}
+        onCloseVerify={() => setIsVerifyModalOpen(false)}
       />
     </Box>
   );

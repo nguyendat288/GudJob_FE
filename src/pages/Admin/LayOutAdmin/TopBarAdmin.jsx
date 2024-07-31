@@ -15,11 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { logOutSuccess } from '../../../redux/authSlice';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import LanguageSelector from '../../../components/language-selector';
 import { useTranslation } from 'react-i18next';
 
@@ -74,11 +70,6 @@ const TopBarAdmin = () => {
               }}
             ></Box>
             <Box display="flex" gap={2}>
-              <Tooltip title={t('notifications')}>
-                <IconButton>
-                  <NotificationsNoneOutlinedIcon />
-                </IconButton>
-              </Tooltip>
               <LanguageSelector />
               <Typography
                 sx={{
@@ -106,24 +97,11 @@ const TopBarAdmin = () => {
                 keepMounted
                 transformOrigin={{
                   vertical: 'top',
-                  horizontal: 'right',
+                  horizontal: 'center',
                 }}
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                <MenuItem
-                  onClick={handleCloseUserMenu}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Typography sx={{ display: 'flex', alignItems: 'center' }}>
-                    <AccountCircleOutlinedIcon sx={{ mr: 1 }} />
-                    Profile
-                  </Typography>
-                </MenuItem>
                 <MenuItem
                   onClick={handleLogOut}
                   sx={{

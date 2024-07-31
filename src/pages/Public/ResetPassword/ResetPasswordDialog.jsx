@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
 import {
-  Container,
-  Box,
-  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   TextField,
   Button,
   CircularProgress,
+  Typography,
+  Slide,
 } from '@mui/material';
 import authApi from '../../../services/authApi';
-import { Link, useNavigate } from 'react-router-dom';
 
-const ResetPasswordPage = () => {
-  const navigate = useNavigate();
+// Slide transition for dialog
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="down" ref={ref} {...props} />;
+});
+
+const ResetPasswordDialog = ({ open, onClose }) => {
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -73,9 +79,9 @@ const ResetPasswordPage = () => {
         email,
         newPassword,
         confirmPassword,
-        secureToken,
-        navigate
+        secureToken
       );
+      onClose(); // Close the dialog on successful reset
     } catch (error) {
       setError('Failed to reset password. Please try again.');
     } finally {
@@ -84,11 +90,15 @@ const ResetPasswordPage = () => {
   };
 
   return (
-    <Container maxWidth="xs">
-      <Box mt={8} p={4} boxShadow={3} borderRadius={4}>
-        <Typography variant="h5" align="center" gutterBottom>
-          Reset Password
-        </Typography>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      TransitionComponent={Transition}
+      maxWidth="xs"
+      fullWidth
+    >
+      <DialogTitle>Reset Password</DialogTitle>
+      <DialogContent>
         {step === 1 && (
           <form
             onSubmit={(e) => {
@@ -227,14 +237,14 @@ const ResetPasswordPage = () => {
             )}
           </form>
         )}
-        <Box sx={{ mt: 2, color: 'text.primary' }}>
-          <Typography component={Link} to="/login">
-            Back to login
-          </Typography>
-        </Box>
-      </Box>
-    </Container>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} color="primary">
+          Close
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
-export default ResetPasswordPage;
+export default ResetPasswordDialog;

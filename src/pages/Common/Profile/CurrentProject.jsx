@@ -9,6 +9,12 @@ import {
   Button,
   CardHeader,
   CardActions,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Slide,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +25,10 @@ import projectApi from '../../../services/projectApi';
 import { toast } from 'react-toastify';
 import { truncateText } from '../../../utils/truncateText';
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="down" ref={ref} {...props} />;
+});
+
 function CurrentProject() {
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
@@ -27,6 +37,9 @@ function CurrentProject() {
   const [pageSize, setPageSize] = useState(4);
   const [statusId, setStatusId] = useState(2);
   const [reload, setReload] = useState(false);
+
+  const [open, setOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -54,20 +67,30 @@ function CurrentProject() {
     setPage(1);
   };
 
-  const handleMarkAsDone = async (projectId, bidId, statusId) => {
+  const handleMarkAsDone = async () => {
     try {
       let data = {
-        projectId: projectId,
-        bidId: bidId,
-        statusId: statusId,
+        projectId: selectedProject.projectId,
+        bidId: selectedProject.bidId,
+        statusId: 9,
       };
       await projectApi.MarkDoneProject(data);
       setReload((prev) => !prev);
       toast.success('Project marked as done successfully');
+      setOpen(false);
     } catch (error) {
       console.log(error);
       console.error('Error marking project as done:', error);
     }
+  };
+
+  const handleClickOpen = (project) => {
+    setSelectedProject(project);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const handleDetail = (id) => {
@@ -189,11 +212,7 @@ function CurrentProject() {
                         color="warning"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleMarkAsDone(
-                            project?.projectId,
-                            project?.bidId,
-                            9
-                          );
+                          handleClickOpen(project);
                         }}
                         sx={{ ml: 'auto' }}
                       >
@@ -217,6 +236,36 @@ function CurrentProject() {
       ) : (
         <Typography>No projects found.</Typography>
       )}
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle sx={{ fontSize: '1.875rem' }}>
+          {'Xác nhận công việc đã hoàn thành'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Bạn chắc chắn muốn xác nhận công việc này đã hoàn thành? Công việc
+            này sẽ chuyển sang trạng thái đợi kiểm. Người đăng bài sẽ kiểm tra
+            kết quả công việc và thông báo công việc này đã hoàn thiện sau này.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button
+            onClick={handleMarkAsDone}
+            variant="contained"
+            color="primary"
+          >
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

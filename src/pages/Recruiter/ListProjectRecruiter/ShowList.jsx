@@ -14,8 +14,8 @@ import { useNavigate } from 'react-router-dom';
 import ProjectDescription from '../../../components/ProjectDescription';
 import TypographyTitle from '../../../components/Typography/TypographyTitle';
 import { formatCurrency } from '../../../utils/formatCurrency';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import BookmarkAddedTwoToneIcon from '@mui/icons-material/BookmarkAddedTwoTone';
+import FavoriteBorderTwoToneIcon from '@mui/icons-material/FavoriteBorderTwoTone';
+import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
 import { useSelector } from 'react-redux';
 import projectApi from '../../../services/projectApi';
 
@@ -197,9 +197,9 @@ const ShowList = ({ listProject, setReloadList }) => {
                     }}
                   >
                     {project.isFavorite ? (
-                      <BookmarkAddedTwoToneIcon sx={{ color: '#fad702' }} />
+                      <FavoriteTwoToneIcon sx={{ color: '#fad702' }} />
                     ) : (
-                      <BookmarkBorderIcon />
+                      <FavoriteBorderTwoToneIcon />
                     )}
                   </IconButton>
                 )}

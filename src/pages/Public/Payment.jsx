@@ -114,7 +114,6 @@ const Payment = () => {
     setBidNumber(bid);
     try {
       const response = await paymentApi.createPayment(bid);
-      console.log('response', response);
       setQrCodeData({
         qrCode: response.qrCode,
         bankName: 'Ngân hàng TMCP Quân đội',

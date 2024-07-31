@@ -72,6 +72,7 @@ const Detail = () => {
 
   const [listBidding, setListBidding] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [reload, setReload] = useState(false);
   const [open, setOpen] = useState(false);
   const [openBidding, setOpenBidding] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -113,7 +114,7 @@ const Detail = () => {
       }
     };
     getProjectDetail();
-  }, [projectId]);
+  }, [projectId, reload]);
 
   useEffect(() => {
     const getAllBidding = async () => {
@@ -343,6 +344,7 @@ const Detail = () => {
                   setOpenDelete={setOpenDelete}
                   myBidding={myBidding}
                   handleOpenUpdate={handleOpenUpdate}
+                  setReload={setReload}
                 />
               )}
             </TabPanel>

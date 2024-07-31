@@ -3,8 +3,6 @@ import {
   Box,
   Typography,
   Tooltip,
-  TextField,
-  InputAdornment,
   Button,
   Menu,
   MenuItem,
@@ -190,7 +188,6 @@ const ReportList = ({
   loading,
   setLoading,
 }) => {
-  const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElPop, setAnchorElPop] = useState(null);
   const [popoverContent, setPopoverContent] = useState('');
@@ -212,13 +209,11 @@ const ReportList = ({
       field: 'nameCreatedBy',
       headerName: 'Created By',
       sortable: false,
-      width: 150,
       flex: 1,
     },
     {
       field: 'reportInformation',
       headerName: 'Report Information',
-      width: 200,
       flex: 1,
       filterable: false,
       sortable: false,
@@ -243,7 +238,6 @@ const ReportList = ({
       field: 'reportName',
       headerName: 'Reason',
       sortable: false,
-      width: 200,
       flex: 1,
     },
     {
@@ -251,7 +245,6 @@ const ReportList = ({
       headerName: 'Description',
       sortable: false,
       filterable: false,
-      width: 300,
       flex: 1,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" width="100%" sx={{ mt: 1.5 }}>
@@ -289,7 +282,6 @@ const ReportList = ({
     {
       field: 'status',
       headerName: 'Status',
-      width: 150,
       flex: 1,
       sortable: false,
       filterOperators: statusOperators,
@@ -317,7 +309,6 @@ const ReportList = ({
     {
       field: 'actions',
       headerName: 'Actions',
-      width: 150,
       flex: 1,
       sortable: false,
       filterable: false,
@@ -383,46 +374,32 @@ const ReportList = ({
         <Typography sx={{ fontSize: '1.5rem', fontWeight: '600' }}>
           Report List
         </Typography>
+        <Button
+          aria-controls="type-menu"
+          aria-haspopup="true"
+          onClick={handleRoleButtonClick}
+          endIcon={<ArrowDropDownIcon />}
+        >
+          {typeDes || 'Type'}
+        </Button>
+        <Menu
+          id="type-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={() => handleTypeSelect('user')}>
+            Report User
+          </MenuItem>
+          <MenuItem onClick={() => handleTypeSelect('bid')}>
+            Report Bid
+          </MenuItem>
+          <MenuItem onClick={() => handleTypeSelect('project')}>
+            Report Project
+          </MenuItem>
+          <MenuItem onClick={() => handleTypeSelect('All')}>All</MenuItem>
+        </Menu>
       </Box>
-      <TextField
-        label="Search reporter"
-        variant="outlined"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        fullWidth
-        margin="normal"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <Button
-                aria-controls="type-menu"
-                aria-haspopup="true"
-                onClick={handleRoleButtonClick}
-                endIcon={<ArrowDropDownIcon />}
-              >
-                {typeDes || 'Type'}
-              </Button>
-              <Menu
-                id="type-menu"
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-              >
-                <MenuItem onClick={() => handleTypeSelect('user')}>
-                  Report User
-                </MenuItem>
-                <MenuItem onClick={() => handleTypeSelect('bid')}>
-                  Report Bid
-                </MenuItem>
-                <MenuItem onClick={() => handleTypeSelect('project')}>
-                  Report Project
-                </MenuItem>
-                <MenuItem onClick={() => handleTypeSelect('All')}>All</MenuItem>
-              </Menu>
-            </InputAdornment>
-          ),
-        }}
-      />
       <Box height={400} width="100%">
         <DataGrid
           rows={reports}

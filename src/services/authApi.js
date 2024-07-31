@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { loginFailed, loginStart, loginSuccess } from '../redux/authSlice';
 import { BASE_URL } from '.';
 import { ROLES } from '../constaints/role';
+import axiosClient from '../utils/axiosClient';
 
 const authApi = {
   loginUser: async (data, dispatch, navigate) => {
@@ -91,7 +92,6 @@ const authApi = {
         secureToken,
       });
       toast.success('Password reset successful');
-      navigate('/login');
     } catch (error) {
       toast.error('Change password failed');
       throw error;
@@ -128,6 +128,41 @@ const authApi = {
       } else {
         console.error('Login with Google failed:', error);
       }
+      throw error;
+    }
+  },
+  verifyPhone: async (phoneNumber) => {
+    try {
+      const response = await axiosClient.post(
+        `${BASE_URL}/api/Identity/VerifyPhone`,
+        phoneNumber,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+
+  verifyPhoneCode: async (phoneCode) => {
+    try {
+      const response = await axiosClient.post(
+        `${BASE_URL}/api/Identity/VerifyPhoneCode`,
+        phoneCode,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
       throw error;
     }
   },

@@ -12,6 +12,12 @@ import {
   TextField,
   Snackbar,
   Alert,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Slide,
 } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import {
@@ -93,6 +99,10 @@ const statusOperators = [
   },
 ];
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="down" ref={ref} {...props} />;
+});
+
 const SkillList = ({
   categoryList,
   skillList,
@@ -118,6 +128,18 @@ const SkillList = ({
   });
   const [rowModesModel, setRowModesModel] = useState({});
   const [openMenu, setOpenMenu] = useState({});
+
+  const [open, setOpen] = useState(false);
+  const [selectedSkillId, setSelectedSkillId] = useState(null);
+
+  const handleClickOpen = (id) => {
+    setSelectedSkillId(id);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -190,15 +212,16 @@ const SkillList = ({
     return newRow;
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     try {
-      await skillApi.DeleteSkill(id);
+      await skillApi.DeleteSkill(selectedSkillId);
       setReloadSkill((prev) => !prev);
       setSnackbar({
         open: true,
         message: 'Skill deleted successfully',
         severity: 'success',
       });
+      setOpen(false);
     } catch (error) {
       console.error('Failed to delete the skill:', error);
       setSnackbar({
@@ -378,7 +401,7 @@ const SkillList = ({
             <GridActionsCellItem
               icon={<DeleteIcon />}
               label="Delete"
-              onClick={() => handleDelete(id)}
+              onClick={() => handleClickOpen(id)}
             />
           </Tooltip>,
         ];
@@ -522,6 +545,30 @@ const SkillList = ({
           {snackbar.message}
         </Alert>
       </Snackbar>
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle sx={{ fontSize: '1.875rem' }}>
+          {'Xác nhận xóa kĩ năng'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Xác nhận xóa kĩ năng này? Các project với kĩ năng này vẫn sẽ được
+            hiển thị nhưng người dùng sẽ không thể thêm kĩ năng này vào profile
+            của họ
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button variant="contained" color="primary" onClick={handleDelete}>
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

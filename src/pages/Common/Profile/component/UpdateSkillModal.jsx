@@ -125,9 +125,7 @@ const UpdateSkillModal = ({ openSkill, onCloseSkill, profile, setProfile }) => {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 'auto',
-          maxWidth: '90%',
-          minWidth: isSmallScreen ? '90%' : 1500,
+          width: '50%',
           bgcolor: 'background.paper',
           boxShadow: 24,
           borderRadius: '10px',
@@ -191,7 +189,7 @@ const UpdateSkillModal = ({ openSkill, onCloseSkill, profile, setProfile }) => {
               <Divider className="bg-slate-500" sx={{ my: 1 }} />
               <List
                 sx={{
-                  maxHeight: 550,
+                  maxHeight: 250,
                   overflow: 'auto',
                 }}
               >
@@ -235,8 +233,8 @@ const UpdateSkillModal = ({ openSkill, onCloseSkill, profile, setProfile }) => {
               <Divider className="bg-slate-500" sx={{ my: 1 }} />
               <List
                 sx={{
-                  height: 550,
-                  maxHeight: 550,
+                  height: 250,
+                  maxHeight: 250,
                   overflow: 'auto',
                 }}
               >
@@ -301,7 +299,7 @@ const UpdateSkillModal = ({ openSkill, onCloseSkill, profile, setProfile }) => {
                 spacing={1}
                 sx={{
                   height: 100,
-                  maxHeight: 550,
+                  maxHeight: 250,
                   flexWrap: 'wrap',
                 }}
               >

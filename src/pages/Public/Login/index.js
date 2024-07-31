@@ -1,3 +1,5 @@
+// Login.js
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -6,7 +8,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -16,6 +17,7 @@ import authApi from '../../../services/authApi';
 import { useGoogleLogin } from '@react-oauth/google';
 import GoogleIcon from '@mui/icons-material/Google';
 import Register from '../Register';
+import ResetPasswordDialog from '../ResetPassword/ResetPasswordDialog';
 
 const style = {
   position: 'absolute',
@@ -39,6 +41,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [errorPassword, setErrorPassword] = useState(false);
+  const [openResetPasswordDialog, setOpenResetPasswordDialog] = useState(false);
   const isLoading = useSelector((state) => state.auth.login?.isFetching);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,14 +56,14 @@ const Login = () => {
         if (error.response && error.response.status === 415) {
           setErrorText('Unsupported media type.');
         } else {
-          setErrorText('An error occurred during Google login.');
+          setErrorText('Đã có lỗi xảy ra khi đăng nhập bằng Google.');
         }
         setErrorPassword(true);
       }
     },
     onError: (error) => {
       console.error('Google login error:', error);
-      setErrorText('Failed to login with Google.');
+      setErrorText('Đăng nhập bằng Google không thành công.');
       setErrorPassword(true);
     },
   });
@@ -81,7 +84,7 @@ const Login = () => {
     e.preventDefault();
 
     if (userName === '' || password === '') {
-      setErrorText('Vui lòng nhập đủ thông tin .');
+      setErrorText('Vui lòng nhập đủ thông tin.');
       setErrorPassword(true);
       return;
     }
@@ -93,7 +96,7 @@ const Login = () => {
       await authApi.loginUser(data, dispatch, navigate);
     } catch (error) {
       console.log(error);
-      setErrorText('Sai thông tin đăng nhập .');
+      setErrorText(error.response.data.message);
       setErrorPassword(true);
     }
   };
@@ -136,7 +139,6 @@ const Login = () => {
                   },
                 }}
               />
-
               <TextField
                 sx={{
                   '& .MuiOutlinedInput-root': {
@@ -187,9 +189,7 @@ const Login = () => {
               <Typography
                 variant="body1"
                 component="span"
-                onClick={() => {
-                  navigate('/reset-password');
-                }}
+                onClick={() => setOpenResetPasswordDialog(true)}
                 style={{
                   marginTop: '10px',
                   cursor: 'pointer',
@@ -253,6 +253,10 @@ const Login = () => {
               </Typography>
             </Box>
           </Box>
+          <ResetPasswordDialog
+            open={openResetPasswordDialog}
+            onClose={() => setOpenResetPasswordDialog(false)}
+          />
         </Box>
       ) : (
         <Register

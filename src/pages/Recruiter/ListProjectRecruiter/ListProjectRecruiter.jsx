@@ -11,6 +11,12 @@ import {
   TextField,
   Tooltip,
   Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Slide,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -23,6 +29,10 @@ import { toast } from 'react-toastify';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { truncateText } from '../../../utils/truncateText';
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="down" ref={ref} {...props} />;
+});
+
 const ListProjectRecruiter = () => {
   const { status } = useParams();
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
@@ -34,6 +44,9 @@ const ListProjectRecruiter = () => {
   const [search, setSearch] = useState('');
   const [statusId, setStatusId] = useState(parseInt(status));
   const [reload, setReload] = useState(false);
+
+  const [open, setOpen] = useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -89,11 +102,21 @@ const ListProjectRecruiter = () => {
     navigate(`/detail/${id}`);
   };
 
-  const handleMarkAsComplete = async (id) => {
+  const handleClickOpen = (id) => {
+    setSelectedProjectId(id);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleMarkAsComplete = async () => {
     try {
-      await projectApi.MakeDoneProject(id);
+      await projectApi.MakeDoneProject(selectedProjectId);
       setReload((prev) => !prev);
       toast.success('Dự án đã hoàn thành');
+      setOpen(false);
     } catch (error) {
       toast.error('Đã có lỗi xảy ra');
       console.error(error);
@@ -274,6 +297,11 @@ const ListProjectRecruiter = () => {
                       <strong>Description:</strong>{' '}
                       <i>Select this project to see full description</i>
                     </Typography>
+                    {project.statusId === 2 && (
+                      <Typography variant="body1" component="div">
+                        <strong>Total bid:</strong> <i>{project.totalBids}</i>
+                      </Typography>
+                    )}
                     {project.statusId === 5 && (
                       <Typography variant="body1" component="div">
                         <strong>Reject reason:</strong>{' '}
@@ -288,7 +316,7 @@ const ListProjectRecruiter = () => {
                         color="warning"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleMarkAsComplete(project?.id);
+                          handleClickOpen(project?.id);
                         }}
                         sx={{ ml: 'auto' }}
                       >
@@ -312,6 +340,34 @@ const ListProjectRecruiter = () => {
       ) : (
         <Typography>No projects found.</Typography>
       )}
+
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle sx={{ fontSize: '1.875rem' }}>
+          {'Xác nhận công việc đã hoàn thiện'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Bạn chắc chắn muốn xác nhận công việc này đã hoàn thiện? Hành động
+            này sẽ không cho phép bạn thay đổi chi tiết công việc này về sau.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleMarkAsComplete}
+          >
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

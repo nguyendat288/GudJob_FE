@@ -1,5 +1,5 @@
-import { useSelector } from 'react-redux'
-import { Navigate, Outlet } from 'react-router-dom'
+import { useSelector } from 'react-redux';
+import { Navigate, Outlet } from 'react-router-dom';
 const RequireAuth = ({ allowedRoles }) => {
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
   if (currentUser !== null) {
@@ -10,9 +10,9 @@ const RequireAuth = ({ allowedRoles }) => {
     } else {
       return <Navigate to="/unauthorized" />;
     }
-  }else{
+  } else {
     return <Navigate to="/unauthorized" />;
   }
 };
 
-export default RequireAuth
+export default RequireAuth;

@@ -8,9 +8,11 @@ import {
   LinearProgress,
   Pagination,
 } from '@mui/material';
-import BookmarkBorderTwoToneIcon from '@mui/icons-material/BookmarkBorderTwoTone';
+import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
 import { formatCurrency } from '../../../utils/formatCurrency';
 import TypographyHeader from '../../../components/Typography/TypographyHeader';
+import { truncateText } from '../../../utils/truncateText';
+import ProjectDescription from '../../../components/ProjectDescription';
 
 const FavoriteProjectsList = ({
   projects,
@@ -21,7 +23,7 @@ const FavoriteProjectsList = ({
   loading,
 }) => {
   return (
-    <Box className="bg-gray-100 p-4 rounded-lg shadow-md">
+    <Box className="bg-gray-100 p-4 rounded-lg shadow-md w-1/2">
       <Box textAlign="center" mb={2}>
         <TypographyHeader title="Favorite projects" />
       </Box>
@@ -43,11 +45,12 @@ const FavoriteProjectsList = ({
               {project.projectName}
             </Typography>
             <IconButton onClick={() => onRemoveFavorite(project.projectId)}>
-              <BookmarkBorderTwoToneIcon sx={{ color: '#fad702' }} />
+              <FavoriteTwoToneIcon sx={{ color: '#fad702' }} />
             </IconButton>
           </Box>
           <Typography variant="body1" className="mt-2">
-            {project.description}
+            <ProjectDescription description={project.description} />
+            {/* {truncateText(project.description, 100)} */}
           </Typography>
           <Typography variant="body2" className="mt-1 font-bold">
             Budget: {formatCurrency(project.minBudget)} -{' '}

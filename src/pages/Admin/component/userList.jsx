@@ -400,10 +400,13 @@ const UserList = ({
 
     const lockedUserIds = lockedUsers.map((user) => user.id);
     const activeUserIds = activeUsers.map((user) => user.id);
-
     try {
-      await userManagementApi.lockUser(activeUserIds);
-      await userManagementApi.unlockUser(lockedUserIds);
+      if (lockedUserIds.length > 0) {
+        await userManagementApi.unlockUser(lockedUserIds);
+      }
+      if (activeUserIds.length > 0) {
+        await userManagementApi.lockUser(activeUserIds);
+      }
       reloadUsers((prev) => !prev);
       toast.success('User locked/unlocked successfully');
     } catch (error) {
